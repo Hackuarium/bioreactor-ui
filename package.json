@@ -11,18 +11,37 @@
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.0"
   },
+  "devDependencies": {
+    "autoprefixer": "^9.8.6",
+    "eslint-config-prettier": "^8.1.0",
+    "postcss": "^8.2.6",
+    "postcss-cli": "^8.3.1",
+    "prettier": "^2.2.1",
+    "tailwindcss": "^2.0.3"
+  },
   "scripts": {
-    "start": "npm run watch:css && react-scripts start",
-    "build": "npm run watch:css && react-scripts build",
+    "start": "npm run start:dev",
+    "start:dev": "npm run prettier && npm run build:css && react-scripts start",
+    "build": "npm run build:dev",
+    "build:dev": "npm run prettier && npm run build:css && react-scripts build",
+    "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
+    "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "prettier"
     ]
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "tabWidth": 2,
+    "singleQuote": true,
+    "semi": true,
+    "trailingComma": "all"
   },
   "browserslist": {
     "production": [
@@ -35,11 +54,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "autoprefixer": "^9.8.6",
-    "postcss": "^8.2.6",
-    "postcss-cli": "^8.3.1",
-    "tailwindcss": "^2.0.3"
   }
 }
