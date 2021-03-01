@@ -3,18 +3,17 @@ import React, { useState } from 'react';
 import { ReactComponent as MenuIcon } from '../assets/icons/menu.svg';
 import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
 import Logo from '../assets/img/zakodium.png';
-import { routes } from './routes';
 import useMedia from '../hooks/useMedia';
 import NavBarItem from './navBarItem';
 
-const NavBar = () => {
+const NavBar = ({ routes }) => {
   const isSmallScreen = useMedia(['(max-width: 1023px)'], [true], false);
   const [menuVisibility, setMenuVisibility] = useState(false);
 
   const onMenuClick = (e) => setMenuVisibility(!menuVisibility);
 
   return (
-    <header className="m-0 p-0 w-full lg:w-max lg:h-full bg-primary-dark">
+    <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-dark">
       {/** Top NavBar in small screens*/}
       <div className="px-4 py-3 flex flex-row justify-between items-center lg:hidden ">
         <img src={Logo} alt="Logo" className="h-8" />
@@ -33,8 +32,9 @@ const NavBar = () => {
       {/** NavBar*/}
       <nav
         className={
+          //hide navbar for small screens by default
           menuVisibility || !isSmallScreen
-            ? 'w-full lg:w-max px-4 pt-2 pb-4 flex flex-col justify-start flex-grow-0 relative z-10'
+            ? 'w-full lg:w-max px-4 pt-2 pb-4 flex flex-col justify-start flex-grow-0 absolute z-10 top-auto lg:static bg-primary-dark'
             : 'hidden'
         }
       >
@@ -43,7 +43,7 @@ const NavBar = () => {
             <img src={Logo} alt="Logo" width="150" />
           </div>
         )}
-        <ul className="w-full">
+        <div className="w-full">
           {routes.map((route) => (
             <NavBarItem
               key={route.label}
@@ -51,13 +51,14 @@ const NavBar = () => {
               subMenuVisibility={false}
             />
           ))}
-        </ul>
+        </div>
       </nav>
-      {/** exit navbar when click anywhere in the screen*/}
-      {menuVisibility && (
+      {/** on small screens: exit navbar when click anywhere in the screen*/}
+      {isSmallScreen && menuVisibility && (
         <button
           className="fixed inset-0 h-full w-full cursor-default focus:outline-none"
           tabIndex="-1"
+          onClick={() => setMenuVisibility(false)}
         />
       )}
     </header>
