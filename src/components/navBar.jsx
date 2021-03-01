@@ -11,6 +11,7 @@ const NavBar = ({ routes }) => {
   const [menuVisibility, setMenuVisibility] = useState(false);
 
   const onMenuClick = (e) => setMenuVisibility(!menuVisibility);
+  const onCloseMenu = (e) => setMenuVisibility(false);
 
   return (
     <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-dark">
@@ -48,6 +49,7 @@ const NavBar = ({ routes }) => {
             <NavBarItem
               key={route.label}
               route={route}
+              onCloseMenu={onCloseMenu}
               subMenuVisibility={false}
             />
           ))}
@@ -58,7 +60,7 @@ const NavBar = ({ routes }) => {
         <button
           className="fixed inset-0 h-full w-full cursor-default focus:outline-none"
           tabIndex="-1"
-          onClick={() => setMenuVisibility(false)}
+          onClick={onCloseMenu}
         />
       )}
     </header>

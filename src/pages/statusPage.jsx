@@ -1,5 +1,5 @@
 const StatusPage = () => {
-  return <div>Status</div>;
+  return <div className="w-full h-full  ">status</div>;
 };
 
 export default StatusPage;
