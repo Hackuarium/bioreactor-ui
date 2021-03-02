@@ -30,6 +30,7 @@ const NavBar = ({ routes }) => {
           )}
         </button>
       </div>
+
       {/** NavBar*/}
       <nav
         className={
@@ -55,6 +56,7 @@ const NavBar = ({ routes }) => {
           ))}
         </div>
       </nav>
+
       {/** on small screens: exit navbar when click anywhere in the screen*/}
       {isSmallScreen && menuVisibility && (
         <button

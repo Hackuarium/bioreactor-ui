@@ -31,9 +31,11 @@ const NavBarItem = ({ route, onCloseMenu }) => {
             'pl-2 pr-4 fill-current text-gray-300 group-hover:text-gray-100',
           height: '20',
         })}
+
         <span className="font-sans font-light text-md text-gray-300 group-hover:font-normal group-hover:text-gray-100 ">
           {route.label}
         </span>
+
         {subMenuEnabled && (
           <div className="flex flex-1 justify-end px-4 lg:pr-0">
             <ArrowIcon
