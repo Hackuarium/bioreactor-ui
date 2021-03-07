@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/settingsPage.jsx"],"names":["SettingsPage"],"mappings":"uIAIeA,UAJM,WACnB,OAAO","file":"static/js/6.0c3357fd.chunk.js","sourcesContent":["const SettingsPage = () => {\n  return <div>Settings</div>;\n};\n\nexport default SettingsPage;\n"],"sourceRoot":""}
