@@ -4,7 +4,7 @@ import Loader from '../components/loader';
 
 const AppContent = ({ routes }) => {
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full" data-testid="App-content">
       <Suspense
         fallback={
           <Loader
