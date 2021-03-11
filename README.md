@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+The first goal is to be able to display the result of the monitoring of the computer. We have a MQTT
+broker that is receiving information about my server every 10s. We should create everything required to display chart
+for the monitoring.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+After installing `mosquitto` you can check the packets using `mosquitto_sub -h mqtt.beemos.org -t "lpatiny/Computer/server"`
 
-## Available Scripts
+## Use Zakodium components
 
-In the project directory, you can run:
+Please have a look at: https://github.com/Hackuarium/bioreactor-ui/issues/9 and try to migrate to it if possible.
 
-### `npm start`
+## Create preferences and menu
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The menu on the left will depend on the available devices. So at the beginning we have only the preferences menu.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The preference menu contains 4 submenu. The next step to implement is the preferences: https://github.com/Hackuarium/bioreactor-ui/issues/7
 
-### `npm test`
+Once we know the devices that are configured we can display in the menu the corresponding categories if there is at least one device configured.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Bioreactor (if there are some devices of category OpenBio6)
 
-### `npm run build`
+Beemos (if there are some devices of category Beemos)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Computer (if there are some devices of category Computer)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Spectrophotometer (if there are some devices of category SimpleSpectro)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+As a submenu of those 4 categories we will display the custom name defined by the user in the preferences
 
-### `npm run eject`
+## Store / Synchronise data
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+First step:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+There should be a background process that will take care to listen for all the MQTT packets received for the Broadcast devices.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The packet is parsed and store in a local pouchDB. I would use for the pouchDB database name the device kind + underscore + custom name. This will allow in the future to display the results for the currently configured devices as well as some
+historetical data for which there is a pouchDB database.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+We will see laster how to synchronize interactive devices.
 
-## Learn More
+## Display the results
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Based on the preferences we fill the menu on the left. In this case there should be a menu `Computer` with a submenu `Luc_Cellar` (if this is the name used in the preferences).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Clicking on this submenu will bring the `Computer` layout to display the results.
 
-### Code Splitting
+In the layout there will be 4 charts:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Load
+  - xAxis: time
+  - yAxis: % from 0 to 100 (forced values)
+  - series: total, user, system
+- I/O
+  - xAxis: time
+  - yAxis: kb / s (not sure about this per second, the format is wrong seems to me)
+  - series: Network read, Network write, Disk read, Disk write
+- FS
+  - xAxis: time
+  - yAxis: % from 0 to 100 (forced values)
+  - series: min, max
+- Temperature
+  - xAxis: time
+  - yAxis: °C from 0 to 100 (forced values)
+  - series: CPU
 
-### Analyzing the Bundle Size
+On the top we should be able to define if we want to display:
+1h / 1d / 1m / 1y
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+We will see later if we need more flexibility for the date picking.
