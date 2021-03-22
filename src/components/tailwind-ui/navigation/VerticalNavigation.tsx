@@ -42,7 +42,7 @@ export interface VerticalNavigationProps<T> {
 type SelectOptionCallback<T> = (selected: VerticalNavigationOption<T>) => void;
 
 const optionStyles = {
-  small: 'text-gray-300 hover:text-gray-100 text-sm',
+  small: 'text-gray-300 hover:text-white text-sm',
   base: 'text-neutral-900 text-base',
 };
 
@@ -134,7 +134,7 @@ function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
         {element.icon && (
           <div
             className={clsx(
-              'text-2xl text-gray-300 group-hover:text-gray-100',
+              'text-2xl text-gray-300 group-hover:text-white',
               iconStyles[size],
             )}
           >
@@ -145,8 +145,8 @@ function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
         {element.label}
         <svg
           className={clsx(
-            'ml-auto h-5 w-5 transform group-hover:text-gray-100 transition-colors ease-in-out duration-150',
-            isOpen ? 'text-gray-100 rotate-90' : 'text-gray-300',
+            'ml-auto h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-150',
+            isOpen ? 'text-white rotate-90' : 'text-gray-300',
           )}
           viewBox="0 0 20 20"
           aria-hidden="true"
@@ -183,13 +183,13 @@ function Navigation<T>(props: NavigationProps<T>): JSX.Element {
         'group w-full flex items-center py-2 rounded-md cursor-pointer hover:bg-gray-400 hover:bg-opacity-10',
         optionStyles[props.size],
         isSelected ? 'bg-gray-400 bg-opacity-30 hover:bg-opacity-30' : '',
-        props.offset ? 'pl-11' : 'pl-2',
+        props.offset ? 'pl-8' : 'pl-2',
       )}
     >
       {props.element.icon && (
         <div
           className={clsx(
-            'text-2xl group-hover:text-gray-100',
+            'text-2xl group-hover:text-white',
             iconStyles[props.size],
           )}
         >

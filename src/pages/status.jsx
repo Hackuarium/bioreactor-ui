@@ -2,7 +2,7 @@ import React from 'react';
 import TemperaturePlot from '../components/temperaturePlot';
 import TemperatureDisplay from '../components/temperatureDisplay';
 
-const StatusPage = () => {
+const Status = () => {
   return (
     <div className="w-full h-full p-6 lg:p-8 flex justify-center">
       <div className="w-max h-max flex flex-col items-center justify-start lg:justify-center">
@@ -26,4 +26,4 @@ const StatusPage = () => {
   );
 };
 
-export default StatusPage;
+export default Status;

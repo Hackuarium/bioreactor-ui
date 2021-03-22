@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
-import { ReactComponent as MenuIcon } from '../assets/icons/menu.svg';
-import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
 import useMedia from '../hooks/useMedia';
 import { ZakodiumSolidSvg } from './tailwind-ui/logos/Zakodium';
 import { VerticalNavigation } from './tailwind-ui/navigation/VerticalNavigation';
 import { NavLink } from 'react-router-dom';
+import { SvgOutlineMenu, SvgOutlineX } from './tailwind-ui';
 
 const NavBar = ({ routes }) => {
   const isSmallScreen = useMedia(['(max-width: 1023px)'], [true], false);
@@ -43,16 +42,24 @@ const NavBar = ({ routes }) => {
     <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-dark">
       {/** Top NavBar in small screens*/}
       <div className="px-4 py-3 flex flex-row justify-between items-center lg:hidden">
-        <ZakodiumSolidSvg className="fill-current text-white h-8" />
+        <ZakodiumSolidSvg className="fill-current text-white h-6" />
         <button
           type="button"
-          className="block px-2 text-gray-300 hover:text-white focus:text-white focus:outline-none relative z-10"
+          className="block focus:outline-none relative z-10"
           onClick={onMenuClick}
         >
           {menuVisibility ? (
-            <CloseIcon className="fill-current h-5" />
+            <SvgOutlineX
+              className="text-gray-300 hover:text-white focus:text-white"
+              width="1.5em"
+              height="1.5em"
+            />
           ) : (
-            <MenuIcon className="fill-current h-5" />
+            <SvgOutlineMenu
+              className="text-gray-300 hover:text-white focus:text-white"
+              width="1.5em"
+              height="1.5em"
+            />
           )}
         </button>
       </div>
@@ -62,13 +69,13 @@ const NavBar = ({ routes }) => {
         className={
           //hide navbar by default for small screens
           menuVisibility || !isSmallScreen
-            ? 'w-full lg:w-52 px-2 pt-2 pb-4 flex flex-col justify-start flex-grow-0 absolute z-10 top-auto lg:static bg-primary-dark'
+            ? 'w-full lg:w-60 px-6 lg:px-2 pt-2 pb-4 flex flex-col justify-start flex-grow-0 absolute z-10 top-auto lg:static bg-primary-dark'
             : 'hidden'
         }
       >
         {!isSmallScreen && (
           <div className="w-full flex justify-center pt-2 pb-24 px-4">
-            <ZakodiumSolidSvg className="fill-current text-white" width="150" />
+            <ZakodiumSolidSvg className="w-44 fill-current text-white" />
           </div>
         )}
         <VerticalNavigation

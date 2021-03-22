@@ -1,52 +1,63 @@
 import { lazy } from 'react';
-import { ReactComponent as Status } from '../assets/icons/status.svg';
-import { ReactComponent as Settings } from '../assets/icons/settings.svg';
-import { ReactComponent as Temperature } from '../assets/icons/temperature.svg';
+import {
+  SvgOutlineAdjustments,
+  SvgOutlineChartSquareBar,
+  SvgOutlineChip,
+  SvgOutlineClipboardList,
+  SvgOutlineCog,
+  SvgOutlineDesktopComputer,
+  SvgOutlineSwitchHorizontal,
+} from '../components/tailwind-ui';
 
 const routes = [
   {
     id: 'status',
     label: 'Status',
     path: '/status',
-    component: lazy(() => import('./statusPage')),
-    icon: <Status className="fill-current" height="20" />,
+    component: lazy(() => import('./status')),
+    icon: <SvgOutlineChartSquareBar height="20" />,
   },
   {
-    id: 'temperature',
-    label: 'Temperature',
-    path: '/temperature',
-    component: lazy(() => import('./temperaturePage')),
-    icon: <Temperature className="fill-current" height="20" />,
-  },
-  {
-    id: 'history',
-    label: 'History',
-    path: '/history',
-    component: lazy(() => import('./historyPage')),
-    icon: <Settings className="fill-current" height="20" />,
+    id: 'preferences',
+    label: 'Preferences',
+    icon: <SvgOutlineClipboardList height="20" />,
+    options: [
+      {
+        id: 'general',
+        label: 'General',
+        path: '/preferences/general',
+        component: lazy(() => import('./general')),
+        icon: <SvgOutlineAdjustments height="20" />,
+      },
+      {
+        id: 'broadcast-devices',
+        label: 'Broadcast devices',
+        path: '/preferences/broadcast-devices',
+        component: lazy(() => import('./broadcastDevices')),
+        icon: <SvgOutlineChip height="20" />,
+      },
+      {
+        id: 'interactive-devices',
+        label: 'Interactive devices',
+        path: '/preferences/interactive-devices',
+        component: lazy(() => import('./interactiveDevices')),
+        icon: <SvgOutlineSwitchHorizontal height="20" />,
+      },
+      {
+        id: 'local-devices',
+        label: 'Local devices',
+        path: '/preferences/local-devices',
+        component: lazy(() => import('./localDevices')),
+        icon: <SvgOutlineDesktopComputer height="20" />,
+      },
+    ],
   },
   {
     id: 'settings',
     label: 'Settings',
     path: '/settings',
-    component: lazy(() => import('./settingsPage')),
-    icon: <Settings className="fill-current" height="20" />,
-    options: [
-      {
-        id: 'settings1',
-        label: 'Settings 1',
-        path: '/settings/settings1',
-        exact: true,
-        component: lazy(() => import('./settings1Page')),
-      },
-      {
-        id: 'settings2',
-        label: 'Settings 2',
-        path: '/settings/settings2',
-        exact: true,
-        component: lazy(() => import('./settings1Page')),
-      },
-    ],
+    component: lazy(() => import('./settings')),
+    icon: <SvgOutlineCog height="20" />,
   },
 ];
 
