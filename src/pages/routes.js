@@ -5,48 +5,44 @@ import { ReactComponent as Temperature } from '../assets/icons/temperature.svg';
 
 const routes = [
   {
+    id: 'status',
     label: 'Status',
     path: '/status',
-    exact: true,
     component: lazy(() => import('./statusPage')),
-    icon: (props) => <Status {...props} />,
+    icon: <Status className="fill-current" height="20" />,
   },
   {
+    id: 'temperature',
     label: 'Temperature',
     path: '/temperature',
-    exact: true,
     component: lazy(() => import('./temperaturePage')),
-    icon: (props) => <Temperature {...props} />,
+    icon: <Temperature className="fill-current" height="20" />,
   },
   {
+    id: 'history',
     label: 'History',
     path: '/history',
-    exact: true,
     component: lazy(() => import('./historyPage')),
-    icon: (props) => <Settings {...props} />,
+    icon: <Settings className="fill-current" height="20" />,
   },
   {
+    id: 'settings',
     label: 'Settings',
     path: '/settings',
-    exact: true,
     component: lazy(() => import('./settingsPage')),
-    icon: (props) => <Settings {...props} />,
-    subRoute: [
+    icon: <Settings className="fill-current" height="20" />,
+    options: [
       {
+        id: 'settings1',
         label: 'Settings 1',
-        path: '/settings1',
+        path: '/settings/settings1',
         exact: true,
         component: lazy(() => import('./settings1Page')),
       },
       {
+        id: 'settings2',
         label: 'Settings 2',
-        path: '/settings2',
-        exact: true,
-        component: lazy(() => import('./settings1Page')),
-      },
-      {
-        label: 'Settings 3',
-        path: '/settings3',
+        path: '/settings/settings2',
         exact: true,
         component: lazy(() => import('./settings1Page')),
       },

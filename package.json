@@ -24,10 +24,12 @@
     "react-popper": "^2.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "react-spinners": "^0.10.6",
+    "typescript": "^4.2.3",
     "web-vitals": "^1.1.0"
   },
   "devDependencies": {
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.2",
     "autoprefixer": "^9.8.6",
     "eslint-config-prettier": "^8.1.0",
     "gh-pages": "^3.1.0",
@@ -37,15 +39,15 @@
     "tailwindcss": "^2.0.3"
   },
   "scripts": {
-    "start": "npm run prettier && npm run build:css && react-scripts start",
-    "build": "npm run prettier && npm run build:css && react-scripts build",
-    "components-update": "components-update --out src/components/tailwind-ui",
+    "start": "npm run build:css && react-scripts start",
+    "build": "npm run build:css && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
+    "components-update": "components-update --out src/components/tailwind-ui",
     "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

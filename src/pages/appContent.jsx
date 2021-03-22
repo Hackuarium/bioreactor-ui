@@ -1,46 +1,35 @@
 import React, { Suspense } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
-import Loader from '../components/loader';
+import { Route, Switch } from 'react-router-dom';
+import { Spinner } from '../components/tailwind-ui';
 
 const AppContent = ({ routes }) => {
+  const renderRoutes = (routes) =>
+    routes.flatMap((route) => {
+      if (route.options) return renderRoutes(route.options);
+      else
+        return (
+          <Route
+            key={route.label}
+            path={route.path}
+            exact={route.exact}
+            component={route.component}
+          />
+        );
+    });
+
   return (
     <div className="w-full h-full" data-testid="App-content">
       <Suspense
         fallback={
-          <Loader
-            color={'#f05454'}
-            size={80}
-            className="w-full h-full flex justify-center items-start pt-52"
-          />
+          <div className="w-full h-full flex justify-center items-start pt-52">
+            <Spinner className="text-secondary w-12"></Spinner>
+          </div>
         }
       >
         <Switch>
-          {routes.flatMap((route) => {
-            if (route.subRoute) {
-              /**return subRoutes with path : /parentRoute/subRoute */
-              return route.subRoute.map((subRoute) => (
-                <Route
-                  key={subRoute.label}
-                  path={route.path + subRoute.path}
-                  exact={subRoute.exact}
-                  component={subRoute.component}
-                />
-              ));
-            } else {
-              /**return main routes */
-              return (
-                <Route
-                  key={route.label}
-                  path={route.path}
-                  exact={route.exact}
-                  component={route.component}
-                />
-              );
-            }
-          })}
+          {renderRoutes(routes)}
           {/**use the first route as default one */}
           <Route path="/" exact component={routes[0].component} />
-          <Redirect to="/" />
         </Switch>
       </Suspense>
     </div>
