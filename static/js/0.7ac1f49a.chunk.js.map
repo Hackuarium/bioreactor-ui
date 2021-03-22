@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/settings1Page.jsx"],"names":["Setting1Page"],"mappings":"uIAIeA,UAJM,WACnB,OAAO","file":"static/js/0.7ac1f49a.chunk.js","sourcesContent":["const Setting1Page = () => {\n  return <div>Sub settings</div>;\n};\n\nexport default Setting1Page;\n"],"sourceRoot":""}

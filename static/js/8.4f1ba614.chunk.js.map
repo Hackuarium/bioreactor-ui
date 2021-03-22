@@ -1,1 +1,0 @@
-{"version":3,"sources":["pages/temperaturePage.jsx"],"names":["TemperaturePage"],"mappings":"uIAIeA,UAJS,WACtB,OAAO","file":"static/js/8.4f1ba614.chunk.js","sourcesContent":["const TemperaturePage = () => {\n  return <div>Temperature</div>;\n};\n\nexport default TemperaturePage;\n"],"sourceRoot":""}

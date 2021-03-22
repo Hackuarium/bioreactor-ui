@@ -1,1 +1,0 @@
-{"version":3,"sources":["pages/historyPage.jsx"],"names":["HistoryPage"],"mappings":"uIAIeA,UAJK,WAClB,OAAO","file":"static/js/5.a419f6d3.chunk.js","sourcesContent":["const HistoryPage = () => {\n  return <div>History</div>;\n};\n\nexport default HistoryPage;\n"],"sourceRoot":""}

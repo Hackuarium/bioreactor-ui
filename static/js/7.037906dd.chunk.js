@@ -1,0 +1,2 @@
+(this["webpackJsonpbioreactor-ui"]=this["webpackJsonpbioreactor-ui"]||[]).push([[7],{93:function(e,r,t){"use strict";t.r(r);var i=t(0);r.default=function(){return Object(i.jsx)("div",{children:"Temperature"})}}}]);
+//# sourceMappingURL=7.037906dd.chunk.js.map
