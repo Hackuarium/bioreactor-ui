@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/broadcastDevices.jsx"],"names":["BroadcastDevices"],"mappings":"uIAIeA,UAJU,WACvB,OAAO","file":"static/js/3.78e0a91e.chunk.js","sourcesContent":["const BroadcastDevices = () => {\n  return <div>BroadcastDevicesPage</div>;\n};\n\nexport default BroadcastDevices;\n"],"sourceRoot":""}
