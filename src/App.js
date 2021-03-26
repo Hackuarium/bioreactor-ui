@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="w-screen h-screen flex flex-col lg:flex-row">
       <NavBar routes={routes} />
-      <div className="w-full h-full bg-gray-100">
+      <div className="w-full h-full bg-neutral-50">
         <AppContent routes={routes} />
       </div>
     </div>

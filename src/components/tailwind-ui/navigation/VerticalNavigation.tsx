@@ -42,12 +42,12 @@ export interface VerticalNavigationProps<T> {
 type SelectOptionCallback<T> = (selected: VerticalNavigationOption<T>) => void;
 
 const optionStyles = {
-  small: 'text-gray-300 hover:text-white text-sm',
+  small: 'text-neutral-200 hover:text-white text-sm',
   base: 'text-neutral-900 text-base',
 };
 
 const iconStyles = {
-  small: 'text-gray-300 mr-3',
+  small: 'text-neutral-200 mr-3',
   base: 'text-neutral-500 mr-4',
 };
 
@@ -127,14 +127,14 @@ function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
         type="button"
         onClick={toggle}
         className={clsx(
-          'flex items-center w-full pl-2 pr-1 py-2 rounded-md group hover:bg-gray-400 hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-primary-500',
+          'flex items-center w-full pl-2 pr-1 py-2 rounded-md group hover:bg-neutral-50 hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-primary-500',
           optionStyles[size],
         )}
       >
         {element.icon && (
           <div
             className={clsx(
-              'text-2xl text-gray-300 group-hover:text-white',
+              'text-2xl text-neutral-200 group-hover:text-white',
               iconStyles[size],
             )}
           >
@@ -146,7 +146,7 @@ function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
         <svg
           className={clsx(
             'ml-auto h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-150',
-            isOpen ? 'text-white rotate-90' : 'text-gray-300',
+            isOpen ? 'text-white rotate-90' : 'text-neutral-200',
           )}
           viewBox="0 0 20 20"
           aria-hidden="true"
@@ -180,9 +180,11 @@ function Navigation<T>(props: NavigationProps<T>): JSX.Element {
     <span
       onClick={props.onSelect}
       className={clsx(
-        'group w-full flex items-center py-2 rounded-md cursor-pointer hover:bg-gray-400 hover:bg-opacity-10',
+        'group w-full flex items-center py-2 rounded-md cursor-pointer hover:bg-neutral-400 hover:bg-opacity-10',
         optionStyles[props.size],
-        isSelected ? 'bg-gray-400 bg-opacity-30 hover:bg-opacity-30' : '',
+        isSelected
+          ? 'text-white bg-neutral-400 bg-opacity-30 hover:bg-opacity-30'
+          : '',
         props.offset ? 'pl-8' : 'pl-2',
       )}
     >
@@ -191,6 +193,7 @@ function Navigation<T>(props: NavigationProps<T>): JSX.Element {
           className={clsx(
             'text-2xl group-hover:text-white',
             iconStyles[props.size],
+            isSelected ? 'text-white' : '',
           )}
         >
           {props.element.icon}

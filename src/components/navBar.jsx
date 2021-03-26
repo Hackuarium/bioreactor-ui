@@ -39,7 +39,7 @@ const NavBar = ({ routes }) => {
     });
 
   return (
-    <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-dark">
+    <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-900">
       {/** Top NavBar in small screens*/}
       <div className="px-4 py-3 flex flex-row justify-between items-center lg:hidden">
         <ZakodiumSolidSvg className="fill-current text-white h-6" />
@@ -69,7 +69,7 @@ const NavBar = ({ routes }) => {
         className={
           //hide navbar by default for small screens
           menuVisibility || !isSmallScreen
-            ? 'w-full lg:w-60 px-6 lg:px-2 pt-2 pb-4 flex flex-col justify-start flex-grow-0 absolute z-10 top-auto lg:static bg-primary-dark'
+            ? 'w-full lg:w-60 px-6 lg:px-2 pt-2 pb-4 flex flex-col justify-start flex-grow-0 absolute z-10 top-auto lg:static bg-primary-900'
             : 'hidden'
         }
       >
