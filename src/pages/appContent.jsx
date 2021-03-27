@@ -10,7 +10,7 @@ const AppContent = ({ routes }) => {
         return (
           <Route
             key={route.label}
-            path={route.path}
+            path={route.value}
             exact={route.exact}
             component={route.component}
           />

@@ -1,41 +1,46 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import useMedia from '../hooks/useMedia';
-import { ZakodiumSolidSvg } from './tailwind-ui/logos/Zakodium';
-import { VerticalNavigation } from './tailwind-ui/navigation/VerticalNavigation';
-import { NavLink } from 'react-router-dom';
-import { SvgOutlineMenu, SvgOutlineX } from './tailwind-ui';
+import { getCurrentRoute } from '../hooks/utils';
+import {
+  SvgOutlineMenu,
+  SvgOutlineX,
+  VerticalNavigation,
+  ZakodiumSolidSvg,
+} from './tailwind-ui';
 
 const NavBar = ({ routes }) => {
   const isSmallScreen = useMedia(['(max-width: 1023px)'], [true], false);
-  const [menuVisibility, setMenuVisibility] = useState(false);
-  const [selected, setSelected] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(getCurrentRoute(routes));
 
-  const onMenuClick = (e) => setMenuVisibility(!menuVisibility);
-  const onCloseMenu = (e) => setMenuVisibility(false);
+  const onCloseMenu = (e) => setIsOpen(false);
 
   const getRoutes = (routes) =>
     routes.map((route) => {
-      const navigationType = route.options ? 'group' : 'option';
-      const navigation = {
-        type: navigationType,
-        id: route.id,
-        label: route.label,
-        value: route.path,
-        icon: route.icon,
+      const { id, label, value, icon, options } = route;
+      const isGroup = options ? true : false;
+
+      const additionalProp = isGroup //if route has sub routes (options)
+        ? { options: getRoutes(options) }
+        : {
+            //else render the route
+            renderOption: (children, option) => (
+              <NavLink to={option.value} exact onClick={onCloseMenu}>
+                {children}
+              </NavLink>
+            ),
+          };
+
+      return {
+        type: isGroup ? 'group' : 'option',
+        id,
+        label,
+        value,
+        icon,
+        ...additionalProp,
       };
-      if (navigationType === 'option') {
-        return {
-          ...navigation,
-          renderOption: (children, option) => (
-            <NavLink to={option.value} exact onClick={onCloseMenu}>
-              {children}
-            </NavLink>
-          ),
-        };
-      } else {
-        return { ...navigation, options: getRoutes(route.options) };
-      }
     });
 
   return (
@@ -46,20 +51,12 @@ const NavBar = ({ routes }) => {
         <button
           type="button"
           className="block focus:outline-none relative z-10"
-          onClick={onMenuClick}
+          onClick={() => setIsOpen(!isOpen)}
         >
-          {menuVisibility ? (
-            <SvgOutlineX
-              className="text-gray-300 hover:text-white focus:text-white"
-              width="1.5em"
-              height="1.5em"
-            />
+          {isOpen ? (
+            <SvgOutlineX className="text-gray-300 hover:text-white focus:text-white h-6 w-6" />
           ) : (
-            <SvgOutlineMenu
-              className="text-gray-300 hover:text-white focus:text-white"
-              width="1.5em"
-              height="1.5em"
-            />
+            <SvgOutlineMenu className="text-gray-300 hover:text-white focus:text-white h-6 w-6" />
           )}
         </button>
       </div>
@@ -68,7 +65,7 @@ const NavBar = ({ routes }) => {
       <nav
         className={
           //hide navbar by default for small screens
-          menuVisibility || !isSmallScreen
+          isOpen || !isSmallScreen
             ? 'w-full lg:w-60 px-6 lg:px-2 pt-2 pb-4 flex flex-col justify-start flex-grow-0 absolute z-10 top-auto lg:static bg-primary-900'
             : 'hidden'
         }
@@ -86,7 +83,7 @@ const NavBar = ({ routes }) => {
       </nav>
 
       {/** on small screens: exit navbar when clicking anywhere in the screen*/}
-      {isSmallScreen && menuVisibility && (
+      {isSmallScreen && isOpen && (
         <button
           className="fixed inset-0 h-full w-full cursor-default focus:outline-none"
           tabIndex="-1"

@@ -119,7 +119,7 @@ interface NavigationGroupProps<T> {
 function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
   const { element, selected, onSelect, size } = props;
   const [isOpen, , , toggle] = useOnOff(
-    element.options.some((element) => element === selected),
+    element.options.some((element) => element.value === selected?.value),
   );
   return (
     <div className="space-y-1">
