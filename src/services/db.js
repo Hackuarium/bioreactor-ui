@@ -10,15 +10,16 @@ const getInfo = () => {
 };
 
 const put = (doc) => {
-  if (!('_id' in doc)) doc._id = Date.now().toString(16);
+  if (!('_id' in doc)) return Promise.reject(new Error('doc must include _id'));
   return db.put(doc);
 };
 
 const get = (docId) => db.get(docId);
 
-const getAll = () =>
+const getAll = (options) =>
   db.allDocs({
     include_docs: true,
+    ...options,
   });
 
 const update = (doc) => {
@@ -26,9 +27,8 @@ const update = (doc) => {
   return db.get(doc._id).then((res) => db.put({ ...doc, _rev: res._rev }));
 };
 
-const remove = (doc) => {
-  if (!('_id' in doc)) return Promise.reject(new Error('doc must include _id'));
-  return db.get(doc._id).then((res) => db.remove({ ...doc, _rev: res._rev }));
+const remove = (docId) => {
+  return db.get(docId).then((res) => db.remove({ _id: docId, _rev: res._rev }));
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
