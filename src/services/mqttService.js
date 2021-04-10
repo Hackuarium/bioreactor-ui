@@ -2,24 +2,32 @@ import mqtt from 'mqtt';
 import { isFunction } from 'lodash';
 import { parseCurrentSettings } from 'legoino-util';
 
-const BROKER_URL = 'tcp://mqtt.beemos.org';
+// Private Functions
+
+const BROKER_PROTOCOL = 'tcp';
 const BROKER_PORT = 9001;
 let client;
 
-const getClientInstance = () => {
-  if (client && client.connected) return client;
-  client = mqtt.connect(BROKER_URL, {
+const getClientInstance = (url) => {
+  if (client && client.connected && client.options.hostname === url)
+    return client;
+
+  const brokerUrl = `${BROKER_PROTOCOL}://${url}:${BROKER_PORT}`;
+  client = mqtt.connect(brokerUrl, {
     port: BROKER_PORT,
     keepalive: 60,
   });
+
   client.stream.on('error', (err) => {
-    console.log(`Error: couldn't connect to BROKER`);
+    console.log(`Error: couldn't connect to BROKER ` + brokerUrl);
     console.log(err);
     client.end();
   });
+
   client.on('connect', () => {
-    console.log('connected: ' + client.connected);
+    console.log(`connected to ${brokerUrl} : ${client.connected}`);
   });
+
   return client;
 };
 
@@ -27,8 +35,10 @@ const parseToJson = (data) => {
   return parseCurrentSettings(data.toString(), {});
 };
 
-export const subscribe = (topic, onSuccess, onError) => {
-  const client = getClientInstance();
+// Public Functions
+
+export const subscribe = (url, topic, onSuccess, onError) => {
+  const client = getClientInstance(url);
   client.subscribe(topic, { qos: 2 }, (err) => {
     err
       ? isFunction(onError) && onError(err)
@@ -36,16 +46,16 @@ export const subscribe = (topic, onSuccess, onError) => {
           isFunction(onSuccess) && onSuccess(parseToJson(payload));
         });
   });
-};
 
-export const disconnect = () => {
-  const client = getClientInstance();
-  return client?.end();
-};
+  // Functions to return
 
-const modules = {
-  subscribe,
-  disconnect,
-};
+  const unsubscribe = (onError) => client.unsubscribe(topic, {}, onError);
 
-export default modules;
+  const disconnect = (callback) =>
+    client.end(() => {
+      console.log(`mqtt broker "${client.options.hostname}" disconnected`);
+      isFunction(callback) && callback();
+    });
+
+  return { unsubscribe, disconnect };
+};
