@@ -30,7 +30,7 @@ module.exports = {
         },
         neutral: {
           DEFAULT: '#808080',
-          50: 'f3f4f6',
+          50: 'f4f4f6',
           100: '#f2f2f2',
           200: '#d9d9d9',
           300: '#c0c0c0',
@@ -47,6 +47,7 @@ module.exports = {
   variants: {
     extend: {
       fontWeight: ['group-hover', 'hover'],
+      backgroundColor: ['active'],
     },
   },
   plugins: [],
