@@ -1,10 +1,25 @@
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  presets: [
+    require('@zakodium/tailwind-config')({
+      colors: {
+        additional: [
+          'gray',
+          'blue',
+          'red',
+          'blue-gray',
+          'true-gray',
+          'cool-gray',
+          'light-blue',
+        ],
+      },
+    }),
+  ],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
-        primary: {
+        themePrimary: {
           DEFAULT: '#30475e',
           100: '#83919e',
           200: '#6e7e8e',
@@ -16,7 +31,7 @@ module.exports = {
           800: '#223242',
           900: '#051128',
         },
-        secondary: {
+        themeSecondary: {
           DEFAULT: '#f05454',
           100: '#fcdddd',
           200: '#f9bbbb',
@@ -27,19 +42,6 @@ module.exports = {
           700: '#c04343',
           800: '#a83b3b',
           900: '#903232',
-        },
-        neutral: {
-          DEFAULT: '#808080',
-          50: 'f4f4f6',
-          100: '#f2f2f2',
-          200: '#d9d9d9',
-          300: '#c0c0c0',
-          400: '#a6a6a6',
-          500: '#8d8d8d',
-          600: '#737373',
-          700: '#5a5a5a',
-          800: '#4d4d4d',
-          900: '#404040',
         },
       },
     },

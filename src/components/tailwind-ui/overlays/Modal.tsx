@@ -86,7 +86,7 @@ export function Modal<T extends ElementType>(props: ModalProps<T>) {
 
   let modalContents = (
     <div
-      className="flex items-end justify-center h-full px-4 pt-4 pb-20 text-center sm:block"
+      className="flex items-center justify-center h-full px-4 pt-4 pb-20 text-center sm:block"
       onClick={props.onRequestClose}
     >
       <div className="fixed inset-0">
