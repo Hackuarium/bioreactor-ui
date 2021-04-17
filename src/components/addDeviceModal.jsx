@@ -35,8 +35,8 @@ const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
   const protocolOptions = Object.values(DEVICE_PROTOCOLS).map((val) => {
     return { label: val.toUpperCase(), value: val };
   });
-  const kindOptions = Object.values(DEVICE_KINDS).map((val) => {
-    return { label: val.toUpperCase(), value: val };
+  const kindOptions = DEVICE_KINDS.map((val) => {
+    return { label: val, value: val };
   });
   const _initialValues = {
     name: '123',

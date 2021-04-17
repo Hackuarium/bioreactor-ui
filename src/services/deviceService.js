@@ -12,10 +12,15 @@ export const DEVICE_PROTOCOLS = {
   tcp: 'tcp',
   http: 'http',
 };
-export const DEVICE_KINDS = {
-  tcp: 'computer',
-  http: 'beemos',
-};
+export const DEVICE_KINDS = [
+  'computer',
+  'beemos',
+  'openBio',
+  'openBio6',
+  'openSpectro',
+  'simpleSpectro',
+  'solar2015',
+];
 
 // Private Vars (Default)
 const DEVICES_DB = 'BIOREACTOR_devices';
@@ -26,6 +31,12 @@ const DEFAULT_PROTOCOL = DEVICE_PROTOCOLS.tcp;
 
 export const connectDevice = ({ url, protocol, port, username, password }) => {
   return connect(url, protocol, port, username, password);
+};
+
+export const getSavedDevices = async () => {
+  const dbClient = db.connect(DEVICES_DB);
+  const list = await dbClient.getAll();
+  return list.map((item) => item.doc);
 };
 
 export const connectDevice2 = (
