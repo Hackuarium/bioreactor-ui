@@ -1,3 +1,6 @@
+import { useRef, useState } from 'react';
+import * as Yup from 'yup';
+import { isFunction } from 'lodash';
 import {
   Form,
   InputField,
@@ -8,36 +11,44 @@ import {
   SvgOutlineUser,
   SvgOutlineKey,
   SvgOutlineLink,
+  SvgOutlineX,
   SelectField,
+  Spinner,
+  SvgOutlineCheck,
 } from '../components/tailwind-ui';
 
-import * as Yup from 'yup';
+import {
+  addDevice,
+  connectDevice,
+  DEVICE_KINDS,
+  DEVICE_PROTOCOLS,
+} from '../services/deviceService';
 
-const AddDeviceModal = ({
-  isOpen,
-  onClose,
-  initialValues = {},
-  submitedValues,
-}) => {
+//
+//
+
+const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
+  const [footerMessage, setFooterMessage] = useState(<div />);
+  const ref = useRef(null); // Ref the Form
+
+  // init initial values
+  const protocolOptions = Object.values(DEVICE_PROTOCOLS).map((val) => {
+    return { label: val.toUpperCase(), value: val };
+  });
+  const kindOptions = Object.values(DEVICE_KINDS).map((val) => {
+    return { label: val.toUpperCase(), value: val };
+  });
   const _initialValues = {
-    name: '',
-    url: '',
-    protocol: 'tcp',
-    port: '8883',
-    type: 'computer',
-    topic: '',
-    username: '',
-    password: '',
+    name: '123',
+    url: 'mqtt.beemos.org',
+    protocol: protocolOptions[0].value,
+    port: '9001',
+    kind: kindOptions[0].value,
+    topic: 'test',
+    username: 'testuser',
+    password: 'word',
     ...initialValues,
   };
-  const protocolOptions = [
-    { label: 'TCP', value: 'tcp' },
-    { label: 'HTTP', value: 'http' },
-  ];
-  const typeOptions = [
-    { label: 'Computer', value: 'computer' },
-    { label: 'Beemos', value: 'beemos' },
-  ];
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -53,13 +64,59 @@ const AddDeviceModal = ({
     username: Yup.string().required('Required'),
   });
 
-  const onConnect = (values) => {
-    console.log(values);
-    submitedValues = values;
+  // events functions
+  const onSubmit = async (values) => {
+    try {
+      await addDevice(values);
+      isFunction(onClose) && onClose();
+    } catch (e) {
+      throw new Error(e.message);
+    }
   };
+
   const testConnection = (e) => {
     e.stopPropagation();
-    console.log('test connection');
+    setFooterMessage(renderFooterMessage('connecting', 'Connecting ...'));
+    setTimeout(() => {
+      connectDevice(ref.current.values)
+        .then((client) => {
+          setFooterMessage(renderFooterMessage('success', 'Connected'));
+          // TO DO : disconnect client
+        })
+        .catch((err) => {
+          setFooterMessage(
+            renderFooterMessage('error', `Connection Error: ${err.message}`),
+          );
+        });
+    }, 500);
+  };
+
+  const renderFooterMessage = (state, message) => {
+    switch (state) {
+      case 'connecting':
+        return (
+          <div className="h-full mx-6 flex flex-row items-center text-sm text-neutral-500">
+            <Spinner className="w-5 h-5 mr-2" />
+            <span>{message}</span>
+          </div>
+        );
+      case 'success':
+        return (
+          <div className="h-full mx-4 flex flex-row items-center text-sm text-success-500">
+            <SvgOutlineCheck className="h-5 w-5 mr-4" />
+            <span>{message}</span>
+          </div>
+        );
+      case 'error':
+        return (
+          <div className="h-full mx-4 flex flex-row items-center text-sm text-danger-500">
+            <SvgOutlineX className="h-5 w-5 mr-4" />
+            <span>{message}</span>
+          </div>
+        );
+      default:
+        return <div />;
+    }
   };
 
   return (
@@ -75,9 +132,10 @@ const AddDeviceModal = ({
       fluid
       wrapperComponent={Form}
       wrapperProps={{
+        innerRef: ref,
         initialValues: _initialValues,
         validationSchema,
-        onSubmit: onConnect,
+        onSubmit: onSubmit,
         className: 'h-full',
       }}
     >
@@ -126,10 +184,10 @@ const AddDeviceModal = ({
           </div>
           <div className="flex flex-row justify-between">
             <SelectField
-              name="type"
-              id="type"
-              label="Type"
-              options={typeOptions}
+              name="kind"
+              id="kind"
+              label="Device kind"
+              options={kindOptions}
               renderOption={(o) => `${o.label}`}
               getValue={(o) => o.value}
               required
@@ -173,15 +231,16 @@ const AddDeviceModal = ({
         <FormError />
       </Modal.Body>
       <Modal.Footer>
-        <div className="flex flex-row">
+        <div className="flex flex-row items-center">
+          {footerMessage}
           <button
             onClick={testConnection}
             type="button"
-            className="px-4 mr-4 text-neutral-700 border rounded-md shadow bg-neutral-200 focus:outline-none flex-1 sm:flex-none"
+            className="px-4 py-2 mr-4 text-sm font-semibold text-neutral-700 border rounded-md shadow bg-neutral-200 focus:outline-none flex-1 sm:flex-none"
           >
             Test connection
           </button>
-          <SubmitButton className="w-1/3 sm:w-max">Add</SubmitButton>
+          <SubmitButton className="w-1/3 sm:w-max ">Add</SubmitButton>
         </div>
       </Modal.Footer>
     </Modal>

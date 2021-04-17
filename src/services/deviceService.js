@@ -1,16 +1,34 @@
 import db from './db';
-import { subscribe } from './mqttService';
+import { connect, subscribe } from './mqttService';
 import { isFunction } from 'lodash';
 
+// Public Vars
 export const DEVICE_TYPE = {
   broadcast: 'broadcast',
   interactive: 'interactive',
   local: 'local',
 };
+export const DEVICE_PROTOCOLS = {
+  tcp: 'tcp',
+  http: 'http',
+};
+export const DEVICE_KINDS = {
+  tcp: 'computer',
+  http: 'beemos',
+};
+
+// Private Vars (Default)
+const DEVICES_DB = 'BIOREACTOR_devices';
+const DEFAULT_PORT = '9001';
+const DEFAULT_PROTOCOL = DEVICE_PROTOCOLS.tcp;
 
 // Public Functions
 
-export const connectDevice = (
+export const connectDevice = ({ url, protocol, port, username, password }) => {
+  return connect(url, protocol, port, username, password);
+};
+
+export const connectDevice2 = (
   type,
   name,
   url,
@@ -40,4 +58,64 @@ export const connectDevice = (
     getAllData,
     getLastData,
   };
+};
+
+// add device to devices DB
+export const addDevice = async (props) => {
+  const dbClient = db.connect(DEVICES_DB);
+  const {
+    kind,
+    name,
+    url,
+    protocol = DEFAULT_PROTOCOL,
+    port = DEFAULT_PORT,
+    topic,
+    username,
+    password,
+  } = props;
+
+  // make sure all props are defined
+  for (let key in props)
+    if (!props[key]) throw new Error(`Field missing [${key}]`);
+
+  const id = `${kind}_${name}`;
+
+  return dbClient
+    .get(id)
+    .then((r) => {
+      // the device already exists in DB
+      const err = new Error('Another device exists with the same name');
+      err.payload = { exist: true, payload: r };
+      throw err;
+    })
+    .catch((e) => {
+      // if the device exists in DB
+      if (e.payload && e.payload.exist) throw e;
+      // the device does not exist in DB
+      return dbClient
+        .put({
+          _id: id,
+          name,
+          url,
+          protocol,
+          port,
+          topic,
+          username,
+          password,
+        })
+        .then((r) => {
+          // inserted successfully
+          return { exist: false, inserted: true, payload: r };
+        })
+        .catch((e) => {
+          // DB error
+          const err = new Error(e.toString());
+          err.payload = {
+            exist: false,
+            inserted: false,
+            payload: e.toString(),
+          };
+          throw err;
+        });
+    });
 };

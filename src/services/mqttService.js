@@ -3,32 +3,37 @@ import { isFunction } from 'lodash';
 import { parseCurrentSettings } from 'legoino-util';
 
 // Private Functions
-
-const BROKER_PROTOCOL = 'tcp';
-const BROKER_PORT = 9001;
 let client;
 
-const getClientInstance = (url) => {
+const getClientInstance = (
+  url,
+  protocol,
+  port,
+  username,
+  password,
+  onSuccess,
+  onError,
+) => {
+  // if client is already connected
   if (client && client.connected && client.options.hostname === url)
-    return client;
+    isFunction(onSuccess) && onSuccess(client);
 
-  const brokerUrl = `${BROKER_PROTOCOL}://${url}:${BROKER_PORT}`;
+  const brokerUrl = `${protocol}://${url}:${port}`;
   client = mqtt.connect(brokerUrl, {
-    port: BROKER_PORT,
     keepalive: 60,
   });
 
   client.stream.on('error', (err) => {
-    console.log(`Error: couldn't connect to BROKER ` + brokerUrl);
-    console.log(err);
+    const error = new Error(`couldn't connect to BROKER "${brokerUrl}"`);
+    error.name = 'MQTT ERROR';
     client.end();
+    isFunction(onError) && onError(error);
   });
 
   client.on('connect', () => {
     console.log(`connected to ${brokerUrl} : ${client.connected}`);
+    isFunction(onSuccess) && onSuccess(client);
   });
-
-  return client;
 };
 
 const parseToJson = (data) => {
@@ -36,6 +41,21 @@ const parseToJson = (data) => {
 };
 
 // Public Functions
+
+export const connect = (url, protocol, port, username, password) => {
+  const clientPromise = new Promise((resolve, reject) => {
+    getClientInstance(
+      url,
+      protocol,
+      port,
+      username,
+      password,
+      (client) => resolve(client),
+      (error) => reject(error),
+    );
+  });
+  return clientPromise;
+};
 
 export const subscribe = (url, topic, onSuccess, onError) => {
   const client = getClientInstance(url);
