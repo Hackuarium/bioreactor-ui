@@ -1,6 +1,10 @@
-import { SvgOutlineChevronRight, SvgSolidCog } from '../components/tailwind-ui';
+import {
+  SvgOutlineChevronRight,
+  SvgSolidCog,
+  SvgSolidTrash,
+} from '../components/tailwind-ui';
 
-const AvailableDevicesList = ({ data, onSelect, onEdit }) => {
+const AvailableDevicesList = ({ data, onSelect, onEdit, onDelete }) => {
   return (
     <div>
       <div className="w-full flex flex-row items-center">
@@ -13,7 +17,7 @@ const AvailableDevicesList = ({ data, onSelect, onEdit }) => {
       <div className="overflow-hidden bg-white shadow sm:rounded-md">
         {data.map((element) => (
           <li
-            key={element.name}
+            key={element.kind + element.name}
             className="block transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50 cursor-pointer"
             onClick={(e) => onSelect(element, e)}
           >
@@ -35,10 +39,16 @@ const AvailableDevicesList = ({ data, onSelect, onEdit }) => {
                   </div>
                   <div className="pt-2 md:pt-0 flex justify-end items-center cursor-default">
                     <button
-                      className="mx-1 p-2 border rounded-md shadow bg-neutral-100 focus:outline-none active:bg-neutral-200"
+                      className="mx-1 p-2 border rounded shadow-sm bg-neutral-100 focus:outline-none active:bg-neutral-200"
                       onClick={(e) => onEdit(element, e)}
                     >
                       <SvgSolidCog className="text-gray-700" />
+                    </button>
+                    <button
+                      className="mx-1 p-2 border rounded shadow-sm bg-neutral-100 focus:outline-none active:bg-neutral-200"
+                      onClick={(e) => onDelete(element, e)}
+                    >
+                      <SvgSolidTrash className="text-gray-700" />
                     </button>
                   </div>
                 </div>

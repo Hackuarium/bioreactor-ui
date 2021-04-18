@@ -31,7 +31,7 @@ function DB() {
         include_docs: true,
         ...options,
       });
-      console.log(`get ${docs.total_rows} rows`);
+      //console.log(`get ${docs.total_rows} rows`);
       return docs.rows;
     };
 

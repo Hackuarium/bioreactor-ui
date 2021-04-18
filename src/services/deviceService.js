@@ -39,6 +39,16 @@ export const getSavedDevices = async () => {
   return list.map((item) => item.doc);
 };
 
+export const updateDevice = async (deviceData) => {
+  const dbClient = db.connect(DEVICES_DB);
+  return dbClient.update(deviceData);
+};
+
+export const deleteDevice = (deviceID) => {
+  const dbClient = db.connect(DEVICES_DB);
+  return dbClient.remove(deviceID);
+};
+
 export const connectDevice2 = (
   type,
   name,
@@ -111,6 +121,7 @@ export const addDevice = async (props) => {
           protocol,
           port,
           topic,
+          kind,
           username,
           password,
         })

@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import * as Yup from 'yup';
-import { isFunction } from 'lodash';
+import { isFunction, isEmpty } from 'lodash';
 import {
   Form,
   InputField,
@@ -15,10 +15,9 @@ import {
   SelectField,
   Spinner,
   SvgOutlineCheck,
-} from '../components/tailwind-ui';
+} from './tailwind-ui';
 
 import {
-  addDevice,
   connectDevice,
   DEVICE_KINDS,
   DEVICE_PROTOCOLS,
@@ -27,9 +26,21 @@ import {
 //
 //
 
-const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
+const DeviceModal = ({
+  isOpen,
+  onClose,
+  initialValues, // if initialValues defined : update record ; else: add record
+  onSave,
+  onUpdate,
+}) => {
   const [footerMessage, setFooterMessage] = useState(<div />);
   const ref = useRef(null); // Ref the Form
+  const updateMode = !isEmpty(initialValues); // if initialValues defined : modal updates the recode; else: add the record
+
+  useEffect(() => {
+    // clear footer when modal is closed
+    !isOpen && setTimeout(() => setFooterMessage(<div />), 500);
+  }, [isOpen]);
 
   // init initial values
   const protocolOptions = Object.values(DEVICE_PROTOCOLS).map((val) => {
@@ -67,7 +78,10 @@ const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
   // events functions
   const onSubmit = async (values) => {
     try {
-      await addDevice(values);
+      //await addDevice(values);
+      updateMode
+        ? isFunction(onUpdate) && (await onUpdate(values))
+        : isFunction(onSave) && (await onSave(values));
       isFunction(onClose) && onClose();
     } catch (e) {
       throw new Error(e.message);
@@ -91,26 +105,27 @@ const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
     }, 500);
   };
 
+  // helper function for testConnection event
   const renderFooterMessage = (state, message) => {
     switch (state) {
       case 'connecting':
         return (
-          <div className="h-full mx-6 flex flex-row items-center text-sm text-neutral-500">
-            <Spinner className="w-5 h-5 mr-2" />
+          <div className="mx-6 flex flex-row items-center text-sm text-left text-neutral-500">
+            <Spinner className="w-6 h-6 mr-2" />
             <span>{message}</span>
           </div>
         );
       case 'success':
         return (
-          <div className="h-full mx-4 flex flex-row items-center text-sm text-success-500">
-            <SvgOutlineCheck className="h-5 w-5 mr-4" />
+          <div className="mx-4 flex flex-row items-center text-sm text-left text-success-500">
+            <SvgOutlineCheck className="h-6 w-6 mr-4" />
             <span>{message}</span>
           </div>
         );
       case 'error':
         return (
-          <div className="h-full mx-4 flex flex-row items-center text-sm text-danger-500">
-            <SvgOutlineX className="h-5 w-5 mr-4" />
+          <div className="mx-4 flex flex-row items-center text-sm text-left text-danger-500">
+            <SvgOutlineX className="h-6 w-6 mr-4" />
             <span>{message}</span>
           </div>
         );
@@ -147,6 +162,7 @@ const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
             id="name"
             label="Custom name"
             placeholder="device_123"
+            disabled={updateMode}
             required
             className="w-full"
             inputClassName="w-full"
@@ -162,7 +178,7 @@ const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
               className="mt-4 sm:mr-4 w-full sm:w-1/2"
               inputClassName="w-full"
             ></InputField>
-            <div className="flex flex-row justify-between flex-1">
+            <div className="flex flex-row justify-between items-end flex-1">
               <SelectField
                 name="protocol"
                 id="protocol"
@@ -182,7 +198,7 @@ const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
               ></InputField>
             </div>
           </div>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between items-end">
             <SelectField
               name="kind"
               id="kind"
@@ -231,20 +247,22 @@ const AddDeviceModal = ({ isOpen, onClose, initialValues = {} }) => {
         <FormError />
       </Modal.Body>
       <Modal.Footer>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-col sm:flex-row items-center">
           {footerMessage}
           <button
             onClick={testConnection}
             type="button"
-            className="px-4 py-2 mr-4 text-sm font-semibold text-neutral-700 border rounded-md shadow bg-neutral-200 focus:outline-none flex-1 sm:flex-none"
+            className="w-full sm:w-max mt-2 sm:my-0 px-4 py-2 sm:mr-4 text-sm font-semibold text-neutral-700 border rounded-md shadow bg-neutral-200 focus:outline-none flex-1 sm:flex-none"
           >
             Test connection
           </button>
-          <SubmitButton className="w-1/3 sm:w-max ">Add</SubmitButton>
+          <SubmitButton className="w-full my-2 sm:my-0 sm:w-max ">
+            {updateMode ? 'Update' : 'Add'}
+          </SubmitButton>
         </div>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default AddDeviceModal;
+export default DeviceModal;

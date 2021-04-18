@@ -1,17 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Button } from '../components/tailwind-ui';
 import AvailableDevicesList from '../components/availableDevicesList';
-import AddDeviceModal from '../components/addDeviceModal';
-import { getSavedDevices } from '../services/deviceService';
+import DeviceModal from '../components/deviceModal';
+import {
+  addDevice,
+  updateDevice,
+  deleteDevice,
+  getSavedDevices,
+} from '../services/deviceService';
 
 const BroadcastDevices = () => {
+  const [render, setRender] = useState(false);
+  const [initialValues, setInitialValues] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [devicesList, setDevicesList] = useState([]);
 
   useEffect(() => {
     // get saved devices from DB
     getSavedDevices().then((list) => setDevicesList(list));
-  }, [isModalOpen]);
+  }, [render]);
 
   const onSelectItem = (device) => {
     console.log(device);
@@ -19,7 +26,19 @@ const BroadcastDevices = () => {
 
   const onEditItem = (device, e) => {
     e.stopPropagation();
-    console.log(device);
+    setInitialValues(device);
+    setIsModalOpen(true);
+  };
+
+  const onDeleteItem = (device, e) => {
+    e.stopPropagation();
+    deleteDevice(device._id).then(() => setRender(!render));
+  };
+
+  const onCloseModal = () => {
+    setRender(!render);
+    setIsModalOpen(false);
+    setInitialValues({});
   };
 
   return (
@@ -30,15 +49,19 @@ const BroadcastDevices = () => {
       <div className="w-full flex justify-end mb-6 lg:mb-8">
         <Button onClick={() => setIsModalOpen(true)}>Add device</Button>
       </div>
-      <AddDeviceModal
+      <DeviceModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      ></AddDeviceModal>
+        onClose={onCloseModal}
+        initialValues={initialValues}
+        onSave={addDevice}
+        onUpdate={updateDevice}
+      ></DeviceModal>
 
       <AvailableDevicesList
         data={devicesList}
         onSelect={onSelectItem}
         onEdit={onEditItem}
+        onDelete={onDeleteItem}
       />
     </div>
   );
