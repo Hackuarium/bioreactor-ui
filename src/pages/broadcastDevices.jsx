@@ -7,7 +7,9 @@ import {
   updateDevice,
   deleteDevice,
   getSavedDevices,
+  connectDevice,
 } from '../services/deviceService';
+import { isFunction } from 'lodash';
 
 const BroadcastDevices = () => {
   const [render, setRender] = useState(false);
@@ -20,8 +22,15 @@ const BroadcastDevices = () => {
     getSavedDevices().then((list) => setDevicesList(list));
   }, [render]);
 
-  const onSelectItem = (device) => {
-    console.log(device);
+  const onSelectItem = (device, e, callback) => {
+    setTimeout(() => {
+      //console.log(device);
+      connectDevice(device)
+        .then((r) => console.log(r))
+        .catch((e) => console.log(e));
+
+      isFunction(callback) && callback();
+    }, 500);
   };
 
   const onEditItem = (device, e) => {

@@ -1,10 +1,23 @@
+import { isFunction } from 'lodash';
+import { useState } from 'react';
 import {
+  Spinner,
   SvgOutlineChevronRight,
   SvgSolidCog,
   SvgSolidTrash,
 } from '../components/tailwind-ui';
 
 const AvailableDevicesList = ({ data, onSelect, onEdit, onDelete }) => {
+  const [elementLoading, setElementLoading] = useState();
+
+  const handleSelect = async (element, e) => {
+    if (!elementLoading) {
+      // disable handleClick if another element is loading
+      setElementLoading(element);
+      const callback = () => setElementLoading(null);
+      isFunction(onSelect) && onSelect(element, e, callback);
+    }
+  };
   return (
     <div>
       <div className="w-full flex flex-row items-center">
@@ -19,11 +32,20 @@ const AvailableDevicesList = ({ data, onSelect, onEdit, onDelete }) => {
           <li
             key={element.kind + element.name}
             className="block transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50 cursor-pointer"
-            onClick={(e) => onSelect(element, e)}
+            onClick={(e) => handleSelect(element, e)}
           >
-            <div className="flex items-center px-4 py-4 sm:px-6">
+            <div className="relative flex items-center px-4 py-4 sm:px-6">
+              {elementLoading === element ? ( // if element is selected, display spinner
+                <div className="absolute top-0 left-0 w-full h-full opacity-30 bg-gray-300">
+                  <div className="w-full h-full flex justify-center items-center">
+                    <Spinner className="w-8 h-8 text-primary-800" />
+                  </div>
+                </div>
+              ) : (
+                <div />
+              )}
               <div className="flex items-center flex-1 min-w-0">
-                <div className="flex-1 min-w-0 px-4 md:grid md:grid-col-2 md:gap-4">
+                <div className="flex-1 min-w-0 px-4 sm:grid sm:grid-col-2 sm:gap-4">
                   <p className="col-span-2 text-lg font-semibold truncate text-primary-700">
                     {element.name}
                   </p>
@@ -37,7 +59,7 @@ const AvailableDevicesList = ({ data, onSelect, onEdit, onDelete }) => {
                       {element.topic}
                     </p>
                   </div>
-                  <div className="pt-2 md:pt-0 flex justify-end items-center cursor-default">
+                  <div className="pt-2 sm:pt-0 flex justify-end items-center cursor-default">
                     <button
                       className="mx-1 p-2 border rounded shadow-sm bg-neutral-100 focus:outline-none active:bg-neutral-200"
                       onClick={(e) => onEdit(element, e)}

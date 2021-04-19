@@ -56,7 +56,7 @@ const DeviceModal = ({
     port: '9001',
     kind: kindOptions[0].value,
     topic: 'test',
-    username: 'testuser',
+    username: 'testUser',
     password: 'word',
     ...initialValues,
   };
