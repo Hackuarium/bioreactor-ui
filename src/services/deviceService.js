@@ -46,7 +46,11 @@ export const updateDevice = async (deviceData) => {
 
 export const deleteDevice = (deviceID) => {
   const dbClient = db.connect(DEVICES_DB);
-  return dbClient.remove(deviceID);
+  return dbClient.remove(deviceID).catch((e) => {
+    const err = new Error(`Couldn't remove record: ${e.message}`);
+    err.name = 'Database Error';
+    throw err;
+  });
 };
 
 export const connectDevice2 = (

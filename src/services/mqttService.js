@@ -24,8 +24,8 @@ const getClientInstance = (
   });
 
   client.stream.on('error', (err) => {
-    const error = new Error(`couldn't connect to BROKER "${brokerUrl}"`);
-    error.name = 'MQTT ERROR';
+    const error = new Error(`Couldn't connect to BROKER "${brokerUrl}"`);
+    error.name = 'Mqtt Error';
     client.end();
     isFunction(onError) && onError(error);
   });

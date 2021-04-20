@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { isFunction } from 'lodash';
 import { Button } from '../components/tailwind-ui';
 import AvailableDevicesList from '../components/availableDevicesList';
 import DeviceModal from '../components/deviceModal';
@@ -9,13 +10,14 @@ import {
   getSavedDevices,
   connectDevice,
 } from '../services/deviceService';
-import { isFunction } from 'lodash';
+import useNotification from '../hooks/useNotification';
 
 const BroadcastDevices = () => {
   const [render, setRender] = useState(false);
-  const [initialValues, setInitialValues] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [devicesList, setDevicesList] = useState([]);
+  const [onEditValues, setOnEditValues] = useState({});
+  const { addErrorNotification } = useNotification();
 
   useEffect(() => {
     // get saved devices from DB
@@ -24,30 +26,36 @@ const BroadcastDevices = () => {
 
   const onSelectItem = (device, e, callback) => {
     setTimeout(() => {
-      //console.log(device);
       connectDevice(device)
-        .then((r) => console.log(r))
-        .catch((e) => console.log(e));
-
-      isFunction(callback) && callback();
+        .then((r) => {
+          // navigate to device details page
+          console.log(r);
+          isFunction(callback) && callback();
+        })
+        .catch((e) => {
+          isFunction(callback) && callback();
+          addErrorNotification(e.name, e.message);
+        });
     }, 500);
   };
 
   const onEditItem = (device, e) => {
     e.stopPropagation();
-    setInitialValues(device);
+    setOnEditValues(device);
     setIsModalOpen(true);
   };
 
   const onDeleteItem = (device, e) => {
     e.stopPropagation();
-    deleteDevice(device._id).then(() => setRender(!render));
+    deleteDevice(device._id)
+      .then(() => setRender(!render))
+      .catch((e) => addErrorNotification(e.name, e.message));
   };
 
   const onCloseModal = () => {
     setRender(!render);
     setIsModalOpen(false);
-    setInitialValues({});
+    setOnEditValues({});
   };
 
   return (
@@ -61,7 +69,7 @@ const BroadcastDevices = () => {
       <DeviceModal
         isOpen={isModalOpen}
         onClose={onCloseModal}
-        initialValues={initialValues}
+        initialValues={onEditValues}
         onSave={addDevice}
         onUpdate={updateDevice}
       ></DeviceModal>

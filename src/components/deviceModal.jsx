@@ -34,7 +34,7 @@ const DeviceModal = ({
   onUpdate,
 }) => {
   const [footerMessage, setFooterMessage] = useState(<div />);
-  const ref = useRef(null); // Ref the Form
+  const formRef = useRef(null); // Ref the Form
   const updateMode = !isEmpty(initialValues); // if initialValues defined : modal updates the recode; else: add the record
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const DeviceModal = ({
     e.stopPropagation();
     setFooterMessage(renderFooterMessage('connecting', 'Connecting ...'));
     setTimeout(() => {
-      connectDevice(ref.current.values)
+      connectDevice(formRef.current.values)
         .then((client) => {
           setFooterMessage(renderFooterMessage('success', 'Connected'));
           // TO DO : disconnect client
@@ -147,7 +147,7 @@ const DeviceModal = ({
       fluid
       wrapperComponent={Form}
       wrapperProps={{
-        innerRef: ref,
+        innerRef: formRef,
         initialValues: _initialValues,
         validationSchema,
         onSubmit: onSubmit,
