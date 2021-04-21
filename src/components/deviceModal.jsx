@@ -17,38 +17,39 @@ import {
   SvgOutlineCheck,
 } from './tailwind-ui';
 
-import {
-  connectDevice,
-  DEVICE_KINDS,
-  DEVICE_PROTOCOLS,
-} from '../services/deviceService';
+import { connectDevice } from '../services/deviceService';
+import { DEVICE_KINDS, DEVICE_PROTOCOLS } from '../services/devicesOptions';
 
 //
+// Pre-defined Vars
+const protocolOptions = DEVICE_PROTOCOLS.map((val) => {
+  return { label: val.toUpperCase(), value: val };
+});
+const kindOptions = DEVICE_KINDS.map((val) => {
+  return { label: val, value: val };
+});
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .max(50, 'Name too Long!')
+    .matches(
+      /^[A-z0-9_-]*$/,
+      'Field supports only : letters / numbers / _ / - ',
+    )
+    .required('Required'),
+  url: Yup.string().required('Required'),
+  port: Yup.number().positive().integer(),
+  protocol: Yup.string(),
+  kind: Yup.string().required('Required'),
+  topic: Yup.string().required('Required'),
+  username: Yup.string().required('Required'),
+});
 //
 
-const DeviceModal = ({
-  isOpen,
-  onClose,
-  initialValues, // if initialValues defined : update record ; else: add record
-  onSave,
-  onUpdate,
-}) => {
+const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
+  const updateMode = !isEmpty(initialValues); // if initialValues defined : updates the recode; else: add the record
   const [footerMessage, setFooterMessage] = useState(<div />);
   const formRef = useRef(null); // Ref the Form
-  const updateMode = !isEmpty(initialValues); // if initialValues defined : modal updates the recode; else: add the record
 
-  useEffect(() => {
-    // clear footer when modal is closed
-    !isOpen && setTimeout(() => setFooterMessage(<div />), 500);
-  }, [isOpen]);
-
-  // init initial values
-  const protocolOptions = Object.values(DEVICE_PROTOCOLS).map((val) => {
-    return { label: val.toUpperCase(), value: val };
-  });
-  const kindOptions = DEVICE_KINDS.map((val) => {
-    return { label: val, value: val };
-  });
   const _initialValues = {
     name: '123',
     url: 'mqtt.beemos.org',
@@ -60,20 +61,6 @@ const DeviceModal = ({
     password: 'word',
     ...initialValues,
   };
-
-  const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .max(50, 'Name too Long!')
-      .matches(
-        /^[A-z0-9_-]*$/,
-        'Field supports only : letters / numbers / _ / - ',
-      )
-      .required('Required'),
-    url: Yup.string().required('Required'),
-    port: Yup.number().positive().integer().required('Required'),
-    protocol: Yup.string().required('Required'),
-    username: Yup.string().required('Required'),
-  });
 
   // events functions
   const onSubmit = async (values) => {
@@ -104,6 +91,11 @@ const DeviceModal = ({
         });
     }, 500);
   };
+
+  useEffect(() => {
+    // clear footer when modal is closed
+    !isOpen && setTimeout(() => setFooterMessage(<div />), 500);
+  }, [isOpen]);
 
   // helper function for testConnection event
   const renderFooterMessage = (state, message) => {
@@ -178,7 +170,7 @@ const DeviceModal = ({
               className="mt-4 sm:mr-4 w-full sm:w-1/2"
               inputClassName="w-full"
             ></InputField>
-            <div className="flex flex-row justify-between items-end flex-1">
+            <div className="flex flex-row justify-between items-start flex-1">
               <SelectField
                 name="protocol"
                 id="protocol"
@@ -198,7 +190,7 @@ const DeviceModal = ({
               ></InputField>
             </div>
           </div>
-          <div className="flex flex-row justify-between items-end">
+          <div className="flex flex-row justify-between items-start">
             <SelectField
               name="kind"
               id="kind"

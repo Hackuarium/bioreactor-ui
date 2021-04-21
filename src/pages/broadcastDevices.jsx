@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { isFunction } from 'lodash';
 import { Button } from '../components/tailwind-ui';
-import AvailableDevicesList from '../components/availableDevicesList';
+import DevicesList from '../components/devicesList';
 import DeviceModal from '../components/deviceModal';
 import {
   addDevice,
@@ -33,8 +33,8 @@ const BroadcastDevices = () => {
           isFunction(callback) && callback();
         })
         .catch((e) => {
-          isFunction(callback) && callback();
           addErrorNotification(e.name, e.message);
+          isFunction(callback) && callback();
         });
     }, 500);
   };
@@ -66,6 +66,21 @@ const BroadcastDevices = () => {
       <div className="w-full flex justify-end mb-6 lg:mb-8">
         <Button onClick={() => setIsModalOpen(true)}>Add device</Button>
       </div>
+      <div>
+        <div className="w-full my-2 flex flex-row items-center ">
+          <h3 className="w-max ml-2 mr-4 text-neutral-600 text-sm whitespace-nowrap ">
+            Available devices
+          </h3>
+          <div className="w-full border-t border-neutral-300" />
+        </div>
+        <DevicesList
+          data={devicesList}
+          onSelect={onSelectItem}
+          onEdit={onEditItem}
+          onDelete={onDeleteItem}
+        />
+      </div>
+
       <DeviceModal
         isOpen={isModalOpen}
         onClose={onCloseModal}
@@ -73,13 +88,6 @@ const BroadcastDevices = () => {
         onSave={addDevice}
         onUpdate={updateDevice}
       ></DeviceModal>
-
-      <AvailableDevicesList
-        data={devicesList}
-        onSelect={onSelectItem}
-        onEdit={onEditItem}
-        onDelete={onDeleteItem}
-      />
     </div>
   );
 };

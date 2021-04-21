@@ -4,7 +4,6 @@ import {
   NotificationCenter,
   NotificationProvider,
   Spinner,
-  ToastNotificationCenter,
 } from '../components/tailwind-ui';
 
 const AppContent = ({ routes }) => {

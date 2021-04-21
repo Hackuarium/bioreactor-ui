@@ -1,31 +1,7 @@
 import db from './db';
-import { connect, subscribe } from './mqttService';
 import { isFunction } from 'lodash';
-
-// Public Vars
-export const DEVICE_TYPE = {
-  broadcast: 'broadcast',
-  interactive: 'interactive',
-  local: 'local',
-};
-export const DEVICE_PROTOCOLS = {
-  tcp: 'tcp',
-  http: 'http',
-};
-export const DEVICE_KINDS = [
-  'computer',
-  'beemos',
-  'openBio',
-  'openBio6',
-  'openSpectro',
-  'simpleSpectro',
-  'solar2015',
-];
-
-// Private Vars (Default)
-const DEVICES_DB = 'BIOREACTOR_devices';
-const DEFAULT_PORT = '9001';
-const DEFAULT_PROTOCOL = DEVICE_PROTOCOLS.tcp;
+import { connect, subscribe } from './mqttService';
+import { DEVICES_DB, DEFAULT_PROTOCOL, DEFAULT_PORT } from './devicesOptions';
 
 // Public Functions
 
@@ -51,38 +27,6 @@ export const deleteDevice = (deviceID) => {
     err.name = 'Database Error';
     throw err;
   });
-};
-
-export const connectDevice2 = (
-  type,
-  name,
-  url,
-  deviceTopic,
-  onSuccess,
-  onError,
-) => {
-  const dbName = `${type}_${name}`;
-  const dbClient = db.connect(dbName);
-  const mqttClient = subscribe(
-    url,
-    deviceTopic,
-    (payload) => {
-      dbClient.put({ _id: Date.now().toString(), ...payload });
-      isFunction(onSuccess) && onSuccess(payload);
-    },
-    onError,
-  );
-
-  // Functions to return
-  const disconnect = () => mqttClient.disconnect(() => dbClient.close());
-  const getAllData = () => dbClient.getAll();
-  const getLastData = () => dbClient.getAll({ descending: true, limit: 1 });
-
-  return {
-    disconnect,
-    getAllData,
-    getLastData,
-  };
 };
 
 // add device to devices DB
@@ -144,4 +88,37 @@ export const addDevice = async (props) => {
           throw err;
         });
     });
+};
+
+// To Do: update it (refactor)
+export const connectDevice2 = (
+  type,
+  name,
+  url,
+  deviceTopic,
+  onSuccess,
+  onError,
+) => {
+  const dbName = `${type}_${name}`;
+  const dbClient = db.connect(dbName);
+  const mqttClient = subscribe(
+    url,
+    deviceTopic,
+    (payload) => {
+      dbClient.put({ _id: Date.now().toString(), ...payload });
+      isFunction(onSuccess) && onSuccess(payload);
+    },
+    onError,
+  );
+
+  // Functions to return
+  const disconnect = () => mqttClient.disconnect(() => dbClient.close());
+  const getAllData = () => dbClient.getAll();
+  const getLastData = () => dbClient.getAll({ descending: true, limit: 1 });
+
+  return {
+    disconnect,
+    getAllData,
+    getLastData,
+  };
 };

@@ -57,6 +57,7 @@ export const connect = (url, protocol, port, username, password) => {
   return clientPromise;
 };
 
+// TO DO: update function
 export const subscribe = (url, topic, onSuccess, onError) => {
   const client = getClientInstance(url);
   client.subscribe(topic, { qos: 2 }, (err) => {
