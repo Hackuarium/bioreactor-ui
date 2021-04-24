@@ -1,7 +1,7 @@
 import db from './db';
 import { isFunction } from 'lodash';
 import { connect, subscribe } from './mqttService';
-import { DEVICES_DB, DEFAULT_PROTOCOL, DEFAULT_PORT } from './devicesOptions';
+import { DEVICES_DB } from './devicesOptions';
 
 // Public Functions
 
@@ -32,16 +32,7 @@ export const deleteDevice = (deviceID) => {
 // add device to devices DB
 export const addDevice = async (props) => {
   const dbClient = db.connect(DEVICES_DB);
-  const {
-    kind,
-    name,
-    url,
-    protocol = DEFAULT_PROTOCOL,
-    port = DEFAULT_PORT,
-    topic,
-    username,
-    password,
-  } = props;
+  const { kind, name, url, protocol, port, topic, username, password } = props;
 
   // make sure all props are defined
   for (let key in props)

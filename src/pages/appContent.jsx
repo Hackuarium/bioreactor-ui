@@ -1,26 +1,15 @@
 import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
+import { routes, renderRoutes } from '../navigation/routeHelper';
+
 import {
   NotificationCenter,
   NotificationProvider,
   Spinner,
 } from '../components/tailwind-ui';
 
-const AppContent = ({ routes }) => {
-  const renderRoutes = (routes) =>
-    routes.flatMap((route) => {
-      if (route.options) return renderRoutes(route.options);
-      else
-        return (
-          <Route
-            key={route.label}
-            path={route.value}
-            exact={route.exact}
-            component={route.component}
-          />
-        );
-    });
-
+const AppContent = () => {
   return (
     <div className="w-full h-full" data-testid="App-content">
       <NotificationProvider>
@@ -28,7 +17,7 @@ const AppContent = ({ routes }) => {
         <Suspense
           fallback={
             <div className="w-full h-full flex justify-center items-start pt-52">
-              <Spinner className="text-secondary w-12"></Spinner>
+              <Spinner className="text-primary-300 w-10"></Spinner>
             </div>
           }
         >

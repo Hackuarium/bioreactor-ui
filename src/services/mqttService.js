@@ -1,38 +1,43 @@
 import mqtt from 'mqtt';
 import { isFunction } from 'lodash';
 import { parseCurrentSettings } from 'legoino-util';
+import { DEFAULT_PORT, DEFAULT_PROTOCOL } from './devicesOptions';
 
 // Private Functions
 let client;
 
 const getClientInstance = (
   url,
-  protocol,
-  port,
+  protocol = DEFAULT_PROTOCOL,
+  port = DEFAULT_PORT,
   username,
   password,
   onSuccess,
   onError,
 ) => {
   // if client is already connected
+  console.log(protocol);
+  console.log(port);
   if (client && client.connected && client.options.hostname === url)
     isFunction(onSuccess) && onSuccess(client);
 
   const brokerUrl = `${protocol}://${url}:${port}`;
   client = mqtt.connect(brokerUrl, {
-    keepalive: 60,
-  });
-
-  client.stream.on('error', (err) => {
-    const error = new Error(`Couldn't connect to BROKER "${brokerUrl}"`);
-    error.name = 'Mqtt Error';
-    client.end();
-    isFunction(onError) && onError(error);
+    keepalive: 300,
+    reconnectPeriod: 5000,
   });
 
   client.on('connect', () => {
     console.log(`connected to ${brokerUrl} : ${client.connected}`);
     isFunction(onSuccess) && onSuccess(client);
+  });
+
+  client.stream.on('error', (err) => {
+    console.log(err);
+    const error = new Error(`Couldn't connect to BROKER "${brokerUrl}"`);
+    error.name = 'Mqtt Error';
+    client.end();
+    isFunction(onError) && onError(error);
   });
 };
 

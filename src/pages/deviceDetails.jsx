@@ -1,10 +1,10 @@
-import { connectDevice, DEVICE_TYPE } from '../services/deviceService';
-import { useState, useEffect } from 'react';
+//import { connectDevice, DEVICE_TYPE } from '../services/deviceService';
+//import { useState, useEffect } from 'react';
 
-const DeviceDetails = () => {
+const DeviceDetails = ({ match }) => {
+  /*
   const [connected, setConnected] = useState(false);
   const [data, setData] = useState([]);
-
   useEffect(() => {
     const device = connectDevice(
       DEVICE_TYPE.broadcast,
@@ -22,17 +22,19 @@ const DeviceDetails = () => {
     /*
     setTimeout(() => {
       device.disconnect(() => setConnected(false));
-    }, 9000);*/
+    }, 9000);//
 
     return () => {
       device.disconnect();
     };
   }, []);
 
+      <div>{connected && JSON.stringify(data)}</div>
+*/
   return (
     <div>
       <div>Device Details</div>
-      <div>{connected && JSON.stringify(data)}</div>
+      <p>{JSON.stringify(match.params)}</p>
     </div>
   );
 };

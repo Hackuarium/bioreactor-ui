@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import useMedia from '../hooks/useMedia';
-import { getCurrentRoute } from '../hooks/utils';
+import { routes, getCurrentRoute } from '../navigation/routeHelper';
 import {
   SvgOutlineMenu,
   SvgOutlineX,
@@ -10,38 +10,48 @@ import {
   ZakodiumSolidSvg,
 } from './tailwind-ui';
 
-const NavBar = ({ routes }) => {
+// Helper func: get only routes which has inNavbar=true
+const getNavbarOptions = (routes, onClick) =>
+  routes.reduce((routeList, route) => {
+    if (route.inNavbar) {
+      const { id, label, value, icon } = route;
+      const renderOption =
+        route.component || route.render
+          ? (children, option) => (
+              <NavLink to={option.value} exact onClick={onClick}>
+                {children}
+              </NavLink>
+            )
+          : undefined;
+
+      const options = route.options //if route has sub routes (options)
+        ? getNavbarOptions(route.options)
+        : [];
+
+      routeList.push({
+        type: options.length > 0 ? 'group' : 'option',
+        id,
+        label,
+        value,
+        icon,
+        renderOption,
+        options,
+      });
+    }
+    return routeList;
+  }, []);
+
+//
+// Navbar Component
+
+const NavBar = () => {
   const isSmallScreen = useMedia(['(max-width: 1023px)'], [true], false);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(getCurrentRoute(routes));
 
   const onCloseMenu = (e) => setIsOpen(false);
 
-  const getRoutes = (routes) =>
-    routes.map((route) => {
-      const { id, label, value, icon, options } = route;
-      const isGroup = options ? true : false;
-
-      const additionalProp = isGroup //if route has sub routes (options)
-        ? { options: getRoutes(options) }
-        : {
-            //else render the route
-            renderOption: (children, option) => (
-              <NavLink to={option.value} exact onClick={onCloseMenu}>
-                {children}
-              </NavLink>
-            ),
-          };
-
-      return {
-        type: isGroup ? 'group' : 'option',
-        id,
-        label,
-        value,
-        icon,
-        ...additionalProp,
-      };
-    });
+  const navbarOptions = getNavbarOptions(routes, onCloseMenu);
 
   return (
     <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-900">
@@ -78,7 +88,7 @@ const NavBar = ({ routes }) => {
         <VerticalNavigation
           onSelect={setSelected}
           selected={selected}
-          options={getRoutes(routes)}
+          options={navbarOptions}
         />
       </nav>
 

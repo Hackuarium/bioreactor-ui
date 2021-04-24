@@ -12,7 +12,7 @@ import {
 } from '../services/deviceService';
 import useNotification from '../hooks/useNotification';
 
-const BroadcastDevices = () => {
+const BroadcastDevices = ({ history, match }) => {
   const [render, setRender] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [devicesList, setDevicesList] = useState([]);
@@ -24,6 +24,16 @@ const BroadcastDevices = () => {
     getSavedDevices().then((list) => setDevicesList(list));
   }, [render]);
 
+  const onOpenModal = () => {
+    setOnEditValues({});
+    setIsModalOpen(true);
+  };
+
+  const onCloseModal = () => {
+    setRender(!render); // refresh devices list
+    setIsModalOpen(false); // close modal
+  };
+
   const onSelectItem = (device, e, callback) => {
     setTimeout(() => {
       connectDevice(device)
@@ -31,6 +41,8 @@ const BroadcastDevices = () => {
           // navigate to device details page
           console.log(r);
           isFunction(callback) && callback();
+          console.log(match);
+          history.push(match.url + '/device/' + device._id);
         })
         .catch((e) => {
           addErrorNotification(e.name, e.message);
@@ -52,19 +64,13 @@ const BroadcastDevices = () => {
       .catch((e) => addErrorNotification(e.name, e.message));
   };
 
-  const onCloseModal = () => {
-    setRender(!render);
-    setIsModalOpen(false);
-    setOnEditValues({});
-  };
-
   return (
     <div className="p-8">
       <h2 className="text-3xl font-semibold mb-12 lg:mb-16">
         Broadcast devices
       </h2>
       <div className="w-full flex justify-end mb-6 lg:mb-8">
-        <Button onClick={() => setIsModalOpen(true)}>Add device</Button>
+        <Button onClick={onOpenModal}>Add device</Button>
       </div>
       <div>
         <div className="w-full my-2 flex flex-row items-center ">
