@@ -16,8 +16,6 @@ const getClientInstance = (
   onError,
 ) => {
   // if client is already connected
-  console.log(protocol);
-  console.log(port);
   if (client && client.connected && client.options.hostname === url)
     isFunction(onSuccess) && onSuccess(client);
 
@@ -63,25 +61,24 @@ export const connect = (url, protocol, port, username, password) => {
 };
 
 // TO DO: update function
-export const subscribe = (url, topic, onSuccess, onError) => {
-  const client = getClientInstance(url);
+
+export const subscribe = (client, topic, onMessageReceived, onError) => {
   client.subscribe(topic, { qos: 2 }, (err) => {
     err
       ? isFunction(onError) && onError(err)
       : client.on('message', (topic, payload) => {
-          isFunction(onSuccess) && onSuccess(parseToJson(payload));
+          isFunction(onMessageReceived) &&
+            onMessageReceived(parseToJson(payload));
         });
   });
 
-  // Functions to return
-
   const unsubscribe = (onError) => client.unsubscribe(topic, {}, onError);
 
-  const disconnect = (callback) =>
-    client.end(() => {
-      console.log(`mqtt broker "${client.options.hostname}" disconnected`);
-      isFunction(callback) && callback();
-    });
-
-  return { unsubscribe, disconnect };
+  return unsubscribe;
 };
+
+export const disconnect = (client, callback) =>
+  client.end(() => {
+    console.log(`mqtt broker "${client.options.hostname}" disconnected`);
+    isFunction(callback) && callback();
+  });

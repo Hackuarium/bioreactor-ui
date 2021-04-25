@@ -1,18 +1,20 @@
 import db from './db';
 import { isFunction } from 'lodash';
-import { connect, subscribe } from './mqttService';
+import { connect, subscribe, disconnect } from './mqttService';
 import { DEVICES_DB } from './devicesOptions';
 
 // Public Functions
-
-export const connectDevice = ({ url, protocol, port, username, password }) => {
-  return connect(url, protocol, port, username, password);
-};
 
 export const getSavedDevices = async () => {
   const dbClient = db.connect(DEVICES_DB);
   const list = await dbClient.getAll();
   return list.map((item) => item.doc);
+};
+
+export const getDevice = async (deviceId) => {
+  const dbClient = db.connect(DEVICES_DB);
+  const device = await dbClient.get(deviceId);
+  return device;
 };
 
 export const updateDevice = async (deviceData) => {
@@ -30,7 +32,7 @@ export const deleteDevice = (deviceID) => {
 };
 
 // add device to devices DB
-export const addDevice = async (props) => {
+export const addDevice = (props) => {
   const dbClient = db.connect(DEVICES_DB);
   const { kind, name, url, protocol, port, topic, username, password } = props;
 
@@ -81,35 +83,51 @@ export const addDevice = async (props) => {
     });
 };
 
-// To Do: update it (refactor)
-export const connectDevice2 = (
-  type,
+//
+// connect to broadcast device & return a client instance with {subscribe, disconnect, getAllData, getLastData}
+export const connectDevice = ({
+  _id,
   name,
+  kind,
+  deviceId = _id || `${kind}_${name}`,
   url,
-  deviceTopic,
-  onSuccess,
-  onError,
-) => {
-  const dbName = `${type}_${name}`;
-  const dbClient = db.connect(dbName);
-  const mqttClient = subscribe(
-    url,
-    deviceTopic,
-    (payload) => {
-      dbClient.put({ _id: Date.now().toString(), ...payload });
-      isFunction(onSuccess) && onSuccess(payload);
-    },
-    onError,
-  );
+  protocol,
+  port,
+  topic,
+  username,
+  password,
+}) => {
+  const clientPromise = new Promise(async (resolve, reject) => {
+    try {
+      const mqttClient = await connect(url, protocol, port, username, password);
+      const dbClient = db.connect(deviceId);
+      const _subscribe = (onSubscribe, onError) => {
+        const unsubscribe = subscribe(
+          mqttClient,
+          topic,
+          (payload) => {
+            dbClient.put({ _id: Date.now().toString(), ...payload });
+            isFunction(onSubscribe) && onSubscribe(payload);
+          },
+          onError,
+        );
+        return unsubscribe;
+      };
 
-  // Functions to return
-  const disconnect = () => mqttClient.disconnect(() => dbClient.close());
-  const getAllData = () => dbClient.getAll();
-  const getLastData = () => dbClient.getAll({ descending: true, limit: 1 });
+      const _disconnect = () => disconnect(mqttClient, () => dbClient.close());
+      const getAllData = () => dbClient.getAll();
+      const getLastData = () => dbClient.getAll({ descending: true, limit: 1 });
+      resolve({
+        subscribe: _subscribe,
+        disconnect: _disconnect,
+        getAllData,
+        getLastData,
+      });
+    } catch (e) {
+      // connection error
+      reject(e);
+    }
+  });
 
-  return {
-    disconnect,
-    getAllData,
-    getLastData,
-  };
+  return clientPromise;
 };

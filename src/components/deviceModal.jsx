@@ -56,7 +56,7 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
     protocol: protocolOptions[0].value,
     port: '9001',
     kind: kindOptions[0].value,
-    topic: 'test',
+    topic: 'lpatiny/Computer/server',
     username: 'testUser',
     password: 'word',
     ...initialValues,

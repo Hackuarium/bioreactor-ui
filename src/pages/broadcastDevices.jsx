@@ -35,19 +35,15 @@ const BroadcastDevices = ({ history, match }) => {
   };
 
   const onSelectItem = (device, e, callback) => {
-    setTimeout(() => {
-      connectDevice(device)
-        .then((r) => {
-          // navigate to device details page
-          console.log(r);
-          isFunction(callback) && callback();
-          console.log(match);
-          history.push(match.url + '/device/' + device._id);
-        })
-        .catch((e) => {
-          addErrorNotification(e.name, e.message);
-          isFunction(callback) && callback();
-        });
+    setTimeout(async () => {
+      try {
+        await connectDevice(device);
+        isFunction(callback) && callback();
+        history.push(match.url + '/device/' + device._id);
+      } catch (e) {
+        addErrorNotification(e.name, e.message);
+        isFunction(callback) && callback();
+      }
     }, 500);
   };
 

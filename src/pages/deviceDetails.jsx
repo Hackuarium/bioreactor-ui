@@ -1,40 +1,37 @@
-//import { connectDevice, DEVICE_TYPE } from '../services/deviceService';
-//import { useState, useEffect } from 'react';
+import { connectDevice, getDevice } from '../services/deviceService';
+import { useState, useEffect } from 'react';
 
 const DeviceDetails = ({ match }) => {
-  /*
-  const [connected, setConnected] = useState(false);
   const [data, setData] = useState([]);
+  const [deviceClient, setDeviceClient] = useState();
+  const deviceId = `${match.params.id}`;
   useEffect(() => {
-    const device = connectDevice(
-      DEVICE_TYPE.broadcast,
-      'patinyComputer',
-      'mqtt.beemos.org',
-      'lpatiny/Computer/server',
-      (res) => {
-        //console.log(res);
-        setConnected(true);
-        setData(res);
-        //device.getLastData().then((res) => console.log(res));
-      },
-      (err) => console.log(err),
-    );
-    /*
-    setTimeout(() => {
-      device.disconnect(() => setConnected(false));
-    }, 9000);//
+    if (deviceId) {
+      getDevice(deviceId).then((deviceInfo) => {
+        //console.log(deviceInfo);
+        connectDevice(deviceInfo).then((deviceClient) =>
+          setDeviceClient(deviceClient),
+        );
+      });
+    }
+  }, [deviceId]);
 
-    return () => {
-      device.disconnect();
-    };
-  }, []);
+  useEffect(() => {
+    if (deviceClient) {
+      //console.log(deviceClient);
+      deviceClient.subscribe(
+        (message) => setData([message, ...data]),
+        (error) => console.log(error),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deviceClient]);
 
-      <div>{connected && JSON.stringify(data)}</div>
-*/
   return (
     <div>
       <div>Device Details</div>
-      <p>{JSON.stringify(match.params)}</p>
+      <p>{deviceId}</p>
+      <p>{JSON.stringify(data[0])}</p>
     </div>
   );
 };
