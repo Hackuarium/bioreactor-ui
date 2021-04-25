@@ -1,6 +1,5 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState} from 'react';
 import { NavLink } from 'react-router-dom';
-import { useHistory } from 'react-router-dom'
 
 import useMedia from '../hooks/useMedia';
 import { routes, getCurrentRoute } from '../navigation/routeHelper';
@@ -54,10 +53,6 @@ const NavBar = () => {
 
   const navbarOptions = getNavbarOptions(routes, onCloseMenu);
 
-  window.onpopstate = function(event) {
-    //alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
-    
-  };
 
   return (
     <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-900">
