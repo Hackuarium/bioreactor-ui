@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/general.jsx"],"names":["General"],"mappings":"wIAIeA,UAJC,WACd,OAAO","file":"static/js/8.e887ba6c.chunk.js","sourcesContent":["const General = () => {\n  return <div>General</div>;\n};\n\nexport default General;\n"],"sourceRoot":""}
