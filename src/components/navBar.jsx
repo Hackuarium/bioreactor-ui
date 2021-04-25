@@ -55,7 +55,7 @@ const NavBar = () => {
 
 
   return (
-    <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-900">
+    <header className="m-0 p-0 w-full lg:w-max lg:h-full relative  bg-primary-900">
       {/** Top NavBar in small screens*/}
       <div className="px-4 py-3 flex flex-row justify-between items-center lg:hidden">
         <ZakodiumSolidSvg className="fill-current text-white h-6" />
