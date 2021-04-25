@@ -11,7 +11,7 @@ import {
 
 const AppContent = () => {
   return (
-    <div className="w-full h-full" data-testid="App-content">
+    <div className="w-full h-full max-w-full" data-testid="App-content">
       <NotificationProvider>
         <NotificationCenter position="top-right" className="mt-16" />
         <Suspense
