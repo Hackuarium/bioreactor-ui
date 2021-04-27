@@ -24,7 +24,7 @@ function DB() {
       return _db.put(doc);
     };
 
-    const get = (docId) => _db.get(docId);
+    const get = (docId) => _db.get(docId)
 
     const getAll = async (options) => {
       const docs = await _db.allDocs({
@@ -32,7 +32,16 @@ function DB() {
         ...options,
       });
       //console.log(`get ${docs.total_rows} rows`);
+      //console.log(docs.rows);
       return docs.rows;
+    };
+
+    const getAllCount = async (options) => {
+      const docs = await _db.allDocs({
+        include_docs: true,
+        ...options,
+      });
+      return docs.total_rows;
     };
 
     const update = (doc) => {
@@ -67,6 +76,7 @@ function DB() {
       put,
       get,
       getAll,
+      getAllCount,
       update,
       remove,
       removeAll,

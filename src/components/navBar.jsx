@@ -47,14 +47,13 @@ const getNavbarOptions = (routes, onClick) =>
 const NavBar = () => {
   const isSmallScreen = useMedia(['(max-width: 1023px)'], [true], false);
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(getCurrentRoute(routes));
 
   const onCloseMenu = (e) => setIsOpen(false);
 
   const navbarOptions = getNavbarOptions(routes, onCloseMenu);
 
   return (
-    <header className="m-0 p-0 w-full lg:w-max lg:h-full relative bg-primary-900">
+    <header className="m-0 p-0 w-full lg:w-max lg:h-full relative  bg-primary-900">
       {/** Top NavBar in small screens*/}
       <div className="px-4 py-3 flex flex-row justify-between items-center lg:hidden">
         <ZakodiumSolidSvg className="fill-current text-white h-6" />
@@ -86,8 +85,9 @@ const NavBar = () => {
           </div>
         )}
         <VerticalNavigation
-          onSelect={setSelected}
-          selected={selected}
+          onSelect={onCloseMenu}
+          //selected={selected}
+          selected={getCurrentRoute(routes)}
           options={navbarOptions}
         />
       </nav>
