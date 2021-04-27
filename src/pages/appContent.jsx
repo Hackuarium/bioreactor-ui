@@ -10,6 +10,7 @@ import {
 } from '../components/tailwind-ui';
 
 const AppContent = () => {
+
   return (
     <div className="w-full h-full max-w-full" data-testid="App-content">
       <NotificationProvider>
