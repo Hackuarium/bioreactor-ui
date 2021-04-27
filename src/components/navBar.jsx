@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import useMedia from '../hooks/useMedia';
@@ -47,12 +47,10 @@ const getNavbarOptions = (routes, onClick) =>
 const NavBar = () => {
   const isSmallScreen = useMedia(['(max-width: 1023px)'], [true], false);
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(getCurrentRoute(routes));
 
   const onCloseMenu = (e) => setIsOpen(false);
 
   const navbarOptions = getNavbarOptions(routes, onCloseMenu);
-
 
   return (
     <header className="m-0 p-0 w-full lg:w-max lg:h-full relative  bg-primary-900">
@@ -87,7 +85,7 @@ const NavBar = () => {
           </div>
         )}
         <VerticalNavigation
-          onSelect={setSelected}
+          onSelect={onCloseMenu}
           //selected={selected}
           selected={getCurrentRoute(routes)}
           options={navbarOptions}
