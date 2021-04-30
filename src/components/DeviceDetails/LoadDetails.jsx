@@ -1,5 +1,6 @@
 import { useState, useEffect} from 'react';
 import { Table,Dropdown  } from '../tailwind-ui';
+import LoadPlot from './LoadPlot'
 
 const LoadDetails = (props)=>{
 
@@ -112,6 +113,9 @@ const LoadDetails = (props)=>{
           class="min-w-full table-auto"
           Header={() => (
             <tr class="bg-primary-900">
+              <th class="px-4 py-2">
+                <span class="text-white">Date</span>
+              </th>
               <th class="px-2 py-2">
                 <span class="text-white">Load</span>
               </th>
@@ -135,6 +139,9 @@ const LoadDetails = (props)=>{
           Tr={({ value }) =>
             value && value.doc.parameters ? (
               <tr class="bg-white border-4 border-gray-200 text-center">
+                <td class="px-4 py-2">
+                  <span>dd/mm/yy HH:MM:ss</span>
+                </td>
                 <td class="px-4 py-2">
                   <span>{value.doc.parameters.H}</span>
                 </td>
@@ -168,6 +175,40 @@ const LoadDetails = (props)=>{
           }}
         />
       </div>
+      <div className="flex space-x-100 m-4">
+            <div class="flex-1">
+              <h2 class="text-2xl ">Variations Chart</h2>
+              <p class="text-sm text-gray-500">Chart of variations of the device.</p>
+            </div>
+            <div className="flex-2 object-right">
+              <Dropdown
+                onSelect={function noRefCheck(){}}
+                options={[
+                  [
+                    {
+                      label: '1 hour',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 day',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 month',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 year',
+                      type: 'option'
+                    }
+                  ]
+                ]}
+                title="Diplay per"
+              />
+            </div>
+            
+          </div>
+      <LoadPlot/>
     </div>
   );
 }

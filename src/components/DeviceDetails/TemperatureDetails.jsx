@@ -1,5 +1,6 @@
 import { useState, useEffect} from 'react';
 import { Table,Dropdown } from '../tailwind-ui';
+import TemperaturePlot from './TemperaturePlot';
 
 const TemperatureDetails = (props)=>{
 
@@ -25,8 +26,8 @@ const TemperatureDetails = (props)=>{
             </div>
         </div>
 
-        <div class="  my-1   bg-white w-full rounded-lg ">
-          <div className="flex space-x-100 m-4">
+        <div class="  my-1bg-white w-full ">
+          <div className="flex space-x-100 m-2">
             <div class="flex-1">
               <h2 class="text-2xl ">Previous Details</h2>
               <p class="text-sm text-gray-500">Previous details of the device.</p>
@@ -59,12 +60,15 @@ const TemperatureDetails = (props)=>{
             </div>
           </div>
 
-      <div class="min-h-screen flex items-center px-4">
+      <div class=" flex items-center">
         <div class='overflow-x-auto w-full'>
           <Table
-            class="mx-auto max-w-4xl w-full whitespace-nowrap rounded-lg bg-white divide-y divide-gray-300 overflow-hidden"
+            class="mx-auto max-w-4xl w-full whitespace-nowrap bg-white divide-y divide-gray-300 overflow-hidden"
             Header={() => (
               <tr class="bg-primary-900">
+                <th class="px-4 py-2">
+                  <span class="text-white">Date</span>
+                </th>
                 <th class="px-4 py-2">
                   <span class="text-white">CPU Temperature</span>
                 </th>
@@ -73,6 +77,9 @@ const TemperatureDetails = (props)=>{
             Tr={({ value }) =>
               value && value.doc.parameters ? (
                 <tr class="bg-white divide-y border-4 border-gray-200 text-center">
+                  <td class="px-4 py-2">
+                    <span>dd/mm/yy HH:MM:ss</span>
+                  </td>
                   <td class="px-4 py-2 ">
                     <span>{value.doc.parameters.A}</span>
                   </td>
@@ -92,6 +99,40 @@ const TemperatureDetails = (props)=>{
           />
           </div>
         </div>
+        <div className="flex space-x-100 m-4">
+            <div class="flex-1">
+              <h2 class="text-2xl ">Variations Chart</h2>
+              <p class="text-sm text-gray-500">Chart of variations of the device.</p>
+            </div>
+            <div className="flex-2 object-right">
+              <Dropdown
+                onSelect={function noRefCheck(){}}
+                options={[
+                  [
+                    {
+                      label: '1 hour',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 day',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 month',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 year',
+                      type: 'option'
+                    }
+                  ]
+                ]}
+                title="Diplay per"
+              />
+            </div>
+            
+          </div>
+          <TemperaturePlot/>
       </div>
     </div>
   );

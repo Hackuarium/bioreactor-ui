@@ -1,5 +1,6 @@
 import { useState, useEffect} from 'react';
 import { Table ,Dropdown } from '../tailwind-ui';
+import FSPlot from './FSPlot'
 
 const FSDetails = (props)=>{
 
@@ -73,6 +74,9 @@ const FSDetails = (props)=>{
           Header={() => (
             <tr class="bg-primary-900">
               <th class="px-4 py-2">
+                <span class="text-white">Date</span>
+              </th>
+              <th class="px-4 py-2">
                 <span class="text-white">FS min</span>
               </th>
               <th class="px-4 py-2">
@@ -83,6 +87,9 @@ const FSDetails = (props)=>{
           Tr={({ value }) =>
             value && value.doc.parameters ? (
               <tr class="bg-white border-4 border-gray-200 text-center">
+                <td class="px-4 py-2">
+                  <span>dd/mm/yy HH:MM:ss</span>
+                </td>
                 <td class="px-4 py-2">
                   <span>{value.doc.parameters.N}</span>
                 </td>
@@ -104,6 +111,41 @@ const FSDetails = (props)=>{
           }}
         />
       </div>
+      <div className="flex space-x-100 m-4">
+            <div class="flex-1">
+              <h2 class="text-2xl ">Variations Chart</h2>
+              <p class="text-sm text-gray-500">Chart of variations of the device.</p>
+            </div>
+            <div className="flex-2 object-right">
+              <Dropdown
+                onSelect={function noRefCheck(){}}
+                options={[
+                  [
+                    {
+                      label: '1 hour',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 day',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 month',
+                      type: 'option'
+                    },
+                    {
+                      label: '1 year',
+                      type: 'option'
+                    }
+                  ]
+                ]}
+                title="Diplay per"
+              />
+            </div>
+            
+          </div>
+          <FSPlot/>
+
     </div>
   );
 }
