@@ -17,7 +17,7 @@ import {
   SvgOutlineCheck,
 } from './tailwind-ui';
 
-import { connectDevice } from '../services/deviceService';
+import { connectDevice } from '../services/broadCastDeviceService';
 import { DEVICE_KINDS, DEVICE_PROTOCOLS } from '../services/devicesOptions';
 
 //

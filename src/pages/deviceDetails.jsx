@@ -1,7 +1,7 @@
-import { connectDevice, getDevice } from '../services/deviceService';
+import { connectDevice, getDevice } from '../services/broadCastDeviceService';
 import { useState, useEffect } from 'react';
 import { HorizontalNavigation } from '../components/tailwind-ui';
-import Details from '../components/DeviceDetails/Details'
+import Details from '../components/BroadCastDevicesDetails/Details'
 
 const DeviceDetails = ({ match }) => {
 

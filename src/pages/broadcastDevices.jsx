@@ -9,7 +9,7 @@ import {
   deleteDevice,
   getSavedDevices,
   connectDevice,
-} from '../services/deviceService';
+} from '../services/broadCastDeviceService';
 import useNotification from '../hooks/useNotification';
 
 const BroadcastDevices = ({ history, match }) => {
