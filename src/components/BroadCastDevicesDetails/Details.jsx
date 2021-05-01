@@ -14,9 +14,9 @@ const Details = (props)=>{
       
       <ActualDetails DetailType={props.DetailType} data={props.data}/>
 
-      <DataTable previousData={props.previousData} DetailType={props.DetailType}/>
-
       <DetailsPlot DetailType={props.DetailType} Header={props.DetailType+' Variation Chart'}/>
+
+      <DataTable previousData={props.previousData} DetailType={props.DetailType}/>
 
     </div>
   );
