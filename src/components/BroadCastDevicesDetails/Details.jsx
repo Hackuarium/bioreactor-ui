@@ -16,7 +16,7 @@ const Details = (props)=>{
 
       <DetailsPlot DetailType={props.DetailType} Header={props.DetailType+' Variation Chart'}/>
 
-      <DataTable previousData={props.previousData} DetailType={props.DetailType}/>
+      <DataTable currentPage={props.currentPage} setCurrentPage={(p)=>props.setCurrentPage(p)} count={props.count} previousData={props.previousData} DetailType={props.DetailType}/>
 
     </div>
   );

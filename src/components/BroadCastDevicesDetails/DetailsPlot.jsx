@@ -64,7 +64,7 @@ const DetailsPlot = (props) => {
             
           </div>
 
-        <div className="w-max h-max m-2 p-4 flex justify-center items-center rounded-md bg-white shadow"> 
+        <div className="overflow-scroll w-24 min-w-full h-max m-2 p-4 flex justify-center items-center rounded-md bg-white shadow"> 
             <Plot
             width={900}
             height={400}

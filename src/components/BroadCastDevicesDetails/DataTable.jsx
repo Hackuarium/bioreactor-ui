@@ -18,7 +18,7 @@ const DataTable = (props)=>{
     },[props])
 
     return (
-    <div class="my-1 bg-white w-full rounded-lg ">
+    <div class="my-1 overflow-scroll w-24 min-w-full md:min-w-0  bg-white w-full rounded-lg ">
       <div className="flex space-x-100 m-4">
             <div class="flex-1">
               <h2 class="text-2xl ">Previous Details</h2>
@@ -26,7 +26,7 @@ const DataTable = (props)=>{
             </div>
           </div>
         <Table
-          class="min-w-full table-auto"
+          class="min-w-full table-auto "
           Header={() => (
             parameters.length!==0?
               <tr class="bg-primary-900">
@@ -63,10 +63,10 @@ const DataTable = (props)=>{
           pagination={{
             itemsPerPage: 10,
             onPageChange: (page) => {
-              setCurrentPage(page);
+              props.setCurrentPage(page);
             },
-            page: currentPage,
-            totalCount: count,
+            page: props.currentPage,
+            totalCount: props.count,
             withText: true,
           }}
         />

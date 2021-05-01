@@ -7,6 +7,8 @@ const DeviceDetails = ({ match }) => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [count,setCount] =useState(0);
+
   const [selected, setSelected] = useState({value:'Load', label:'Load'});
 
   const [data, setData] = useState([]);
@@ -29,17 +31,17 @@ const DeviceDetails = ({ match }) => {
   useEffect(() => {
     if (deviceClient) {
       //getAllDataCount
-      /*deviceClient.getAllDataCount().then((result) => {
-        console.log(result);
+      deviceClient.getAllDataCount().then((result) => {
+        //console.log(result);
         setCount(result);
-      });*/
+      });
       deviceClient.subscribe(
         (message) => setData([message, ...data]),
         (error) => console.log(error),
       );
-      console.log(data);
-      deviceClient.getPageDate(currentPage * 10, 10).then((result) => {
-        console.log(result);
+      //console.log(data);
+      deviceClient.getPageData(currentPage * 10, 10).then((result) => {
+        //console.log(result);
         setPreviousData(result);
       });
     }
@@ -48,7 +50,7 @@ const DeviceDetails = ({ match }) => {
 
   useEffect(() => {
     if (deviceClient) {
-      deviceClient.getPageDate(currentPage * 10, 10).then((result) => {
+      deviceClient.getPageData(currentPage * 10, 10).then((result) => {
         console.log(result);
         setPreviousData(result);
       });
@@ -62,6 +64,7 @@ const DeviceDetails = ({ match }) => {
       <HorizontalNavigation 
           onSelect={(option) => {
             setSelected(option);
+            setCurrentPage(1);
           }}
           selected={selected}
           options={['Load', 'I/O','FS', 'Temperature'].map((value) => ({
@@ -70,7 +73,7 @@ const DeviceDetails = ({ match }) => {
           }))}
       />
 
-      <Details data={data} previousData={previousData} DetailType={selected.value} setCurrentPage={(p)=>setCurrentPage(p)}/>
+      <Details currentPage={currentPage} count={count} data={data} previousData={previousData} DetailType={selected.value} setCurrentPage={(p)=>setCurrentPage(p)}/>
     
     </div>
   );

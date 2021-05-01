@@ -118,14 +118,14 @@ export const connectDevice = ({
       const _disconnect = () => disconnect(mqttClient, () => dbClient.close());
       const getAllData = () => dbClient.getAll();
       const getLastData = () => dbClient.getAll({ descending: true, limit: 1 });
-      const getPageDate = (skip,limit)=> dbClient.getAll({ descending: true,skip:skip ,limit: limit });
+      const getPageData = (skip,limit)=> dbClient.getAll({ descending: true,skip:skip ,limit: limit });
       const getAllDataCount = ()=>dbClient.getAllCount();
       resolve({
         subscribe: _subscribe,
         disconnect: _disconnect,
         getAllData,
         getLastData,
-        getPageDate,
+        getPageData,
         getAllDataCount
       });
     } catch (e) {
