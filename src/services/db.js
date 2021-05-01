@@ -8,6 +8,8 @@ function DB() {
   let _dbInfo = {};
 
   const connect = (dbName) => {
+    //TODO: disconnect from old db before connecting 
+    
     if (!_db || (_dbInfo && _dbInfo.db_name !== dbName)) {
       _db = new PouchDB(dbName);
       _db.info().then((res) => (_dbInfo = res));
