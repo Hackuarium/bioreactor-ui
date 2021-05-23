@@ -8,15 +8,18 @@ const LocalDevices = () => {
   const onRequest = async () => {
     await devicesManager.requestDevices();
     const _devices = await devicesManager.getConnectedDevices();
+    console.log(_devices);
     setDevicesList(_devices);
   };
 
   useEffect(() => {
-    devicesManager.continuousUpdateDevices((_devices) => {
+    const cleanUp = devicesManager.continuousUpdateDevices((_devices) => {
       console.log(_devices);
-      if (_devices.size > 0) setDevicesList(_devices);
+      setDevicesList(_devices);
     });
-  });
+
+    return () => cleanUp.then((intervalId) => clearInterval(intervalId));
+  }, []);
 
   return (
     <>

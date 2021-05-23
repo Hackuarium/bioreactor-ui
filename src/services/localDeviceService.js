@@ -1,7 +1,8 @@
+import { isFunction } from 'lodash';
 import { DevicesManager } from 'legoino-navigator-serial';
 
 const SCAN_INTERVAL = 5000;
-const DEVICE_STATUS = {
+export const DEVICE_STATUS = {
   opening: 1,
   opened: 2,
   closed: 3,
@@ -9,9 +10,9 @@ const DEVICE_STATUS = {
   error: 10,
 };
 
-export const getLocalDevicesManager = () => {
-  const devicesManager = new DevicesManager(navigator.serial);
+const devicesManager = new DevicesManager(navigator.serial);
 
+export const getLocalDevicesManager = () => {
   /**
    * By calling this method from a click you give users the possibility to allow access to some devices
    */
@@ -24,8 +25,10 @@ export const getLocalDevicesManager = () => {
    */
   const getConnectedDevices = async () => {
     await devicesManager.updateDevices();
-    return await devicesManager.getDevicesList({ ready: true });
-    // If ready==`true` returns only currently connected device, else returns all devices ever connected.
+    const connectedDevices = await devicesManager.getDevicesList({
+      ready: true, // If ready==`true` returns only currently connected device, else returns all devices ever connected.
+    });
+    return connectedDevices;
   };
 
   /**
@@ -37,10 +40,11 @@ export const getLocalDevicesManager = () => {
     callback,
     scanInterval = SCAN_INTERVAL,
   ) => {
-    devicesManager.continuousUpdateDevices({
-      scanInterval,
-      callback,
-    });
+    const interval = setInterval(async () => {
+      const connectedDevices = await getConnectedDevices();
+      isFunction(callback) && callback(connectedDevices);
+    }, scanInterval);
+    return interval;
   };
 
   /**
