@@ -6,15 +6,15 @@ import DetailsPlot from './DetailsPlot'
 const Details = (props)=>{
 
     useEffect(()=>{
-
+      //console.log(props.data)
     },[props])
 
     return (
-    <div class="m-2 ">
+    <div className="m-2 ">
       
       <ActualDetails DetailType={props.DetailType} data={props.data}/>
 
-      <DetailsPlot DetailType={props.DetailType} Header={props.DetailType+' Variation Chart'}/>
+      <DetailsPlot allData={props.allData} previousData={props.previousData} DetailType={props.DetailType} Header={props.DetailType+' Variation Chart'}/>
 
       <DataTable currentPage={props.currentPage} setCurrentPage={(p)=>props.setCurrentPage(p)} count={props.count} previousData={props.previousData} DetailType={props.DetailType}/>
 

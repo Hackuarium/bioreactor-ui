@@ -12,10 +12,12 @@ const DeviceDetails = ({ match }) => {
   const [selected, setSelected] = useState({value:'Load', label:'Load'});
 
   const [data, setData] = useState([]);
+  const [allData,setAllData]=useState([]);
   const [previousData, setPreviousData] = useState([]);
 
   const [deviceClient, setDeviceClient] = useState();
   const deviceId = `${match.params.id}`;
+
 
   useEffect(() => {
     if (deviceId) {
@@ -27,6 +29,7 @@ const DeviceDetails = ({ match }) => {
       });
     }
   },[deviceId]);
+  
 
   useEffect(() => {
     if (deviceClient) {
@@ -44,6 +47,10 @@ const DeviceDetails = ({ match }) => {
         //console.log(result);
         setPreviousData(result);
       });
+      deviceClient.getAllData().then((result) => {
+        //console.log(result);
+        setAllData(result);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceClient]);
@@ -51,7 +58,7 @@ const DeviceDetails = ({ match }) => {
   useEffect(() => {
     if (deviceClient) {
       deviceClient.getPageData(currentPage * 10, 10).then((result) => {
-        console.log(result);
+        //console.log(result);
         setPreviousData(result);
       });
     }
@@ -59,7 +66,7 @@ const DeviceDetails = ({ match }) => {
   }, [currentPage]);
 
   return (
-    <div class="m-4 p-2 shadow-lg " style={{backgroundColor:'white', borderRadius:'10px'}} >
+    <div className="m-4 p-2 shadow-lg " style={{backgroundColor:'white', borderRadius:'10px'}} >
       
       <HorizontalNavigation 
           onSelect={(option) => {
@@ -73,7 +80,7 @@ const DeviceDetails = ({ match }) => {
           }))}
       />
 
-      <Details currentPage={currentPage} count={count} data={data} previousData={previousData} DetailType={selected.value} setCurrentPage={(p)=>setCurrentPage(p)}/>
+      <Details allData={previousData}  currentPage={currentPage} count={count} data={data} previousData={previousData} DetailType={selected.value} setCurrentPage={(p)=>setCurrentPage(p)}/>
     
     </div>
   );
