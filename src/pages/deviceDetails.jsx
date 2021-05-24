@@ -16,13 +16,15 @@ const DeviceDetails = ({ match }) => {
   const [previousData, setPreviousData] = useState([]);
 
   const [deviceClient, setDeviceClient] = useState();
+  const [deviceInfos,setDeviceInfos] = useState();
   const deviceId = `${match.params.id}`;
 
 
   useEffect(() => {
     if (deviceId) {
       getDevice(deviceId).then((deviceInfo) => {
-        //console.log(deviceInfo);
+        console.log(deviceInfo);
+        setDeviceInfos(deviceInfo)
         connectDevice(deviceInfo).then((deviceClient) =>
           setDeviceClient(deviceClient),
         );
@@ -67,7 +69,58 @@ const DeviceDetails = ({ match }) => {
 
   return (
     <div className="m-4 p-2 shadow-lg " style={{backgroundColor:'white', borderRadius:'10px'}} >
-      
+     <div className="m-4" >
+        <div class="p-4 border-b">
+              <h2 class="text-2xl ">
+                  Device Information
+              </h2>
+              <p class="text-sm text-gray-500">
+                  Device connection details. 
+              </p>
+        </div>
+
+        <div>
+            <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                <p class="text-gray-600">
+                    Device Name
+                </p>
+                <p>
+                    {deviceInfos?deviceInfos.name:''}
+                </p>
+            </div>
+        </div>
+        <div>
+            <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                <p class="text-gray-600">
+                    Url
+                </p>
+                <p>
+                  {deviceInfos?deviceInfos.url:''}
+                </p>
+            </div>
+        </div>
+        <div>
+            <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                <p class="text-gray-600">
+                    Device kind
+                </p>
+                <p>
+                  {deviceInfos?deviceInfos.kind:''}
+                </p>
+            </div>
+        </div>
+        <div>
+            <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                <p class="text-gray-600">
+                    Topic
+                </p>
+                <p>
+                  {deviceInfos?deviceInfos.topic:''}
+                </p>
+            </div>
+        </div>
+      </div>
+
       <HorizontalNavigation 
           onSelect={(option) => {
             setSelected(option);
