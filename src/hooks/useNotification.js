@@ -5,12 +5,10 @@ import {
   useNotificationCenter,
 } from '../components/tailwind-ui';
 
-const TIMEOUT = 4000;
-
 export default function useNotification() {
   const notificationContext = useNotificationCenter();
 
-  const addNotification = (title, message, { textColor, Icon }) => {
+  const addNotification = (title, message, { textColor, Icon, timeout }) => {
     notificationContext.addNotification(
       {
         title: (
@@ -21,7 +19,7 @@ export default function useNotification() {
         content: <span className="text-sm text-neutral-500">{message}</span>,
         icon: <Icon className={clsx('w-8 h-8', textColor + '600')} />,
       },
-      TIMEOUT,
+      timeout,
     );
   };
 
@@ -29,6 +27,7 @@ export default function useNotification() {
     addNotification(title, message, {
       textColor: 'text-primary-',
       Icon: SvgOutlineExclamationCircle,
+      timeout: 1000,
     });
   };
 
@@ -36,6 +35,7 @@ export default function useNotification() {
     addNotification(title, message, {
       textColor: 'text-warning-',
       Icon: SvgSolidExclamation,
+      timeout: 2500,
     });
   };
 
@@ -43,6 +43,7 @@ export default function useNotification() {
     addNotification(title, message, {
       textColor: 'text-danger-',
       Icon: SvgSolidExclamation,
+      timeout: 5000,
     });
   };
 
