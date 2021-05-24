@@ -1,7 +1,7 @@
 import { isFunction } from 'lodash';
 import { DevicesManager } from 'legoino-navigator-serial';
 
-const SCAN_INTERVAL = 5000;
+const SCAN_INTERVAL = 3000;
 export const DEVICE_STATUS = {
   opening: 1,
   opened: 2,
