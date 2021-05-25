@@ -4,11 +4,10 @@ import { getLocalDevicesManager } from '../../services/localDeviceService';
 import { Dropdown, Button } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
 
-const SelectDeviceComponent = ({ devices, setDevices }) => {
+const SelectDeviceComponent = ({ selectedDevice, setSelectedDevice }) => {
   const devicesManager = getLocalDevicesManager();
   const { addInfoNotification, addWarningNotification } = useNotification();
-
-  const [selectedDevice, setSelectedDevice] = useState({ label: '--' });
+  const [devices, setDevices] = useState([]);
 
   // continuous update of devices list
   useEffect(() => {

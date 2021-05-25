@@ -1,3 +1,5 @@
+import legoinoDeviceInformation from 'legoino-device-information';
+
 // Default Values
 
 export const DEVICES_DB = 'BIOREACTOR_devices';
@@ -14,12 +16,6 @@ export const DEVICE_TYPE = {
 
 export const DEVICE_PROTOCOLS = ['tcp', 'http'];
 
-export const DEVICE_KINDS = [
-  'computer',
-  'beemos',
-  'openBio',
-  'openBio6',
-  'openSpectro',
-  'simpleSpectro',
-  'solar2015',
-];
+export const DEVICE_KINDS = Object.keys(legoinoDeviceInformation).map(
+  (key) => legoinoDeviceInformation[key].kind,
+);
