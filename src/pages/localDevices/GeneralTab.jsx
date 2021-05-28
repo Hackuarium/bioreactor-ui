@@ -1,6 +1,6 @@
 import React from 'react';
 
-const GeneralParams = ({ data }) => {
+const GeneralTab = ({ data }) => {
   return (
     <div className="flex flex-row justify-around flex-wrap">
       {data?.parametersArray?.map((param, index) => (
@@ -24,4 +24,4 @@ const GeneralParams = ({ data }) => {
   );
 };
 
-export default GeneralParams;
+export default GeneralTab;

@@ -4,8 +4,8 @@ import legoinoDeviceInformation from 'legoino-device-information';
 
 import { Button, HorizontalNavigation } from '../../components/tailwind-ui';
 import { getLocalDevicesManager } from '../../services/localDeviceService';
-import SelectDeviceComponent from './selectDeviceComponent';
-import GeneralParams from '../../components/localDevice/GeneralParams';
+import SelectDeviceComponent from './SelectDeviceComponent';
+import GeneralTab from './GeneralTab';
 
 const tabs = [
   {
@@ -45,7 +45,7 @@ const LocalDevices = () => {
   const renderTabContent = (selected) => {
     switch (selected.value) {
       case 'general':
-        return <GeneralParams data={data} />;
+        return <GeneralTab data={data} />;
       case 'details':
         return <div>details</div>;
 
@@ -60,17 +60,34 @@ const LocalDevices = () => {
         selected={selectedDevice}
         onSelectAction={onSelectedDeviceChanged}
       />
-      <div className="mx-5 ">
-        <HorizontalNavigation
-          onSelect={setSelectedTab}
-          selected={selectedTab}
-          options={tabs}
-        />
-        <div className="p-3 flex flex-col items-center rounded-md rounded-t-none bg-white shadow ">
-          {renderTabContent(selectedTab)}
+      {selectedDevice.id ? (
+        <div className="mx-5 ">
+          <HorizontalNavigation
+            onSelect={setSelectedTab}
+            selected={selectedTab}
+            options={tabs}
+          />
+          <div className="p-3 flex flex-col items-center rounded-md rounded-t-none bg-white shadow ">
+            {renderTabContent(selectedTab)}
+          </div>
         </div>
-      </div>
+      ) : (
+        <NoConnectedDevice />
+      )}
     </>
+  );
+};
+
+const NoConnectedDevice = () => {
+  return (
+    <div className="mx-5 mt-16 flex flex-col items-center">
+      <h3 className="text-base font-bold text-gray-300 leading-loose">
+        No connected Device
+      </h3>
+      <h3 className="text-sm font-base text-gray-300">
+        Please plug your device into the computer
+      </h3>
+    </div>
   );
 };
 

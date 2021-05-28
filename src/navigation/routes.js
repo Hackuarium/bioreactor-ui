@@ -70,7 +70,7 @@ const ROUTS = [
         icon: <SvgOutlineDesktopComputer height="20" />,
         exact: true,
         inNavbar: true,
-        component: lazy(() => import('../pages/localDevices')),
+        component: lazy(() => import('../pages/LocalDevices')),
       },
     ],
   },
