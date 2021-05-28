@@ -4,7 +4,7 @@ import { getLocalDevicesManager } from '../../services/localDeviceService';
 import { Dropdown, Button } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
 
-const SelectDeviceComponent = ({ selectedDevice, setSelectedDevice }) => {
+const SelectDeviceComponent = ({ selected, onSelectAction }) => {
   const devicesManager = getLocalDevicesManager();
   const { addInfoNotification, addWarningNotification } = useNotification();
   const [devices, setDevices] = useState([]);
@@ -18,14 +18,14 @@ const SelectDeviceComponent = ({ selectedDevice, setSelectedDevice }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [devices, devicesManager]);
 
-  // When connected devices are changed : show notification + set selectedDevice + set devicesList
+  // When connected devices are changed : show notification + set selected + set devicesList
   const handleDevicesListChange = (oldList, newList) => {
     if (newList > oldList) {
       addInfoNotification('New device connected');
-      if (!selectedDevice?.id) setSelectedDevice(renderOptions(newList)[0][0]);
+      if (!selected?.id) onSelectAction(renderOptions(newList)[0][0]);
     } else if (newList < oldList) {
       addWarningNotification('Device disconnected');
-      if (newList.length === 0) setSelectedDevice({ label: '--' });
+      if (newList.length === 0) onSelectAction({ label: '--' });
     }
     setDevices(newList);
   };
@@ -51,11 +51,11 @@ const SelectDeviceComponent = ({ selectedDevice, setSelectedDevice }) => {
           Select device :
         </h3>
         <Dropdown
-          title={selectedDevice.label}
+          title={selected.label}
           options={renderOptions(devices)}
           onSelect={(i) => {
             console.log(i);
-            setSelectedDevice(i);
+            onSelectAction(i);
           }}
         />
       </div>
