@@ -2,12 +2,18 @@ import { isFunction } from 'lodash';
 import { DevicesManager } from 'legoino-navigator-serial';
 
 const SCAN_INTERVAL = 3000;
-export const DEVICE_STATUS = {
-  opening: 1,
-  opened: 2,
-  closed: 3,
-  missing: 9,
-  error: 10,
+
+// const DEVICE_STATUS = {
+//   opening: 1,
+//   opened: 2,
+//   closed: 3,
+//   missing: 9,
+//   error: 10,
+// };
+
+export const COMMANDS = {
+  compactSettings: 'uc',
+  reset: 'ur1234',
 };
 
 const devicesManager = new DevicesManager(navigator.serial);

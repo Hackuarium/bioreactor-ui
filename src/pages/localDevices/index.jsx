@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { parseCurrentSettings } from 'legoino-util';
-import legoinoDeviceInformation from 'legoino-device-information';
 
-import { Button, HorizontalNavigation } from '../../components/tailwind-ui';
-import { getLocalDevicesManager } from '../../services/localDeviceService';
+import { HorizontalNavigation } from '../../components/tailwind-ui';
+import {
+  COMMANDS,
+  getLocalDevicesManager,
+} from '../../services/localDeviceService';
 import SelectDeviceComponent from './SelectDeviceComponent';
 import GeneralTab from './GeneralTab';
+import ConfigTab from './ConfigTab';
+import EditTab from './EditTab';
 
 const tabs = [
   {
@@ -13,8 +17,12 @@ const tabs = [
     label: 'General',
   },
   {
-    value: 'details',
-    label: 'Details',
+    value: 'edit',
+    label: 'Edit',
+  },
+  {
+    value: 'config',
+    label: 'Configuration',
   },
 ];
 
@@ -23,7 +31,7 @@ const LocalDevices = () => {
 
   const [data, setData] = useState({});
   const [selectedDevice, setSelectedDevice] = useState({ label: '--' });
-  const [selectedTab, setSelectedTab] = useState(tabs[0]);
+  const [selectedTab, setSelectedTab] = useState(tabs[2]);
 
   const sendCommand = async (deviceId, command) => {
     const r = await devicesManager.sendCommand(deviceId, command);
@@ -39,15 +47,25 @@ const LocalDevices = () => {
 
   const onSelectedDeviceChanged = (newDevice) => {
     setSelectedDevice(newDevice);
-    newDevice?.id ? sendCommand(newDevice.id, 'uc') : setData({});
+    newDevice?.id
+      ? sendCommand(newDevice.id, COMMANDS.compactSettings)
+      : setData({});
   };
 
   const renderTabContent = (selected) => {
     switch (selected.value) {
       case 'general':
-        return <GeneralTab data={data} />;
-      case 'details':
-        return <div>details</div>;
+        return <GeneralTab data={data?.parametersArray} />;
+      case 'edit':
+        return <EditTab device={selectedDevice} />;
+      case 'config':
+        return (
+          <ConfigTab
+            device={selectedDevice}
+            data={data?.parametersArray}
+            deviceType="SimpleSpectro"
+          />
+        );
 
       default:
         return <div>default</div>;
