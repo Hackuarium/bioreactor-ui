@@ -1,7 +1,7 @@
 // Default Values
 
 export const DEVICES_DB = 'BIOREACTOR_devices';
-export const DEFAULT_PORT = '9001';
+export const DEFAULT_PORT = '8080';
 export const DEFAULT_PROTOCOL = 'tcp';
 
 // Static Values

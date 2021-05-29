@@ -53,8 +53,8 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
   const _initialValues = {
     name: '123',
     url: 'mqtt.beemos.org',
-    protocol: protocolOptions[0].value,
-    port: '9001',
+    protocol: protocolOptions[1].value,
+    port: '8080',
     kind: kindOptions[0].value,
     topic: 'lpatiny/Computer/server',
     username: 'testUser',
