@@ -2,10 +2,8 @@ import { useState } from 'react';
 import { parseCurrentSettings } from 'legoino-util';
 
 import { HorizontalNavigation } from '../../components/tailwind-ui';
-import {
-  COMMANDS,
-  getLocalDevicesManager,
-} from '../../services/localDeviceService';
+import { getLocalDevicesManager } from '../../services/localDeviceService';
+import { COMMANDS } from './../../services/devicesOptions';
 import SelectDeviceComponent from './SelectDeviceComponent';
 import GeneralTab from './GeneralTab';
 import ConfigTab from './ConfigTab';
@@ -60,11 +58,7 @@ const LocalDevices = () => {
         return <EditTab device={selectedDevice} />;
       case 'config':
         return (
-          <ConfigTab
-            device={selectedDevice}
-            data={data?.parametersArray}
-            deviceType="SimpleSpectro"
-          />
+          <ConfigTab device={selectedDevice} data={data?.parametersArray} />
         );
 
       default:
@@ -79,13 +73,13 @@ const LocalDevices = () => {
         onSelectAction={onSelectedDeviceChanged}
       />
       {selectedDevice.id ? (
-        <div className="mx-5 ">
+        <div className="mx-4">
           <HorizontalNavigation
             onSelect={setSelectedTab}
             selected={selectedTab}
             options={tabs}
           />
-          <div className="p-3 flex flex-col items-center rounded-md rounded-t-none bg-white shadow ">
+          <div className="p-3 mt-4 sm:m-0 flex flex-col items-center rounded-md sm:rounded-t-none bg-white shadow ">
             {renderTabContent(selectedTab)}
           </div>
         </div>

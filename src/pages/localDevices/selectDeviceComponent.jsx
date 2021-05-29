@@ -39,6 +39,7 @@ const SelectDeviceComponent = ({ selected, onSelectAction }) => {
   ];
 
   const onRequest = async () => {
+    document.activeElement.blur();
     await devicesManager.requestDevices();
     const newList = await devicesManager.getConnectedDevices();
     handleDevicesListChange(devices, newList);
