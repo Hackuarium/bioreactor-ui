@@ -33,21 +33,27 @@ const ConfigTab = ({ device, data }) => {
 
   const onValueChanged = (label, value) => {
     const newValues = values.map((v) =>
-      v.label === label ? { ...v, value: value / v.factor } : v,
+      v.label === label ? { ...v, value: value / v.factor, edited: true } : v,
     );
     setValues(newValues);
   };
 
   const onSave = async () => {
     setShowSpinner(true);
+    let saved = false;
     for (let v of values) {
-      console.log(v.label + v.value);
-      await devicesManager.sendCommand(
-        device.id,
-        COMMANDS.setParameter(v.label, v.value),
-      );
+      if (v.edited) {
+        console.log(v.label + v.value);
+        await devicesManager.sendCommand(
+          device.id,
+          COMMANDS.setParameter(v.label, v.value),
+        );
+        saved = true;
+      }
     }
-    addInfoNotification('Saved');
+    saved
+      ? addInfoNotification('Saved')
+      : addInfoNotification('No change to save');
     setShowSpinner(false);
     document.activeElement.blur();
   };
