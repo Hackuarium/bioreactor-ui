@@ -1,21 +1,47 @@
 import React, { useState, useEffect } from 'react';
+import { parseCurrentSettings } from 'legoino-util';
 
-import { Button, Divider, Spinner } from '../../components/tailwind-ui';
+import { Button, Spinner } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
-import { getLocalDevicesManager } from '../../services/localDeviceService';
+import devicesManager from '../../services/localDeviceService';
 import { COMMANDS } from './../../services/devicesOptions';
 import ValueCard from './ValueCard';
+import DividerCustom from '../../components/DividerCustom';
 
-const ConfigTab = ({ device, data }) => {
-  const devicesManager = getLocalDevicesManager();
+const ConfigTab = ({ device, deviceType }) => {
   const { addInfoNotification } = useNotification();
   const [values, setValues] = useState([]);
   const [showSpinner, setShowSpinner] = useState(false);
 
+  const [data, setData] = useState({});
+
   useEffect(() => {
-    const writableParams = data?.filter((p) => p.writable);
+    const getData = async () => {
+      if (device?.id) {
+        const compressedResults = await devicesManager.sendCommand(
+          device?.id,
+          COMMANDS.compactSettings,
+        );
+        const results = parseCurrentSettings(compressedResults, {
+          kind: deviceType,
+          // parameterLabel: true,
+          parameterInfo: true,
+          parametersArray: true,
+        });
+        setData(results);
+        // console.log(results);
+      } else {
+        // no device || device has disconnected
+        setData({});
+      }
+    };
+    getData();
+  }, [device?.id, deviceType]);
+
+  useEffect(() => {
+    const writableParams = data?.parametersArray?.filter((p) => p.writable);
     setValues(writableParams);
-  }, [data]);
+  }, [data?.parametersArray]);
 
   const onReset = async () => {
     const resultMsg = await devicesManager.sendCommand(
@@ -74,19 +100,16 @@ const ConfigTab = ({ device, data }) => {
           <DividerCustom title="Edit parameters" />
           <div className="flex flex-row justify-start flex-wrap">
             {values.map((p, index) => (
-              <div
+              <ValueCard
                 key={index}
+                title={p.name || p.label}
+                value={p.value * p.factor}
+                placeholder={p.description}
+                unit={p.unit}
+                editable={true}
+                onChange={(newValue) => onValueChanged(p.label, newValue)}
                 className="w-full sm:w-1/2  md:w-1/3 lg:w-1/4 flex"
-              >
-                <ValueCard
-                  title={p.name || p.label}
-                  value={p.value * p.factor}
-                  placeholder={p.description}
-                  unit={p.unit}
-                  editable={true}
-                  onChange={(newValue) => onValueChanged(p.label, newValue)}
-                />
-              </div>
+              />
             ))}
           </div>
 
@@ -102,18 +125,6 @@ const ConfigTab = ({ device, data }) => {
           </Button>
         </>
       )}
-    </div>
-  );
-};
-
-const DividerCustom = ({ title }) => {
-  return (
-    <div className="my-4">
-      <Divider justify="start">
-        <span className="px-2 bg-white text-xs font-medium text-neutral-400">
-          {title}
-        </span>
-      </Divider>
     </div>
   );
 };

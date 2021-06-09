@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { parseCurrentSettings } from 'legoino-util';
 
-import { HorizontalNavigation } from '../../components/tailwind-ui';
-import { getLocalDevicesManager } from '../../services/localDeviceService';
-import { COMMANDS } from './../../services/devicesOptions';
 import SelectDeviceComponent from './SelectDeviceComponent';
 import GeneralTab from './GeneralTab';
-import ConfigTab from './ConfigTab';
 import EditTab from './EditTab';
+import ConfigTab from './ConfigTab';
+import { HorizontalNavigation } from '../../components/tailwind-ui';
+import devicesManager from '../../services/localDeviceService';
+import { COMMANDS } from './../../services/devicesOptions';
 
 const tabs = [
   {
@@ -15,54 +15,67 @@ const tabs = [
     label: 'General',
   },
   {
-    value: 'edit',
-    label: 'Edit',
+    value: 'history',
+    label: 'History',
   },
   {
     value: 'config',
     label: 'Configuration',
   },
 ];
+const deviceType = 'SimpleSpectro';
 
-const LocalDevices = () => {
-  const devicesManager = getLocalDevicesManager();
-
-  const [data, setData] = useState({});
+const LocalDevices = ({ refreshInterval = 1000 }) => {
   const [selectedDevice, setSelectedDevice] = useState({ label: '--' });
-  const [selectedTab, setSelectedTab] = useState(tabs[2]);
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
+  const [data, setData] = useState({});
 
-  const sendCommand = async (deviceId, command) => {
-    const r = await devicesManager.sendCommand(deviceId, command);
-    const s = parseCurrentSettings(r, {
-      kind: 'SimpleSpectro',
-      // parameterLabel: true,
-      parameterInfo: true,
-      parametersArray: true,
-    });
-    setData(s);
-    console.log(s);
+  useEffect(() => {
+    if (selectedDevice?.id) {
+      const interval = setInterval(
+        () => getData(selectedDevice?.id),
+        refreshInterval,
+      );
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [refreshInterval, selectedDevice?.id]);
+
+  const getData = async (deviceId) => {
+    if (deviceId) {
+      const compressedResults = await devicesManager.sendCommand(
+        deviceId,
+        COMMANDS.compactSettings,
+      );
+      const results = parseCurrentSettings(compressedResults, {
+        kind: deviceType, // parameterLabel: true,
+        parameterInfo: true,
+        parametersArray: true,
+      });
+      setData(results);
+      //console.log(results);
+    } else {
+      setData({});
+      //console.log({});
+    }
   };
 
   const onSelectedDeviceChanged = (newDevice) => {
     setSelectedDevice(newDevice);
-    newDevice?.id
-      ? sendCommand(newDevice.id, COMMANDS.compactSettings)
-      : setData({});
+    getData(newDevice?.id);
   };
 
-  const renderTabContent = (selected) => {
-    switch (selected.value) {
+  const renderTabContent = (tab) => {
+    switch (tab.value) {
       case 'general':
-        return <GeneralTab data={data?.parametersArray} />;
+        return <GeneralTab data={data} />;
       case 'edit':
         return <EditTab device={selectedDevice} />;
       case 'config':
-        return (
-          <ConfigTab device={selectedDevice} data={data?.parametersArray} />
-        );
-
+        return <ConfigTab device={selectedDevice} deviceType={deviceType} />;
       default:
-        return <div>default</div>;
+        return <div />;
     }
   };
 
@@ -84,22 +97,16 @@ const LocalDevices = () => {
           </div>
         </div>
       ) : (
-        <NoConnectedDevice />
+        <div className="mx-5 mt-16 flex flex-col items-center">
+          <h3 className="text-base font-bold text-gray-300 leading-loose">
+            No connected Device
+          </h3>
+          <h3 className="text-sm font-base text-gray-300">
+            Please plug your device into the computer
+          </h3>
+        </div>
       )}
     </>
-  );
-};
-
-const NoConnectedDevice = () => {
-  return (
-    <div className="mx-5 mt-16 flex flex-col items-center">
-      <h3 className="text-base font-bold text-gray-300 leading-loose">
-        No connected Device
-      </h3>
-      <h3 className="text-sm font-base text-gray-300">
-        Please plug your device into the computer
-      </h3>
-    </div>
   );
 };
 
