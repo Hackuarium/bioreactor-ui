@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { parseCurrentSettings } from 'legoino-util';
 
 import { Button, Spinner } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
@@ -8,78 +7,80 @@ import { COMMANDS } from './../../services/devicesOptions';
 import ValueCard from './ValueCard';
 import DividerCustom from '../../components/DividerCustom';
 
-const ConfigTab = ({ device, deviceType }) => {
-  const { addInfoNotification } = useNotification();
-  const [values, setValues] = useState([]);
+const ConfigTab = ({ device, data }) => {
+  const { addInfoNotification, addErrorNotification } = useNotification();
+  const [writableParams, setWritableParams] = useState([]);
   const [showSpinner, setShowSpinner] = useState(false);
-
-  const [data, setData] = useState({});
-
-  useEffect(() => {
-    const getData = async () => {
-      if (device?.id) {
-        const compressedResults = await devicesManager.sendCommand(
-          device?.id,
-          COMMANDS.compactSettings,
-        );
-        const results = parseCurrentSettings(compressedResults, {
-          kind: deviceType,
-          // parameterLabel: true,
-          parameterInfo: true,
-          parametersArray: true,
-        });
-        setData(results);
-        // console.log(results);
-      } else {
-        // no device || device has disconnected
-        setData({});
-      }
-    };
-    getData();
-  }, [device?.id, deviceType]);
+  const [render, setRender] = useState(false);
 
   useEffect(() => {
-    const writableParams = data?.parametersArray?.filter((p) => p.writable);
-    setValues(writableParams);
-  }, [data?.parametersArray]);
+    const parameters = data?.parameters;
+    const values =
+      parameters &&
+      Object.keys(parameters)
+        .filter((key) => parameters[key].writable)
+        .map((key) => ({ ...parameters[key], key }));
+    setWritableParams(values);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [render]);
+
+  const reRender = () => {
+    setTimeout(() => {
+      setRender(!render);
+    }, 1000);
+  };
 
   const onReset = async () => {
-    const resultMsg = await devicesManager.sendCommand(
-      device.id,
-      COMMANDS.reset,
-    );
-    addInfoNotification(resultMsg);
+    try {
+      const resultMsg = await devicesManager.sendCommand(
+        device.id,
+        COMMANDS.reset,
+      );
+      addInfoNotification(resultMsg);
+      reRender();
+    } catch (e) {
+      addErrorNotification(e.message);
+    }
     document.activeElement.blur();
   };
 
-  const onSleep = () => {
-    console.log('sleep');
+  const onSleep = async () => {
+    try {
+      await devicesManager.sendCommand(device.id, COMMANDS.sleep);
+    } catch (e) {
+      addErrorNotification(e.message);
+    }
     document.activeElement.blur();
   };
 
   const onValueChanged = (label, value) => {
-    const newValues = values.map((v) =>
+    const newValues = writableParams.map((v) =>
       v.label === label ? { ...v, value: value / v.factor, edited: true } : v,
     );
-    setValues(newValues);
+    setWritableParams(newValues);
   };
 
   const onSave = async () => {
     setShowSpinner(true);
     let saved = false;
-    for (let v of values) {
-      if (v.edited) {
-        console.log(v.label + v.value);
-        await devicesManager.sendCommand(
-          device.id,
-          COMMANDS.setParameter(v.label, v.value),
-        );
-        saved = true;
+    try {
+      for (let v of writableParams) {
+        if (v.edited) {
+          console.log(v.key + v.value);
+          await devicesManager.sendCommand(
+            device.id,
+            COMMANDS.setParameter(v.key, v.value),
+          );
+          saved = true;
+        }
       }
+      saved
+        ? addInfoNotification('Saved')
+        : addInfoNotification('No changes to save');
+      reRender();
+    } catch (e) {
+      addErrorNotification(e.message);
     }
-    saved
-      ? addInfoNotification('Saved')
-      : addInfoNotification('No change to save');
     setShowSpinner(false);
     document.activeElement.blur();
   };
@@ -95,11 +96,11 @@ const ConfigTab = ({ device, deviceType }) => {
         </Button>
       </div>
 
-      {values?.length > 0 && (
+      {writableParams?.length > 0 && (
         <>
           <DividerCustom title="Edit parameters" />
           <div className="flex flex-row justify-start flex-wrap">
-            {values.map((p, index) => (
+            {writableParams.map((p, index) => (
               <ValueCard
                 key={index}
                 title={p.name || p.label}

@@ -73,7 +73,7 @@ const LocalDevices = ({ refreshInterval = 1000 }) => {
       case 'edit':
         return <EditTab device={selectedDevice} />;
       case 'config':
-        return <ConfigTab device={selectedDevice} deviceType={deviceType} />;
+        return <ConfigTab device={selectedDevice} data={data} />;
       default:
         return <div />;
     }
