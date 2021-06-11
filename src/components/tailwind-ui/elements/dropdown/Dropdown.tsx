@@ -61,7 +61,7 @@ export function Dropdown<T>(props: DropdownProps<T>): React.ReactElement {
             >
               <Menu.Items
                 static
-                className="absolute right-0 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg focus:outline-none ring-1 ring-black ring-opacity-5"
+                className="absolute right-0 mt-2 origin-top-right bg-white rounded-md shadow-lg focus:outline-none ring-1 ring-black ring-opacity-5"
               >
                 <div className="py-1 divide-y divide-neutral-100" role="menu">
                   {props.options.map((options, index1) => (

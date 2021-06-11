@@ -1,16 +1,49 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button, Spinner } from '../../components/tailwind-ui';
+import { Button, Spinner, Dropdown } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
 import devicesManager from '../../services/localDeviceService';
 import { COMMANDS } from './../../services/devicesOptions';
 import ValueCard from './ValueCard';
 import DividerCustom from '../../components/DividerCustom';
 
-const ConfigTab = ({ device, data }) => {
+const intervals = [
+  {
+    label: '1 s',
+    value: 1000,
+    type: 'option',
+  },
+  {
+    label: '2 s',
+    value: 2000,
+    type: 'option',
+  },
+  {
+    label: '5 s',
+    value: 5000,
+    type: 'option',
+  },
+  {
+    label: '10 s',
+    value: 10000,
+    type: 'option',
+  },
+];
+
+const ConfigTab = ({
+  device,
+  data,
+  refreshInterval = 1000,
+  setRefreshInterval,
+}) => {
   const { addInfoNotification, addErrorNotification } = useNotification();
   const [writableParams, setWritableParams] = useState([]);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [_refreshInterval, _setRefreshInterval] = useState({
+    label: refreshInterval / 1000 + ' s',
+    value: refreshInterval,
+    type: 'option',
+  });
   const [render, setRender] = useState(false);
 
   useEffect(() => {
@@ -28,6 +61,12 @@ const ConfigTab = ({ device, data }) => {
     setTimeout(() => {
       setRender(!render);
     }, 1000);
+  };
+
+  const OnRefreshIntervalChanged = (option) => {
+    _setRefreshInterval(option);
+    setRefreshInterval(option.value);
+    document.activeElement.blur();
   };
 
   const onReset = async () => {
@@ -87,13 +126,25 @@ const ConfigTab = ({ device, data }) => {
 
   return (
     <div className="w-full flex flex-col ">
-      <div className="mt-2 flex flex-row-reverse justify-start">
-        <Button className="mx-2 " variant="white" onClick={onReset}>
-          Reset Device
-        </Button>
-        <Button className="mx-2" variant="white" onClick={onSleep}>
-          Sleep
-        </Button>
+      <div className="mt-2 flex flex-row justify-between">
+        <div className="flex flex-row items-center z-10">
+          <p className="mx-2 text-sm font-medium text-neutral-700">
+            Refresh inreval :
+          </p>
+          <Dropdown
+            title={_refreshInterval.label}
+            options={[intervals]}
+            onSelect={OnRefreshIntervalChanged}
+          />
+        </div>
+        <div className="flex flex-row justify-end">
+          <Button className="mx-2" variant="white" onClick={onSleep}>
+            Sleep
+          </Button>
+          <Button className="mx-2 " variant="white" onClick={onReset}>
+            Reset Device
+          </Button>
+        </div>
       </div>
 
       {writableParams?.length > 0 && (

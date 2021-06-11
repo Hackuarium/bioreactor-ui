@@ -25,10 +25,11 @@ const tabs = [
 ];
 const deviceType = 'SimpleSpectro';
 
-const LocalDevices = ({ refreshInterval = 1000 }) => {
+const LocalDevices = () => {
   const [selectedDevice, setSelectedDevice] = useState({ label: '--' });
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const [data, setData] = useState({});
+  const [refreshInterval, setRefreshInterval] = useState(1000);
 
   useEffect(() => {
     if (selectedDevice?.id) {
@@ -73,7 +74,14 @@ const LocalDevices = ({ refreshInterval = 1000 }) => {
       case 'edit':
         return <EditTab device={selectedDevice} />;
       case 'config':
-        return <ConfigTab device={selectedDevice} data={data} />;
+        return (
+          <ConfigTab
+            device={selectedDevice}
+            data={data}
+            refreshInterval={refreshInterval}
+            setRefreshInterval={setRefreshInterval}
+          />
+        );
       default:
         return <div />;
     }
