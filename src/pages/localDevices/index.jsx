@@ -1,35 +1,27 @@
 import { useState, useEffect } from 'react';
 import { parseCurrentSettings } from 'legoino-util';
 
+import { HorizontalNavigation } from '../../components/tailwind-ui';
+import useNotification from '../../hooks/useNotification';
+import devicesManager from '../../services/localDeviceService';
+import { COMMANDS } from './../../services/devicesOptions';
 import SelectDeviceComponent from './SelectDeviceComponent';
 import GeneralTab from './GeneralTab';
 import EditTab from './EditTab';
 import ConfigTab from './ConfigTab';
-import { HorizontalNavigation } from '../../components/tailwind-ui';
-import devicesManager from '../../services/localDeviceService';
-import { COMMANDS } from './../../services/devicesOptions';
 
-const tabs = [
-  {
-    value: 'general',
-    label: 'General',
-  },
-  {
-    value: 'history',
-    label: 'History',
-  },
-  {
-    value: 'config',
-    label: 'Configuration',
-  },
-];
-const deviceType = 'SimpleSpectro';
+const tabs = ['General', 'History', 'Configuration'].map((v) => ({
+  value: v,
+  label: v,
+}));
 
 const LocalDevices = () => {
-  const [selectedDevice, setSelectedDevice] = useState({ label: '--' });
+  const [selectedDevice, setSelectedDevice] = useState();
+  const [selectedType, setSelectedType] = useState();
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const [data, setData] = useState({});
   const [refreshInterval, setRefreshInterval] = useState(1000);
+  const { addErrorNotification } = useNotification();
 
   useEffect(() => {
     if (selectedDevice?.id) {
@@ -41,39 +33,37 @@ const LocalDevices = () => {
         clearInterval(interval);
       };
     }
-  }, [refreshInterval, selectedDevice?.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshInterval, selectedDevice?.id, selectedType?.label]);
 
   const getData = async (deviceId) => {
     if (deviceId) {
-      const compressedResults = await devicesManager.sendCommand(
-        deviceId,
-        COMMANDS.compactSettings,
-      );
-      const results = parseCurrentSettings(compressedResults, {
-        kind: deviceType, // parameterLabel: true,
-        parameterInfo: true,
-        parametersArray: true,
-      });
-      setData(results);
-      //console.log(results);
+      try {
+        const compressedResults = await devicesManager.sendCommand(
+          deviceId,
+          COMMANDS.compactSettings,
+        );
+        const results = parseCurrentSettings(compressedResults, {
+          kind: selectedType?.label, // parameterLabel: true,
+          parameterInfo: true,
+          parametersArray: true,
+        });
+        setData(results);
+      } catch (e) {
+        addErrorNotification(e.message);
+      }
     } else {
       setData({});
-      //console.log({});
     }
-  };
-
-  const onSelectedDeviceChanged = (newDevice) => {
-    setSelectedDevice(newDevice);
-    getData(newDevice?.id);
   };
 
   const renderTabContent = (tab) => {
     switch (tab.value) {
-      case 'general':
+      case 'General':
         return <GeneralTab data={data} />;
-      case 'edit':
+      case 'History':
         return <EditTab device={selectedDevice} />;
-      case 'config':
+      case 'Configuration':
         return (
           <ConfigTab
             device={selectedDevice}
@@ -90,11 +80,16 @@ const LocalDevices = () => {
   return (
     <>
       <SelectDeviceComponent
-        selected={selectedDevice}
-        onSelectAction={onSelectedDeviceChanged}
+        deviceType={selectedType}
+        onSelectType={setSelectedType}
+        device={selectedDevice}
+        onSelectDevice={(newDevice) => {
+          setSelectedDevice(newDevice);
+          getData(newDevice?.id);
+        }}
       />
-      {selectedDevice.id ? (
-        <div className="mx-4">
+      {selectedDevice?.id ? (
+        <div className="mx-4 pb-4">
           <HorizontalNavigation
             onSelect={setSelectedTab}
             selected={selectedTab}

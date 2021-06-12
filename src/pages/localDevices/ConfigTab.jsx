@@ -1,34 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Button, Spinner, Dropdown } from '../../components/tailwind-ui';
+import DividerCustom from '../../components/DividerCustom';
 import useNotification from '../../hooks/useNotification';
 import devicesManager from '../../services/localDeviceService';
 import { COMMANDS } from './../../services/devicesOptions';
 import ValueCard from './ValueCard';
-import DividerCustom from '../../components/DividerCustom';
 
-const intervals = [
-  {
-    label: '1 s',
-    value: 1000,
-    type: 'option',
-  },
-  {
-    label: '2 s',
-    value: 2000,
-    type: 'option',
-  },
-  {
-    label: '5 s',
-    value: 5000,
-    type: 'option',
-  },
-  {
-    label: '10 s',
-    value: 10000,
-    type: 'option',
-  },
-];
+const intervals = [1, 2, 5, 10].map((v) => ({
+  label: `${v} s`,
+  value: v * 1000,
+  type: 'option',
+}));
 
 const ConfigTab = ({
   device,
@@ -38,13 +21,13 @@ const ConfigTab = ({
 }) => {
   const { addInfoNotification, addErrorNotification } = useNotification();
   const [writableParams, setWritableParams] = useState([]);
-  const [showSpinner, setShowSpinner] = useState(false);
   const [_refreshInterval, _setRefreshInterval] = useState({
     label: refreshInterval / 1000 + ' s',
     value: refreshInterval,
     type: 'option',
   });
   const [render, setRender] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   useEffect(() => {
     const parameters = data?.parameters;
@@ -126,9 +109,9 @@ const ConfigTab = ({
 
   return (
     <div className="w-full flex flex-col ">
-      <div className="mt-2 flex flex-row justify-between">
-        <div className="flex flex-row items-center z-10">
-          <p className="mx-2 text-sm font-medium text-neutral-700">
+      <div className="mt-2 flex flex-col sm:flex-row justify-between">
+        <div className="my-1 mx-2 flex flex-row items-center justify-end">
+          <p className="mx-1 text-sm font-medium text-neutral-700">
             Refresh inreval :
           </p>
           <Dropdown
@@ -137,7 +120,7 @@ const ConfigTab = ({
             onSelect={OnRefreshIntervalChanged}
           />
         </div>
-        <div className="flex flex-row justify-end">
+        <div className="my-1 flex flex-row justify-end">
           <Button className="mx-2" variant="white" onClick={onSleep}>
             Sleep
           </Button>

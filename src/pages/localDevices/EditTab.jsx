@@ -1,7 +1,7 @@
 import React from 'react';
 
 const EditTab = () => {
-  return <div>edit</div>;
+  return <div></div>;
 };
 
 export default EditTab;
