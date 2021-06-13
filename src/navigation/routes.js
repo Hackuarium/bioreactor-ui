@@ -17,7 +17,7 @@ const ROUTS = [
     icon: <SvgOutlineChartSquareBar height="20" />,
     exact: true,
     inNavbar: true,
-    component: lazy(() => import('../pages/status')),
+    component: lazy(() => import('../pages/Status')),
   },
   {
     id: 'preferences',
@@ -34,7 +34,7 @@ const ROUTS = [
         icon: <SvgOutlineAdjustments height="20" />,
         exact: true,
         inNavbar: true,
-        component: lazy(() => import('../pages/general')),
+        component: lazy(() => import('../pages/General')),
       },
       {
         id: 'broadcast-devices',
@@ -43,14 +43,14 @@ const ROUTS = [
         icon: <SvgOutlineChip height="20" />,
         exact: true,
         inNavbar: true,
-        component: lazy(() => import('../pages/broadcastDevices')),
+        component: lazy(() => import('../pages/BroadcastDevices')),
         options: [
           {
             id: 'device-details',
             label: 'Device information',
             value: '/preferences/broadcast-devices/device/:id',
             exact: true,
-            component: lazy(() => import('../pages/deviceDetails')),
+            component: lazy(() => import('../pages/DeviceDetails')),
           },
         ],
       },
@@ -61,7 +61,7 @@ const ROUTS = [
         icon: <SvgOutlineSwitchHorizontal height="20" />,
         exact: true,
         inNavbar: true,
-        component: lazy(() => import('../pages/interactiveDevices')),
+        component: lazy(() => import('../pages/InteractiveDevices')),
       },
       {
         id: 'local-devices',
@@ -81,7 +81,7 @@ const ROUTS = [
     icon: <SvgOutlineCog height="20" />,
     exact: true,
     inNavbar: true,
-    component: lazy(() => import('../pages/settings')),
+    component: lazy(() => import('../pages/Settings')),
   },
 ];
 

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { isFunction } from 'lodash';
 import { Button } from '../components/tailwind-ui';
-import DevicesList from '../components/devicesList';
-import DeviceModal from '../components/deviceModal';
+import DevicesList from '../components/DevicesList';
+import DeviceModal from '../components/DeviceModal';
 import {
   addDevice,
   updateDevice,

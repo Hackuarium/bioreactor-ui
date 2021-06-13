@@ -1,10 +1,9 @@
 import React from 'react';
 
-import NavBar from './components/navBar';
-import AppContent from './pages/appContent';
+import NavBar from './components/NavBar';
+import AppContent from './pages/AppContent';
 
 function App() {
-  
   return (
     <div className="w-screen h-screen flex overflow-hidden flex-col lg:flex-row">
       <NavBar />
