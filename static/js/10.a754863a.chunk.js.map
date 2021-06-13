@@ -1,1 +1,0 @@
-{"version":3,"sources":["pages/localDevices.jsx"],"names":["LocalDevices"],"mappings":"yIAIeA,UAJM,WACnB,OAAO","file":"static/js/10.a754863a.chunk.js","sourcesContent":["const LocalDevices = () => {\n  return <div>LocalDevicesPage</div>;\n};\n\nexport default LocalDevices;\n"],"sourceRoot":""}
