@@ -30,6 +30,8 @@ export const DEVICE_STATUS = {
 
 export const COMMANDS = {
   compactSettings: 'uc',
+  runExpirement: 'r',
+  kinetic: 'k',
   reset: 'ur1234',
   sleep: 'l',
   setParameter: (label, value) => `${label}${value}`,

@@ -60,7 +60,7 @@ const LocalDevices = () => {
   const renderTabContent = (tab) => {
     switch (tab.value) {
       case 'General':
-        return <GeneralTab data={data} />;
+        return <GeneralTab data={data} device={selectedDevice} />;
       case 'History':
         return <EditTab device={selectedDevice} />;
       case 'Configuration':
