@@ -7,8 +7,8 @@ import devicesManager from '../../services/localDeviceService';
 import { COMMANDS } from './../../services/devicesOptions';
 import ValueCard from './ValueCard';
 
-const intervals = [1, 2, 5, 10].map((v) => ({
-  label: `${v} s`,
+const intervals = [1, 2, 5, 10, 30, 60, 120, 300].map((v) => ({
+  label: v > 59 ? `${v / 60} m` : `${v} s`,
   value: v * 1000,
   type: 'option',
 }));
