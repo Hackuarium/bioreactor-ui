@@ -3,12 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 import useMedia from '../hooks/useMedia';
 import { routes, getCurrentRoute } from '../navigation/routeHelper';
-import {
-  SvgOutlineMenu,
-  SvgOutlineX,
-  VerticalNavigation,
-  ZakodiumSolidSvg,
-} from './tailwind-ui';
+import { SvgOutlineMenu, SvgOutlineX, VerticalNavigation } from './tailwind-ui';
 
 // Helper func: get only routes which has inNavbar=true
 const getNavbarOptions = (routes, onClick) =>
@@ -55,8 +50,12 @@ const NavBar = () => {
   return (
     <header className="m-0 p-0 w-full lg:w-max lg:h-full relative  bg-primary-900">
       {/** Top NavBar in small screens*/}
-      <div className="px-4 py-3 flex flex-row justify-between items-center lg:hidden">
-        <ZakodiumSolidSvg className="fill-current text-white h-6" />
+      <div className="px-4  flex flex-row justify-between items-center lg:hidden">
+        <img
+          src={process.env.PUBLIC_URL + '/logo.svg'}
+          alt="Hackuarium Logo"
+          className="h-10 "
+        />
         <button
           type="button"
           className="block focus:outline-none relative z-10"
@@ -75,13 +74,17 @@ const NavBar = () => {
         className={
           //hide navbar by default for small screens
           isOpen || !isSmallScreen
-            ? 'w-full lg:w-60 px-6 lg:px-2 pt-2 pb-4 flex flex-col justify-start flex-grow-0 absolute z-10 top-auto lg:static bg-primary-900'
+            ? 'w-full lg:w-56 px-6 lg:px-2 flex flex-col justify-start flex-grow-0 absolute z-10 top-auto lg:static bg-primary-900'
             : 'hidden'
         }
       >
         {!isSmallScreen && (
-          <div className="w-full flex justify-center pt-2 pb-24 px-4">
-            <ZakodiumSolidSvg className="w-44 fill-current text-white" />
+          <div className="w-full flex justify-center pb-8 px-4 ">
+            <img
+              src={process.env.PUBLIC_URL + '/logo.svg'}
+              alt="Hackuarium Logo"
+              className="h-24"
+            />
           </div>
         )}
         <VerticalNavigation
