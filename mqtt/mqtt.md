@@ -2,7 +2,7 @@
 
 ## Install a MQTT broker
 
-The server is installed on `mqtt.beemos.org`. A dedicated virtual linux computer.
+The server is installed on `mqtt.hackuarium.org`. A dedicated virtual linux computer.
 
 The problem is that in order to access a MQTT broker from the browser you will need to run it over websocket. Moreover you will also need to have it running in hTTPS (well WSS).
 
@@ -50,7 +50,7 @@ SSLHonorCipherOrder     off
 </Macro>
 ```
 
-`certbot certonly --webroot -w /var/www/html -d mqtt.beemos.org`
+`certbot certonly --webroot -w /var/www/html -d mqtt.hackuarium.org`
 
 ## Install docker
 
