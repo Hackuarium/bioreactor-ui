@@ -8,6 +8,4 @@ client.on("message", function (topic, payload) {
   console.log({topic, payload})
 })
 
-;
-
 console.log(client)

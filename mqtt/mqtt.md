@@ -52,6 +52,36 @@ SSLHonorCipherOrder     off
 
 `certbot certonly --webroot -w /var/www/html -d mqtt.beemos.org`
 
+## Install docker
+
+`vi /usr/local/docker/mosquitto/docker-compose.yml`
+
+```
+version: '2.2'
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    restart: always
+    ports:
+      - 1883:1883
+      - 127.0.0.1:9001:9001
+    volumes:
+      - ./config:/mosquitto/config
+```
+
+`vi /usr/local/docker/mosquitto/config/mosquitto.conf`
+
+```
+allow_anonymous true
+
+listener 1883
+
+
+listener 9001
+protocol websockets
+```
+
+
 
 ## Interesting resource ?
 
