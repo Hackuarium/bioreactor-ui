@@ -42,12 +42,12 @@ export interface VerticalNavigationProps<T> {
 type SelectOptionCallback<T> = (selected: VerticalNavigationOption<T>) => void;
 
 const optionStyles = {
-  small: 'text-neutral-600 hover:text-neutral-900 text-sm',
+  small: 'text-neutral-200 hover:text-white text-sm',
   base: 'text-neutral-900 text-base',
 };
 
 const iconStyles = {
-  small: 'text-neutral-400 mr-3',
+  small: 'text-neutral-200 mr-3',
   base: 'text-neutral-500 mr-4',
 };
 
@@ -69,7 +69,7 @@ export function VerticalNavigation<T>(
   let chosenSize = size ? size : 'small';
   return (
     <div className="flex flex-col flex-grow mt-5">
-      <nav className="flex-1 px-2 space-y-1">
+      <nav className="flex-1 px-1 space-y-1">
         {opts.map((element) => {
           if (element.type === 'option') {
             return (
@@ -119,7 +119,7 @@ interface NavigationGroupProps<T> {
 function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
   const { element, selected, onSelect, size } = props;
   const [isOpen, , , toggle] = useOnOff(
-    element.options.some((element) => element === selected),
+    element.options.some((element) => element.value === selected?.value),
   );
   return (
     <div className="space-y-1">
@@ -127,14 +127,14 @@ function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
         type="button"
         onClick={toggle}
         className={clsx(
-          'flex items-center w-full pl-2 pr-1 py-2 bg-white rounded-md group hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500',
+          'flex items-center w-full pl-2 pr-1 py-2 rounded-md group hover:bg-neutral-50 hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-primary-500',
           optionStyles[size],
         )}
       >
         {element.icon && (
           <div
             className={clsx(
-              'text-2xl text-neutral-400 group-hover:text-neutral-600',
+              'text-2xl text-neutral-200 group-hover:text-white',
               iconStyles[size],
             )}
           >
@@ -145,8 +145,8 @@ function NavigationGroup<T>(props: NavigationGroupProps<T>): JSX.Element {
         {element.label}
         <svg
           className={clsx(
-            'ml-auto h-5 w-5 transform group-hover:text-neutral-400 transition-colors ease-in-out duration-150',
-            isOpen ? 'text-neutral-500 rotate-90' : 'text-neutral-300',
+            'ml-auto h-5 w-5 transform group-hover:text-white transition-colors ease-in-out duration-150',
+            isOpen ? 'text-white rotate-90' : 'text-neutral-200',
           )}
           viewBox="0 0 20 20"
           aria-hidden="true"
@@ -180,17 +180,20 @@ function Navigation<T>(props: NavigationProps<T>): JSX.Element {
     <span
       onClick={props.onSelect}
       className={clsx(
-        'group w-full flex items-center py-2 rounded-md cursor-pointer hover:bg-neutral-100',
+        'group w-full flex items-center py-2 rounded-md cursor-pointer hover:bg-neutral-400 hover:bg-opacity-10',
         optionStyles[props.size],
-        isSelected ? 'bg-neutral-100' : 'bg-white',
-        props.offset ? 'pl-11' : 'pl-2',
+        isSelected
+          ? 'text-white bg-neutral-400 bg-opacity-30 hover:bg-opacity-30'
+          : '',
+        props.offset ? 'pl-8' : 'pl-2',
       )}
     >
       {props.element.icon && (
         <div
           className={clsx(
-            'text-2xl group-hover:text-neutral-600',
+            'text-2xl group-hover:text-white',
             iconStyles[props.size],
+            isSelected ? 'text-white' : '',
           )}
         >
           {props.element.icon}
