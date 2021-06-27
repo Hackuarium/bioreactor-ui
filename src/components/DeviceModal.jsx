@@ -51,8 +51,8 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
   const formRef = useRef(null); // Ref the Form
 
   const _initialValues = {
-    name: '123',
-    url: 'mqtt.beemos.org',
+    name: 'Computer',
+    url: 'mqtt.hackuarium.org',
     protocol: protocolOptions[0].value,
     port: '9001',
     kind: kindOptions[0].value,
