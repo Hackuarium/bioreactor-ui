@@ -1,1 +1,0 @@
-{"version":3,"sources":["pages/Settings.jsx"],"names":["Settings"],"mappings":"yIAIeA,UAJE,WACf,OAAO","file":"static/js/13.c3f05441.chunk.js","sourcesContent":["const Settings = () => {\n  return <div>Settings</div>;\n};\n\nexport default Settings;\n"],"sourceRoot":""}
