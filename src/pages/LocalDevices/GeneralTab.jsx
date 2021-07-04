@@ -4,7 +4,7 @@ import { COMMANDS } from './../../services/devicesOptions';
 
 import DividerCustom from '../../components/DividerCustom';
 import { Button } from '../../components/tailwind-ui';
-import ValueCard from './ValueCard';
+import ValueCard from '../../components/ValueCard';
 
 const GeneralTab = ({ data, device }) => {
   const { addInfoNotification, addErrorNotification } = useNotification();
@@ -58,6 +58,7 @@ const GeneralTab = ({ data, device }) => {
             title={param.name || param.label}
             value={param.value * param.factor}
             unit={param.unit}
+            info={param.description}
             className="w-full sm:w-1/2  md:w-1/3 lg:w-1/4 flex"
           />
         ))}

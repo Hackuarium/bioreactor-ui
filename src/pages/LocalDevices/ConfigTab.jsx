@@ -5,7 +5,7 @@ import DividerCustom from '../../components/DividerCustom';
 import useNotification from '../../hooks/useNotification';
 import devicesManager from '../../services/localDeviceService';
 import { COMMANDS } from './../../services/devicesOptions';
-import ValueCard from './ValueCard';
+import ValueCard from '../../components/ValueCard';
 
 const intervals = [1, 2, 5, 10, 30, 60, 120, 300].map((v) => ({
   label: v > 59 ? `${v / 60} m` : `${v} s`,
@@ -141,6 +141,7 @@ const ConfigTab = ({
                 value={p.value * p.factor}
                 placeholder={p.description}
                 unit={p.unit}
+                info={p.description}
                 editable={true}
                 onChange={(newValue) => onValueChanged(p.label, newValue)}
                 className="w-full sm:w-1/2  md:w-1/3 lg:w-1/4 flex"
