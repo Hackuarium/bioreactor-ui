@@ -38,7 +38,7 @@ const ConfigTab = ({
 
   const { addInfoNotification, addErrorNotification } = useNotification();
 
-  // get Wratible params from data
+  // get Writable params from data
   useEffect(() => {
     const parameters = data?.parameters;
     const values =
@@ -98,7 +98,7 @@ const ConfigTab = ({
       <div className="mt-2 flex flex-col sm:flex-row justify-between">
         <div className="my-1 mx-2 flex flex-row items-center justify-end">
           <p className="mx-1 text-sm font-medium text-neutral-700">
-            Refresh inreval :
+            Refresh interval :
           </p>
           <Dropdown
             title={_refreshInterval.label}

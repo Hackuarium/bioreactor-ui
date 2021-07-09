@@ -12,11 +12,11 @@ const GeneralTab = ({ data, device }) => {
   const onSendCommand = async (command) => {
     try {
       const resultMsg = await devicesManager.sendCommand(device.id, command);
-      console.log('runExpirement');
+      console.log('runExperiment');
       console.log(resultMsg);
       addInfoNotification(resultMsg);
     } catch (e) {
-      console.log('runExpirement error');
+      console.log('runExperiment error');
       console.log(e);
       addErrorNotification(e);
     }
@@ -28,7 +28,7 @@ const GeneralTab = ({ data, device }) => {
       <div className="flex flex-row justify-end">
         <Button
           className="mx-2"
-          onClick={() => onSendCommand(COMMANDS.runExpirement)}
+          onClick={() => onSendCommand(COMMANDS.runExperiment)}
         >
           Run experiment
         </Button>

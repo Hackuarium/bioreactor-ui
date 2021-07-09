@@ -14,7 +14,7 @@ export const DEVICE_TYPE = {
   local: 'local',
 };
 
-export const DEVICE_PROTOCOLS = ['tcp', 'http','wss'];
+export const DEVICE_PROTOCOLS = ['wss', 'tcp', 'http'];
 
 export const DEVICE_KINDS = Object.keys(legoinoDeviceInformation).map(
   (key) => legoinoDeviceInformation[key].kind,
@@ -30,7 +30,7 @@ export const DEVICE_STATUS = {
 
 export const COMMANDS = {
   compactSettings: 'uc',
-  runExpirement: 'r',
+  runExperiment: 'r',
   kinetic: 'k',
   reset: 'ur1234',
   sleep: 'l',

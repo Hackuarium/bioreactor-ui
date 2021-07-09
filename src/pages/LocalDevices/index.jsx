@@ -10,14 +10,14 @@ import GeneralTab from './GeneralTab';
 import HistoryTab from './HistoryTab';
 import ConfigTab from './ConfigTab';
 
-const tabs = ['General', 'History', 'Configuration'].map((v) => ({
+const tabs = ['General', 'History', 'advanced', 'Configuration'].map((v) => ({
   value: v,
   label: v,
 }));
 
 const LocalDevices = () => {
   const [currentData, setCurrentData] = useState({}); // data to display
-  const [allData, setAlltData] = useState([]); // data hystory
+  const [allData, setAllData] = useState([]); // data history
   const [refreshInterval, setRefreshInterval] = useState(10000);
 
   const [selectedDevice, setSelectedDevice] = useState();
@@ -41,7 +41,7 @@ const LocalDevices = () => {
             parametersArray: true,
           });
           setCurrentData(results);
-          setAlltData([results, ...allData]);
+          setAllData([results, ...allData]);
         } catch (e) {
           addErrorNotification(e.message);
         }
@@ -68,7 +68,7 @@ const LocalDevices = () => {
 
   // if selectedType or selectedDevice changed: delete HistoryData + get the new data
   useEffect(() => {
-    setAlltData([]);
+    setAllData([]);
     getData(selectedDevice?.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType?.label, selectedDevice?.id]);

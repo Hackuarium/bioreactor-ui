@@ -28,7 +28,7 @@ const CardEditable = ({
 }) => {
   const [focused, setFocused] = useState(false);
   const [value, setValue] = useState(initialValue);
-  const [myTimeout, setMytimeout] = useState();
+  const [myTimeout, setMyTimeout] = useState();
 
   useEffect(() => {
     if (myTimeout) return clearTimeout(myTimeout);
@@ -42,9 +42,9 @@ const CardEditable = ({
       onSave(id, value);
       const timeout = setTimeout(() => {
         setFocused(false);
-        setMytimeout(undefined);
+        setMyTimeout(undefined);
       }, 1000);
-      setMytimeout(timeout);
+      setMyTimeout(timeout);
     }
   };
 
