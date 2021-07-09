@@ -4,7 +4,7 @@ import { COMMANDS } from './../../services/devicesOptions';
 
 import DividerCustom from '../../components/DividerCustom';
 import { Button } from '../../components/tailwind-ui';
-import ValueCard from '../../components/ValueCard';
+import CardValue from '../../components/CardValue';
 
 const GeneralTab = ({ data, device }) => {
   const { addInfoNotification, addErrorNotification } = useNotification();
@@ -53,7 +53,7 @@ const GeneralTab = ({ data, device }) => {
       )}
       <div className=" flex flex-row justify-around flex-wrap">
         {data?.parametersArray?.map((param, index) => (
-          <ValueCard
+          <CardValue
             key={index}
             title={param.name || param.label}
             value={param.value * param.factor}

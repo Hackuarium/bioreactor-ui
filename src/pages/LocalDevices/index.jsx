@@ -39,9 +39,7 @@ const LocalDevices = () => {
           });
 
           setCurrentData(results);
-          const d = [results, ...allData];
-          console.log(d);
-          setAlltData(d);
+          setAlltData([results, ...allData]);
         } catch (e) {
           addErrorNotification(e.message);
         }

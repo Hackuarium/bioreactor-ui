@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 
-import { Button, Spinner, Dropdown } from '../../components/tailwind-ui';
+import { Button, Dropdown } from '../../components/tailwind-ui';
 import DividerCustom from '../../components/DividerCustom';
 import useNotification from '../../hooks/useNotification';
 import devicesManager from '../../services/localDeviceService';
 import { COMMANDS } from './../../services/devicesOptions';
-import ValueCard from '../../components/ValueCard';
+import CardInput from '../../components/CardInput';
 
 const intervals = [1, 2, 5, 10, 30, 60, 120, 300].map((v) => ({
   label: v > 59 ? `${v / 60} m` : `${v} s`,
@@ -27,7 +27,6 @@ const ConfigTab = ({
     type: 'option',
   });
   const [render, setRender] = useState(false);
-  const [showSpinner, setShowSpinner] = useState(false);
 
   useEffect(() => {
     const parameters = data?.parameters;
@@ -82,29 +81,18 @@ const ConfigTab = ({
     setWritableParams(newValues);
   };
 
-  const onSave = async () => {
-    setShowSpinner(true);
-    let saved = false;
+  const onSaveValue = async (key, value) => {
     try {
-      for (let v of writableParams) {
-        if (v.edited) {
-          console.log(v.key + v.value);
-          await devicesManager.sendCommand(
-            device.id,
-            COMMANDS.setParameter(v.key, v.value),
-          );
-          saved = true;
-        }
-      }
-      saved
-        ? addInfoNotification('Saved')
-        : addInfoNotification('No changes to save');
+      console.log(key + ' : ' + value);
+      await devicesManager.sendCommand(
+        device.id,
+        COMMANDS.setParameter(key, value),
+      );
       reRender();
+      addInfoNotification('saved', '', 500);
     } catch (e) {
       addErrorNotification(e.message);
     }
-    setShowSpinner(false);
-    document.activeElement.blur();
   };
 
   return (
@@ -135,30 +123,20 @@ const ConfigTab = ({
           <DividerCustom title="Edit parameters" />
           <div className="flex flex-row justify-start flex-wrap">
             {writableParams.map((p, index) => (
-              <ValueCard
+              <CardInput
                 key={index}
+                id={p.key}
                 title={p.name || p.label}
-                value={p.value * p.factor}
-                placeholder={p.description}
+                initialValue={p.value * p.factor}
+                placeholder={p.name}
                 unit={p.unit}
                 info={p.description}
-                editable={true}
+                onSave={onSaveValue}
                 onChange={(newValue) => onValueChanged(p.label, newValue)}
                 className="w-full sm:w-1/2  md:w-1/3 lg:w-1/4 flex"
               />
             ))}
           </div>
-
-          <Button
-            className="mx-2 mt-2 flex self-end"
-            variant="white"
-            onClick={onSave}
-          >
-            {showSpinner && (
-              <Spinner className="text-primary-600 w-5 mr-2"></Spinner>
-            )}
-            Save
-          </Button>
         </>
       )}
     </div>

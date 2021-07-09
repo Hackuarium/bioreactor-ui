@@ -23,27 +23,27 @@ export default function useNotification() {
     );
   };
 
-  const addInfoNotification = (title, message) => {
+  const addInfoNotification = (title, message, timeout = 1000) => {
     addNotification(title, message, {
       textColor: 'text-primary-',
       Icon: SvgOutlineExclamationCircle,
-      timeout: 1000,
+      timeout: timeout,
     });
   };
 
-  const addWarningNotification = (title, message) => {
+  const addWarningNotification = (title, message, timeout = 2500) => {
     addNotification(title, message, {
       textColor: 'text-warning-',
       Icon: SvgSolidExclamation,
-      timeout: 2500,
+      timeout: timeout,
     });
   };
 
-  const addErrorNotification = (title, message) => {
+  const addErrorNotification = (title, message, timeout = 5000) => {
     addNotification(title, message, {
       textColor: 'text-danger-',
       Icon: SvgSolidExclamation,
-      timeout: 5000,
+      timeout: timeout,
     });
   };
 
