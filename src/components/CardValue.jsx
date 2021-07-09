@@ -1,6 +1,15 @@
 import clsx from 'clsx';
 import { ReactComponent as InfoIcon } from '../assets/icons/information.svg';
 
+/**
+ *
+ * @param {string} title
+ * @param {string} value
+ * @param {string} unit
+ * @param {string} info
+ * @param {string} className
+ */
+
 const CardValue = ({ title, value, unit, info, className }) => {
   return (
     <div className={clsx('flex', className)}>

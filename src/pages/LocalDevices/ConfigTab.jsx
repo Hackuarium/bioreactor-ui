@@ -13,36 +13,55 @@ const intervals = [1, 2, 5, 10, 30, 60, 120, 300].map((v) => ({
   type: 'option',
 }));
 
+/**
+ *
+ * @param {Object} device
+ * @param {number} refreshInterval
+ * @param {function} setRefreshInterval
+ * @param {Object} data
+ * @param {function} refreshData
+ */
+
 const ConfigTab = ({
   device,
-  data,
-  refreshInterval = 1000,
+  refreshInterval,
   setRefreshInterval,
+  data,
+  refreshData,
 }) => {
-  const { addInfoNotification, addErrorNotification } = useNotification();
   const [writableParams, setWritableParams] = useState([]);
   const [_refreshInterval, _setRefreshInterval] = useState({
     label: refreshInterval / 1000 + ' s',
     value: refreshInterval,
     type: 'option',
   });
-  const [render, setRender] = useState(false);
 
+  const { addInfoNotification, addErrorNotification } = useNotification();
+
+  // get Wratible params from data
   useEffect(() => {
     const parameters = data?.parameters;
     const values =
       parameters &&
       Object.keys(parameters)
         .filter((key) => parameters[key].writable)
-        .map((key) => ({ ...parameters[key], key }));
+        .map((key) => ({ ...parameters[key], key })); // the key is used to send the update command
     setWritableParams(values);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [render]);
+  }, [data]);
 
-  const reRender = () => {
-    setTimeout(() => {
-      setRender(!render);
-    }, 1000);
+  const onSaveValue = async (key, value) => {
+    try {
+      console.log(key + ' is set to: ' + value);
+      await devicesManager.sendCommand(
+        device.id,
+        COMMANDS.setParameter(key, value),
+      );
+      refreshData();
+      addInfoNotification('saved', '', 500);
+    } catch (e) {
+      addErrorNotification(e.message);
+    }
   };
 
   const OnRefreshIntervalChanged = (option) => {
@@ -58,7 +77,7 @@ const ConfigTab = ({
         COMMANDS.reset,
       );
       addInfoNotification(resultMsg);
-      reRender();
+      refreshData();
     } catch (e) {
       addErrorNotification(e.message);
     }
@@ -72,27 +91,6 @@ const ConfigTab = ({
       addErrorNotification(e.message);
     }
     document.activeElement.blur();
-  };
-
-  const onValueChanged = (label, value) => {
-    const newValues = writableParams.map((v) =>
-      v.label === label ? { ...v, value: value / v.factor, edited: true } : v,
-    );
-    setWritableParams(newValues);
-  };
-
-  const onSaveValue = async (key, value) => {
-    try {
-      console.log(key + ' : ' + value);
-      await devicesManager.sendCommand(
-        device.id,
-        COMMANDS.setParameter(key, value),
-      );
-      reRender();
-      addInfoNotification('saved', '', 500);
-    } catch (e) {
-      addErrorNotification(e.message);
-    }
   };
 
   return (
@@ -132,7 +130,6 @@ const ConfigTab = ({
                 unit={p.unit}
                 info={p.description}
                 onSave={onSaveValue}
-                onChange={(newValue) => onValueChanged(p.label, newValue)}
                 className="w-full sm:w-1/2  md:w-1/3 lg:w-1/4 flex"
               />
             ))}

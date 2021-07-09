@@ -2,6 +2,19 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { ReactComponent as InfoIcon } from '../assets/icons/information.svg';
 
+/**
+ *
+ * @param {string} id
+ * @param {string} title
+ * @param {number} initialValue
+ * @param {string} unit
+ * @param {string} placeholder
+ * @param {string} info
+ * @param {string} type
+ * @param {function} onSave
+ * @param {string} className
+ */
+
 const CardEditable = ({
   id,
   title,
@@ -19,6 +32,7 @@ const CardEditable = ({
 
   useEffect(() => {
     if (myTimeout) return clearTimeout(myTimeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onBlur = () => {

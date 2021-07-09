@@ -16,14 +16,17 @@ const tabs = ['General', 'History', 'Configuration'].map((v) => ({
 }));
 
 const LocalDevices = () => {
+  const [currentData, setCurrentData] = useState({}); // data to display
+  const [allData, setAlltData] = useState([]); // data hystory
+  const [refreshInterval, setRefreshInterval] = useState(10000);
+
   const [selectedDevice, setSelectedDevice] = useState();
   const [selectedType, setSelectedType] = useState();
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
-  const [currentData, setCurrentData] = useState({});
-  const [allData, setAlltData] = useState([]);
-  const [refreshInterval, setRefreshInterval] = useState(10000);
+
   const { addErrorNotification } = useNotification();
 
+  // get data from device
   const getData = useCallback(
     async (deviceId) => {
       if (deviceId) {
@@ -33,24 +36,24 @@ const LocalDevices = () => {
             COMMANDS.compactSettings,
           );
           const results = parseCurrentSettings(compressedResults, {
-            kind: selectedType?.label, // parameterLabel: true,
+            kind: selectedType?.label,
             parameterInfo: true,
             parametersArray: true,
           });
-
           setCurrentData(results);
           setAlltData([results, ...allData]);
         } catch (e) {
           addErrorNotification(e.message);
         }
       } else {
-        setCurrentData({});
+        setCurrentData({}); // Hide tabs (no data to display)
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [allData, selectedType?.label, selectedDevice?.id],
+    [allData, selectedType?.label],
   );
 
+  // Listen to data from device every {refreshInterval}
   useEffect(() => {
     if (selectedDevice?.id) {
       const timeout = setInterval(
@@ -61,10 +64,9 @@ const LocalDevices = () => {
         clearInterval(timeout);
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refreshInterval, getData]);
+  }, [selectedDevice?.id, refreshInterval, getData]);
 
-  // if selectedType or selectedDevice: delete HistoryData + get the new data
+  // if selectedType or selectedDevice changed: delete HistoryData + get the new data
   useEffect(() => {
     setAlltData([]);
     getData(selectedDevice?.id);
@@ -81,9 +83,10 @@ const LocalDevices = () => {
         return (
           <ConfigTab
             device={selectedDevice}
-            data={currentData}
             refreshInterval={refreshInterval}
             setRefreshInterval={setRefreshInterval}
+            data={currentData}
+            refreshData={() => getData(selectedDevice?.id)}
           />
         );
       default:
@@ -97,10 +100,7 @@ const LocalDevices = () => {
         deviceType={selectedType}
         onSelectType={setSelectedType}
         device={selectedDevice}
-        onSelectDevice={(newDevice) => {
-          setSelectedDevice(newDevice);
-          getData(newDevice?.id);
-        }}
+        onSelectDevice={setSelectedDevice}
       />
       {selectedDevice?.id ? (
         <div className="mx-4 pb-4">
