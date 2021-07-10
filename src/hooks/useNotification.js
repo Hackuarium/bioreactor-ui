@@ -1,45 +1,51 @@
+import clsx from 'clsx';
 import {
   SvgOutlineExclamationCircle,
   SvgSolidExclamation,
   useNotificationCenter,
 } from '../components/tailwind-ui';
 
-const TIMEOUT = 4000;
-
 export default function useNotification() {
   const notificationContext = useNotificationCenter();
 
-  const addInfoNotification = (title, message) => {
+  const addNotification = (title, message, { textColor, Icon, timeout }) => {
     notificationContext.addNotification(
       {
         title: (
-          <span className="text-base font-semibold text-primary-500">
+          <span className={clsx('text-base font-semibold', textColor + '500')}>
             {title}
           </span>
         ),
         content: <span className="text-sm text-neutral-500">{message}</span>,
-        icon: (
-          <SvgOutlineExclamationCircle className="w-8 h-8 text-primary-600" />
-        ),
+        icon: <Icon className={clsx('w-8 h-8', textColor + '600')} />,
       },
-      TIMEOUT,
+      timeout,
     );
   };
 
-  const addErrorNotification = (title, message) => {
-    notificationContext.addNotification(
-      {
-        title: (
-          <span className=" text-base font-semibold text-danger-500">
-            {title}
-          </span>
-        ),
-        content: <span className="text-sm text-neutral-500">{message}</span>,
-        icon: <SvgSolidExclamation className="w-8 h-8 text-danger-600" />,
-      },
-      TIMEOUT,
-    );
+  const addInfoNotification = (title, message, timeout = 1000) => {
+    addNotification(title, message, {
+      textColor: 'text-primary-',
+      Icon: SvgOutlineExclamationCircle,
+      timeout: timeout,
+    });
   };
 
-  return { addErrorNotification, addInfoNotification };
+  const addWarningNotification = (title, message, timeout = 2500) => {
+    addNotification(title, message, {
+      textColor: 'text-warning-',
+      Icon: SvgSolidExclamation,
+      timeout: timeout,
+    });
+  };
+
+  const addErrorNotification = (title, message, timeout = 5000) => {
+    addNotification(title, message, {
+      textColor: 'text-danger-',
+      Icon: SvgSolidExclamation,
+      timeout: timeout,
+    });
+  };
+
+  return { addErrorNotification, addWarningNotification, addInfoNotification };
 }

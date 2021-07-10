@@ -2,7 +2,7 @@ The first goal is to be able to display the result of the monitoring of the comp
 broker that is receiving information about my server every 10s. We should create everything required to display chart
 for the monitoring.
 
-After installing `mosquitto` you can check the packets using `mosquitto_sub -h mqtt.beemos.org -t "lpatiny/Computer/server"`
+After installing `mosquitto` you can check the packets using `mosquitto_sub -h mqtt.hackuarium.org -t "lpatiny/Computer/server"`
 
 ## Use Zakodium components
 

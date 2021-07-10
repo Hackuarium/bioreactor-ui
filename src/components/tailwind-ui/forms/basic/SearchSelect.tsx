@@ -13,6 +13,7 @@ import {
 
 interface BaseSearchSelectProps<T> {
   // Custom props for search input
+  name: String;
   clearable?: boolean;
   disabled?: boolean;
   loading?: boolean;

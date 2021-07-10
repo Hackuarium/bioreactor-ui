@@ -1,12 +1,21 @@
 {
-    "cSpell.words": [
-        "Spectro",
-        "TTFB",
-        "beemos",
-        "legoino",
-        "lpatiny",
-        "patiny",
-        "testid",
-        "zakodium"
-    ]
+  "cSpell.words": [
+    "Parens",
+    "Spectro",
+    "TTFB",
+    "beemos",
+    "browserslist",
+    "dropzone",
+    "formik",
+    "headlessui",
+    "legoino",
+    "lpatiny",
+    "lukeed",
+    "patiny",
+    "popperjs",
+    "predeploy",
+    "tailwindcss",
+    "testid",
+    "zakodium"
+  ]
 }

@@ -10,7 +10,6 @@ module.exports = {
           'blue-gray',
           'true-gray',
           'cool-gray',
-          'light-blue',
         ],
       },
     }),
@@ -25,6 +24,8 @@ module.exports = {
     extend: {
       fontWeight: ['group-hover', 'hover'],
       backgroundColor: ['active'],
+      fill: ['group-hover'],
+      display: ['group-hover'],
     },
   },
   plugins: [],
