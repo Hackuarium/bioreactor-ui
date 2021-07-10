@@ -1,7 +1,7 @@
 import db from './db';
 import { isFunction } from 'lodash';
 import { connect, subscribe, disconnect } from './mqttService';
-import { DEVICES_DB } from './devicesOptions';
+import { DEVICES_DB, DEFAULT_PORT, DEFAULT_PROTOCOL } from './devicesOptions';
 
 // Public Functions
 
@@ -83,7 +83,6 @@ export const addDevice = (props) => {
     });
 };
 
-
 //
 // connect to broadcast device & return a client instance with {subscribe, disconnect, getAllData, getLastData}
 export const connectDevice = ({
@@ -92,8 +91,8 @@ export const connectDevice = ({
   kind,
   deviceId = _id || `${kind}_${name}`,
   url,
-  protocol,
-  port,
+  protocol = DEFAULT_PROTOCOL,
+  port = DEFAULT_PORT,
   topic,
   username,
   password,
@@ -118,15 +117,16 @@ export const connectDevice = ({
       const _disconnect = () => disconnect(mqttClient, () => dbClient.close());
       const getAllData = () => dbClient.getAll();
       const getLastData = () => dbClient.getAll({ descending: true, limit: 1 });
-      const getPageData = (skip,limit)=> dbClient.getAll({ descending: true,skip:skip ,limit: limit });
-      const getAllDataCount = ()=>dbClient.getAllCount();
+      const getPageData = (skip, limit) =>
+        dbClient.getAll({ descending: true, skip: skip, limit: limit });
+      const getAllDataCount = () => dbClient.getAllCount();
       resolve({
         subscribe: _subscribe,
         disconnect: _disconnect,
         getAllData,
         getLastData,
         getPageData,
-        getAllDataCount
+        getAllDataCount,
       });
     } catch (e) {
       // connection error

@@ -50,7 +50,9 @@ const ROUTS = [
             label: 'Device information',
             value: '/preferences/broadcast-devices/device/:id',
             exact: true,
-            component: lazy(() => import('../pages/DeviceDetails')),
+            component: lazy(() =>
+              import('../pages/BroadcastDevices/DeviceDetails'),
+            ),
           },
         ],
       },
