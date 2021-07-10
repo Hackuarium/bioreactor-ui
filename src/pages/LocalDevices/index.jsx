@@ -9,8 +9,9 @@ import SelectDeviceComponent from './SelectDeviceComponent';
 import GeneralTab from './GeneralTab';
 import HistoryTab from './HistoryTab';
 import ConfigTab from './ConfigTab';
+import AdvancedTab from './AdvancedTab';
 
-const tabs = ['General', 'History', 'advanced', 'Configuration'].map((v) => ({
+const tabs = ['General', 'History', 'Advanced', 'Configuration'].map((v) => ({
   value: v,
   label: v,
 }));
@@ -79,6 +80,8 @@ const LocalDevices = () => {
         return <GeneralTab data={currentData} device={selectedDevice} />;
       case 'History':
         return <HistoryTab data={allData} deviceType={selectedType?.label} />;
+      case 'Advanced':
+        return <AdvancedTab />;
       case 'Configuration':
         return (
           <ConfigTab
