@@ -13,7 +13,7 @@ const ROUTS = [
   {
     id: 'status',
     label: 'Status',
-    value: process.env.PUBLIC_URL + '/status',
+    value: '/status',
     icon: <SvgOutlineChartSquareBar height="20" />,
     exact: true,
     inNavbar: true,
@@ -22,7 +22,7 @@ const ROUTS = [
   {
     id: 'preferences',
     label: 'Preferences',
-    value: process.env.PUBLIC_URL + '/preferences',
+    value: '/preferences',
     icon: <SvgOutlineClipboardList height="20" />,
     exact: true,
     inNavbar: true,
@@ -30,7 +30,7 @@ const ROUTS = [
       {
         id: 'general',
         label: 'General',
-        value: process.env.PUBLIC_URL + '/preferences/general',
+        value: '/preferences/general',
         icon: <SvgOutlineAdjustments height="20" />,
         exact: true,
         inNavbar: true,
@@ -39,7 +39,7 @@ const ROUTS = [
       {
         id: 'broadcast-devices',
         label: 'Broadcast devices',
-        value: process.env.PUBLIC_URL + '/preferences/broadcast-devices',
+        value: '/preferences/broadcast-devices',
         icon: <SvgOutlineChip height="20" />,
         exact: true,
         inNavbar: true,
@@ -48,9 +48,7 @@ const ROUTS = [
           {
             id: 'device-details',
             label: 'Device information',
-            value:
-              process.env.PUBLIC_URL +
-              '/preferences/broadcast-devices/device/:id',
+            value: '/preferences/broadcast-devices/device/:id',
             exact: true,
             component: lazy(() => import('../pages/DeviceDetails')),
           },
@@ -59,7 +57,7 @@ const ROUTS = [
       {
         id: 'interactive-devices',
         label: 'Interactive devices',
-        value: process.env.PUBLIC_URL + '/preferences/interactive-devices',
+        value: '/preferences/interactive-devices',
         icon: <SvgOutlineSwitchHorizontal height="20" />,
         exact: true,
         inNavbar: true,
@@ -68,7 +66,7 @@ const ROUTS = [
       {
         id: 'local-devices',
         label: 'Local devices',
-        value: process.env.PUBLIC_URL + '/preferences/local-devices',
+        value: '/preferences/local-devices',
         icon: <SvgOutlineDesktopComputer height="20" />,
         exact: true,
         inNavbar: true,
@@ -79,7 +77,7 @@ const ROUTS = [
   {
     id: 'settings',
     label: 'Settings',
-    value: process.env.PUBLIC_URL + '/settings',
+    value: '/settings',
     icon: <SvgOutlineCog height="20" />,
     exact: true,
     inNavbar: true,
