@@ -5,8 +5,8 @@
     "static/js/1.890c0105.chunk.js": "/bioreactor-ui/static/js/1.890c0105.chunk.js",
     "static/js/1.890c0105.chunk.js.map": "/bioreactor-ui/static/js/1.890c0105.chunk.js.map",
     "main.css": "/bioreactor-ui/static/css/main.7415e9b4.chunk.css",
-    "main.js": "/bioreactor-ui/static/js/main.bee1e532.chunk.js",
-    "main.js.map": "/bioreactor-ui/static/js/main.bee1e532.chunk.js.map",
+    "main.js": "/bioreactor-ui/static/js/main.4a01d3a5.chunk.js",
+    "main.js.map": "/bioreactor-ui/static/js/main.4a01d3a5.chunk.js.map",
     "runtime-main.js": "/bioreactor-ui/static/js/runtime-main.989fa70c.js",
     "runtime-main.js.map": "/bioreactor-ui/static/js/runtime-main.989fa70c.js.map",
     "static/js/4.2c8ebcce.chunk.js": "/bioreactor-ui/static/js/4.2c8ebcce.chunk.js",
@@ -45,6 +45,6 @@
     "static/js/runtime-main.989fa70c.js",
     "static/js/5.845126e6.chunk.js",
     "static/css/main.7415e9b4.chunk.css",
-    "static/js/main.bee1e532.chunk.js"
+    "static/js/main.4a01d3a5.chunk.js"
   ]
 }
