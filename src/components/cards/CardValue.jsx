@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { ReactComponent as InfoIcon } from '../assets/icons/information.svg';
+
+import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
 
 /**
  *

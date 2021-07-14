@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import useMedia from '../hooks/useMedia';
-import { routes, getCurrentRoute } from '../navigation/routeHelper';
-import { SvgOutlineMenu, SvgOutlineX, VerticalNavigation } from './tailwind-ui';
+import {
+  SvgOutlineMenu,
+  SvgOutlineX,
+  VerticalNavigation,
+} from '../tailwind-ui';
+import useMedia from '../../hooks/useMedia';
+import { routes, getCurrentRoute } from '../../navigation/routeHelper';
 
 // Helper func: get only routes which has inNavbar=true
 const getNavbarOptions = (routes, onClick) =>

@@ -15,10 +15,10 @@ import {
   SelectField,
   Spinner,
   SvgOutlineCheck,
-} from './tailwind-ui';
+} from '../../components/tailwind-ui';
 
-import { connectDevice } from '../services/broadCastDeviceService';
-import { DEVICE_KINDS, DEVICE_PROTOCOLS } from '../services/devicesOptions';
+import { connectDevice } from '../../services/broadCastDeviceService';
+import { DEVICE_KINDS, DEVICE_PROTOCOLS } from '../../services/devicesOptions';
 
 //
 // Pre-defined Vars

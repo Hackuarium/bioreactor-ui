@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { isFunction } from 'lodash';
+
 import { Button } from '../../components/tailwind-ui';
-import DevicesList from '../../components/DevicesList';
-import DeviceModal from '../../components/DeviceModal';
 import {
   addDevice,
   updateDevice,
@@ -11,6 +10,8 @@ import {
   connectDevice,
 } from '../../services/broadCastDeviceService';
 import useNotification from '../../hooks/useNotification';
+import DevicesList from './DevicesList';
+import DeviceModal from './DeviceModal';
 
 const BroadcastDevices = ({ history, match }) => {
   const [render, setRender] = useState(false);

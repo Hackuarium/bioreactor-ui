@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider } from './tailwind-ui';
+import { Divider } from '../tailwind-ui';
 
 const DividerCustom = ({ title }) => {
   return (

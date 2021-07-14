@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import devicesManager from '../../services/localDeviceService';
-import { DEVICE_KINDS } from '../../services/devicesOptions';
 import { Dropdown, Button } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
+import devicesManager from '../../services/localDeviceService';
+import { DEVICE_KINDS } from '../../services/devicesOptions';
 
 const typeOptions = DEVICE_KINDS.map((type) => ({
   label: type,

@@ -1,9 +1,10 @@
+import { useState, useEffect } from 'react';
+import { HorizontalNavigation } from '../../components/tailwind-ui';
+
 import {
   connectDevice,
   getDevice,
 } from '../../services/broadCastDeviceService';
-import { useState, useEffect } from 'react';
-import { HorizontalNavigation } from '../../components/tailwind-ui';
 import Details from './Details';
 
 const DeviceDetails = ({ match }) => {

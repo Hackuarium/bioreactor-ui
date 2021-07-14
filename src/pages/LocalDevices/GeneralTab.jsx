@@ -2,9 +2,8 @@ import useNotification from '../../hooks/useNotification';
 import devicesManager from '../../services/localDeviceService';
 import { COMMANDS } from './../../services/devicesOptions';
 
-import DividerCustom from '../../components/DividerCustom';
+import { DividerCustom, CardValue } from '../../components';
 import { Button } from '../../components/tailwind-ui';
-import CardValue from '../../components/CardValue';
 
 const GeneralTab = ({ data, device }) => {
   const { addInfoNotification, addErrorNotification } = useNotification();

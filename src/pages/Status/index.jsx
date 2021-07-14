@@ -1,6 +1,6 @@
 import React from 'react';
-import TemperaturePlot from '../components/TemperaturePlot';
-import TemperatureDisplay from '../components/TemperatureDisplay';
+import TemperaturePlot from './TemperaturePlot';
+import TemperatureDisplay from './TemperatureDisplay';
 
 const Status = () => {
   return (

@@ -5,7 +5,7 @@ import {
   SvgOutlineChevronRight,
   SvgSolidCog,
   SvgSolidTrash,
-} from './tailwind-ui';
+} from '../../components/tailwind-ui';
 
 const DevicesList = ({ data, onSelect, onEdit, onDelete }) => {
   const [selectedElement, setSelectedElement] = useState();

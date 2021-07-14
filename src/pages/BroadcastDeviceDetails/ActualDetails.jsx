@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { getParams } from './deviceParameters';
-import CardValue from '../../components/CardValue';
+import { CardValue } from '../../components';
 
 const ActualDetails = (props) => {
   const [parameters, setParameters] = useState([]);
