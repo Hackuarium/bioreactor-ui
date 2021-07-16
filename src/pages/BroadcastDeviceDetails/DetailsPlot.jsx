@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import { Axis, LineSeries, Plot, Heading, Legend } from 'react-plot';
 import { xBoxPlot } from 'ml-spectra-processing';
@@ -70,8 +71,8 @@ const DetailsPlot = (props) => {
 
   const EpochToDate = (epoch) => {
     if (epoch < 10000000000) epoch *= 1000; // convert to milliseconds (Epoch is usually expressed in seconds, but Javascript uses Milliseconds)
-    var epoch = epoch + new Date().getTimezoneOffset() * -1; //for timeZone
-    return new Date(epoch);
+    let _epoch = epoch + new Date().getTimezoneOffset() * -1; //for timeZone
+    return new Date(_epoch);
   };
 
   useEffect(() => {
@@ -80,12 +81,12 @@ const DetailsPlot = (props) => {
     if (series && series.length !== 0)
       series.forEach((s) => {
         var table = [];
-        allData.map((d, key) => {
+        allData.forEach((d, key) => {
           console.log(key /*EpochToDate(d.epoch).toLocaleString()*/);
           if (d.parameters)
             table.push({
               x: key /*EpochToDate(d.epoch)*/,
-              y: eval('d.parameters.' + s.label),
+              y: d.parameters[s.label],
             });
         });
 
@@ -98,6 +99,7 @@ const DetailsPlot = (props) => {
 
   useEffect(() => {
     setLines(getSeriesLines());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, type]);
 
   const getDataOfSeries = (label) => {
@@ -249,7 +251,7 @@ const DetailsPlot = (props) => {
                 },
               ],
             ]}
-            title="Diplay per"
+            title="Display per"
           />
         </div>
       </div>

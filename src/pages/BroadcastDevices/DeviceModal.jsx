@@ -20,7 +20,6 @@ import {
 import { testDeviceConnection } from '../../services/broadCastDeviceService';
 import {
   DEFAULT_PORT,
-  DEFAULT_PROTOCOL,
   DEVICE_KINDS,
   DEVICE_PROTOCOLS,
 } from '../../services/devicesOptions';
