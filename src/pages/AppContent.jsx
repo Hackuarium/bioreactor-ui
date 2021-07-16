@@ -10,7 +10,6 @@ import {
 } from '../components/tailwind-ui';
 
 const AppContent = () => {
-
   return (
     <div className="w-full h-full max-w-full" data-testid="App-content">
       <NotificationProvider>
@@ -25,7 +24,7 @@ const AppContent = () => {
           <Switch>
             {renderRoutes(routes)}
             {/**use the first route as default one */}
-            <Route path="/" exact component={routes[0].component} />
+            <Route path={'/'} exact component={routes[0].component} />
           </Switch>
         </Suspense>
       </NotificationProvider>

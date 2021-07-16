@@ -18,7 +18,12 @@ import {
 } from '../../components/tailwind-ui';
 
 import { testDeviceConnection } from '../../services/broadCastDeviceService';
-import { DEVICE_KINDS, DEVICE_PROTOCOLS } from '../../services/devicesOptions';
+import {
+  DEFAULT_PORT,
+  DEFAULT_PROTOCOL,
+  DEVICE_KINDS,
+  DEVICE_PROTOCOLS,
+} from '../../services/devicesOptions';
 
 //
 // Pre-defined Vars
@@ -54,7 +59,7 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
     name: 'Computer',
     url: 'mqtt.hackuarium.org',
     protocol: protocolOptions[0].value,
-    port: '9001',
+    port: DEFAULT_PORT,
     kind: kindOptions[0].value,
     topic: 'lpatiny/Computer/server',
     username: 'testUser',
@@ -157,7 +162,7 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
             name="name"
             id="name"
             label="Custom name"
-            placeholder="device_123"
+            placeholder="Device name"
             disabled={updateMode}
             required
             className="w-full"
