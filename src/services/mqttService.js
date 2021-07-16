@@ -1,15 +1,14 @@
 import mqtt from 'mqtt';
 import { isFunction } from 'lodash';
 import { parseCurrentSettings } from 'legoino-util';
-import { DEFAULT_PORT, DEFAULT_PROTOCOL } from './devicesOptions';
 
 // Private Functions
 let client;
 
 const getClientInstance = (
   url,
-  protocol = DEFAULT_PROTOCOL,
-  port = DEFAULT_PORT,
+  protocol,
+  port,
   username,
   password,
   onSuccess,

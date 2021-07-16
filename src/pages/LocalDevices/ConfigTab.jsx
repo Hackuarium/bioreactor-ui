@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 
 import { Button, Dropdown } from '../../components/tailwind-ui';
-import DividerCustom from '../../components/DividerCustom';
+import { CardInput, DividerCustom } from '../../components';
 import useNotification from '../../hooks/useNotification';
 import devicesManager from '../../services/localDeviceService';
-import { COMMANDS } from './../../services/devicesOptions';
-import CardInput from '../../components/CardInput';
+import { COMMANDS } from '../../services/devicesOptions';
 
 const intervals = [1, 2, 5, 10, 30, 60, 120, 300].map((v) => ({
   label: v > 59 ? `${v / 60} m` : `${v} s`,
@@ -58,7 +57,7 @@ const ConfigTab = ({
         COMMANDS.setParameter(key, value),
       );
       refreshData();
-      addInfoNotification('saved', '', 500);
+      addInfoNotification('saved', '', 1000);
     } catch (e) {
       addErrorNotification(e.message);
     }
