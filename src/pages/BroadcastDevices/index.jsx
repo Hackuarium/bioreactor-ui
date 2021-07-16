@@ -7,7 +7,7 @@ import {
   updateDevice,
   deleteDevice,
   getSavedDevices,
-  connectDevice,
+  testDeviceConnection,
 } from '../../services/broadCastDeviceService';
 import useNotification from '../../hooks/useNotification';
 import DevicesList from './DevicesList';
@@ -37,14 +37,15 @@ const BroadcastDevices = ({ history, match }) => {
 
   const onSelectItem = (device, e, callback) => {
     setTimeout(async () => {
-      try {
-        await connectDevice(device);
-        isFunction(callback) && callback();
-        history.push(match.url + '/device/' + device._id);
-      } catch (e) {
-        addErrorNotification(e.name, e.message);
-        isFunction(callback) && callback();
-      }
+      testDeviceConnection(device)
+        .then(() => {
+          isFunction(callback) && callback();
+          history.push(match.url + '/device/' + device._id);
+        })
+        .catch((err) => {
+          addErrorNotification(e.name, e.message);
+          isFunction(callback) && callback();
+        });
     }, 500);
   };
 
@@ -63,10 +64,8 @@ const BroadcastDevices = ({ history, match }) => {
 
   return (
     <div className="p-8">
-      <h2 className="text-3xl font-semibold mb-12 lg:mb-16">
-        Broadcast devices
-      </h2>
-      <div className="w-full flex justify-end mb-6 lg:mb-8">
+      <h2 className="text-3xl font-semibold mb-10">Broadcast devices</h2>
+      <div className="w-full flex justify-end mb-4">
         <Button onClick={onOpenModal}>Add device</Button>
       </div>
       <div>

@@ -15,7 +15,7 @@ const DeviceDetails = ({ match }) => {
   const [selected, setSelected] = useState({ value: 'Load', label: 'Load' });
 
   const [data, setData] = useState([]);
-  const [allData, setAllData] = useState([]);
+  // const [allData, setAllData] = useState([]);
   const [previousData, setPreviousData] = useState([]);
 
   const [deviceClient, setDeviceClient] = useState();
@@ -32,13 +32,16 @@ const DeviceDetails = ({ match }) => {
         );
       });
     }
+    return () => deviceClient?.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceId]);
 
   useEffect(() => {
     if (deviceClient) {
       //getAllDataCount
       deviceClient.getAllDataCount().then((result) => {
-        //console.log(result);
+        console.log('data count');
+        console.log(result);
         setCount(result);
       });
       deviceClient.subscribe(
@@ -50,10 +53,10 @@ const DeviceDetails = ({ match }) => {
         //console.log(result);
         setPreviousData(result);
       });
-      deviceClient.getAllData().then((result) => {
-        //console.log(result);
-        setAllData(result);
-      });
+      // deviceClient.getAllData().then((result) => {
+      //   //console.log(result);
+      //   setAllData(result);
+      // });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceClient]);

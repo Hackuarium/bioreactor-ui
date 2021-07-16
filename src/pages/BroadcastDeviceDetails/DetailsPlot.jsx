@@ -81,11 +81,11 @@ const DetailsPlot = (props) => {
       series.forEach((s) => {
         var table = [];
         allData.map((d, key) => {
-          console.log(key /*EpochToDate(d.doc.epoch).toLocaleString()*/);
-          if (d.doc.parameters)
+          console.log(key /*EpochToDate(d.epoch).toLocaleString()*/);
+          if (d.parameters)
             table.push({
-              x: key /*EpochToDate(d.doc.epoch)*/,
-              y: eval('d.doc.parameters.' + s.label),
+              x: key /*EpochToDate(d.epoch)*/,
+              y: eval('d.parameters.' + s.label),
             });
         });
 

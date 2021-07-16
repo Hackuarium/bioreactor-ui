@@ -4,8 +4,8 @@ import { Table } from '../../components/tailwind-ui';
 import { getParams } from './deviceParameters';
 
 const DataTable = (props) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [count, setCount] = useState(50);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [count, setCount] = useState(50);
   const [parameters, setParameters] = useState([]);
 
   useEffect(() => {
@@ -13,13 +13,13 @@ const DataTable = (props) => {
       const params = getParams(props.DetailType);
       setParameters(params);
     }
-    setCount(props.previousData.length);
+    // setCount(props.previousData.length);
   }, [props]);
 
   const EpochToDate = (epoch) => {
     if (epoch < 10000000000) epoch *= 1000; // convert to milliseconds (Epoch is usually expressed in seconds, but Javascript uses Milliseconds)
-    var epoch = epoch + new Date().getTimezoneOffset() * -1; //for timeZone
-    return new Date(epoch);
+    let _epoch = epoch + new Date().getTimezoneOffset() * -1; //for timeZone
+    return new Date(_epoch);
   };
 
   return (
@@ -46,16 +46,16 @@ const DataTable = (props) => {
           ) : null
         }
         Tr={({ value }) =>
-          value && value.doc.parameters ? (
+          value && value.parameters ? (
             <tr className="bg-white border-4 border-gray-200 text-center">
               {parameters.map((p, key) => {
                 return p.name === 'Date' ? (
                   <td className="px-4 py-2" key={key}>
-                    <span>{EpochToDate(value.doc.epoch).toLocaleString()}</span>
+                    <span>{EpochToDate(value.epoch).toLocaleString()}</span>
                   </td>
                 ) : (
                   <td className="px-4 py-2" key={key}>
-                    <span>{eval('value.doc.parameters.' + p.label)}</span>
+                    <span>{value.parameters[p.label]}</span>
                   </td>
                 );
               })}

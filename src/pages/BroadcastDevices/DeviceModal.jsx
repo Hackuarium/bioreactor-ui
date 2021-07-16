@@ -17,7 +17,7 @@ import {
   SvgOutlineCheck,
 } from '../../components/tailwind-ui';
 
-import { connectDevice } from '../../services/broadCastDeviceService';
+import { testDeviceConnection } from '../../services/broadCastDeviceService';
 import { DEVICE_KINDS, DEVICE_PROTOCOLS } from '../../services/devicesOptions';
 
 //
@@ -62,6 +62,11 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
     ...initialValues,
   };
 
+  useEffect(() => {
+    // clear footer when modal is closed
+    !isOpen && setTimeout(() => setFooterMessage(<div />), 500);
+  }, [isOpen]);
+
   // events functions
   const onSubmit = async (values) => {
     try {
@@ -77,52 +82,51 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
 
   const testConnection = (e) => {
     e.stopPropagation();
-    setFooterMessage(renderFooterMessage('connecting', 'Connecting ...'));
+    renderFooterMessage('connecting', 'Connecting ...');
     setTimeout(() => {
-      connectDevice(formRef.current.values)
-        .then((client) => {
-          setFooterMessage(renderFooterMessage('success', 'Connected'));
-          // TO DO : disconnect client
+      testDeviceConnection(formRef.current.values)
+        .then(() => {
+          renderFooterMessage('success', 'Connected');
         })
         .catch((err) => {
-          setFooterMessage(
-            renderFooterMessage('error', `Connection Error: ${err.message}`),
-          );
+          renderFooterMessage('error', `Connection Error: ${err.message}`);
         });
     }, 500);
   };
-
-  useEffect(() => {
-    // clear footer when modal is closed
-    !isOpen && setTimeout(() => setFooterMessage(<div />), 500);
-  }, [isOpen]);
 
   // helper function for testConnection event
   const renderFooterMessage = (state, message) => {
     switch (state) {
       case 'connecting':
-        return (
+        setFooterMessage(
           <div className="mx-6 flex flex-row items-center text-sm text-left text-neutral-500">
             <Spinner className="w-6 h-6 mr-2" />
             <span>{message}</span>
-          </div>
+          </div>,
         );
+        break;
+
       case 'success':
-        return (
+        setFooterMessage(
           <div className="mx-4 flex flex-row items-center text-sm text-left text-success-500">
             <SvgOutlineCheck className="h-6 w-6 mr-4" />
             <span>{message}</span>
-          </div>
+          </div>,
         );
+        break;
+
       case 'error':
-        return (
+        setFooterMessage(
           <div className="mx-4 flex flex-row items-center text-sm text-left text-danger-500">
             <SvgOutlineX className="h-6 w-6 mr-4" />
             <span>{message}</span>
-          </div>
+          </div>,
         );
+        break;
+
       default:
-        return <div />;
+        setFooterMessage(<div />);
+        break;
     }
   };
 
