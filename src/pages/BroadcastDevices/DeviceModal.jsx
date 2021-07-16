@@ -54,7 +54,7 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
     name: 'Computer',
     url: 'mqtt.hackuarium.org',
     protocol: protocolOptions[0].value,
-    port: '9001',
+    port: '80',
     kind: kindOptions[0].value,
     topic: 'lpatiny/Computer/server',
     username: 'testUser',
