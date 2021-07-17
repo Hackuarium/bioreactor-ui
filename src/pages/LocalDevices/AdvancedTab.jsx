@@ -25,12 +25,14 @@ const AdvancedTab = ({ device }) => {
   };
 
   const onHelp = async () => {
+    setCommand(COMMANDS.help);
     const data = await devicesManager.sendCommand(deviceId, COMMANDS.help);
     setResults(data);
     setTimeout(() => document.activeElement.blur(), 100);
   };
 
   const onSettings = async () => {
+    setCommand(COMMANDS.settings);
     const data = await devicesManager.sendCommand(deviceId, COMMANDS.settings);
     setResults(data);
     setTimeout(() => document.activeElement.blur(), 100);
@@ -81,7 +83,7 @@ const AdvancedTab = ({ device }) => {
         <div className="w-full mt-2 flex flex-col md:flex-row md:max-w-2xl">
           <div className="w-full h-96 md:mr-2 flex md:flex-1 border rounded-md overflow-auto overflow-x-auto">
             <textarea
-              className="w-full text-sm "
+              className="w-full text-sm font-semibold text-success-400 bg-neutral-900"
               style={{ fontFamily: 'monospace' }}
               value={results}
               onChange={(event) => console.log(event.target.value)}
