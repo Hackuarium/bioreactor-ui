@@ -21,7 +21,7 @@ import { testDeviceConnection } from '../../services/broadCastDeviceService';
 import {
   DEFAULT_PORT,
   DEFAULT_PROTOCOL,
-  DEVICE_KINDS,
+  DEVICE_KINDS_OPTIONS,
   DEVICE_PROTOCOLS,
 } from '../../services/devicesOptions';
 
@@ -30,8 +30,8 @@ import {
 const protocolOptions = DEVICE_PROTOCOLS.map((val) => {
   return { label: val.toUpperCase(), value: val };
 });
-const kindOptions = DEVICE_KINDS.map((val) => {
-  return { label: val, value: val };
+const kindOptions = DEVICE_KINDS_OPTIONS.map((option) => {
+  return { ...option, value: option.kind };
 });
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -58,7 +58,8 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
   const _initialValues = {
     name: 'Computer',
     url: 'mqtt.hackuarium.org',
-    protocol: protocolOptions[0].value,
+    protocol: protocolOptions.filter((v) => v.value === DEFAULT_PROTOCOL)[0]
+      .value,
     port: DEFAULT_PORT,
     kind: kindOptions[0].value,
     topic: 'lpatiny/Computer/server',

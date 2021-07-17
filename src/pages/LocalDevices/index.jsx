@@ -4,7 +4,7 @@ import { parseCurrentSettings } from 'legoino-util';
 import { HorizontalNavigation } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
 import devicesManager from '../../services/localDeviceService';
-import { COMMANDS } from './../../services/devicesOptions';
+import { COMMANDS, getDeviceType } from './../../services/devicesOptions';
 import SelectDeviceComponent from './SelectDeviceComponent';
 import GeneralTab from './GeneralTab';
 import HistoryTab from './HistoryTab';
@@ -74,6 +74,12 @@ const LocalDevices = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType?.label, selectedDevice?.id]);
 
+  const onSelectDevice = (device) => {
+    const type = getDeviceType(device?.id);
+    type && setSelectedType(type);
+    setSelectedDevice(device);
+  };
+
   const renderTabContent = (tab) => {
     switch (tab.value) {
       case 'General':
@@ -103,7 +109,7 @@ const LocalDevices = () => {
         deviceType={selectedType}
         onSelectType={setSelectedType}
         device={selectedDevice}
-        onSelectDevice={setSelectedDevice}
+        onSelectDevice={onSelectDevice}
       />
       {selectedDevice?.id ? (
         <div className="mx-4 pb-4">

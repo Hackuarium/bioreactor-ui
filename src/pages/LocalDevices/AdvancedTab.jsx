@@ -6,7 +6,7 @@ import { COMMANDS } from '../../services/devicesOptions';
 
 const AdvancedTab = ({ device }) => {
   const [deviceId, setDeviceId] = useState();
-  const [command, setCommand] = useState('');
+  const [command, setCommand] = useState(COMMANDS.help);
   const [results, setResults] = useState('');
 
   useEffect(() => setDeviceId(device?.id), [device?.id]);

@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react';
 import { Dropdown, Button } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
 import devicesManager from '../../services/localDeviceService';
-import { DEVICE_KINDS } from '../../services/devicesOptions';
+import {
+  DEVICE_KINDS_OPTIONS,
+  getDeviceType,
+} from '../../services/devicesOptions';
 
-const typeOptions = DEVICE_KINDS.map((type) => ({
-  label: type,
-  type: 'option',
-}));
+const SCAN_INTERVAL = 1000;
 
 const SelectDeviceComponent = ({
   device = { label: '--' },
-  deviceType = typeOptions.filter((o) => o.label === 'SimpleSpectro')[0],
+  deviceType = DEVICE_KINDS_OPTIONS[0],
   onSelectDevice,
   onSelectType,
 }) => {
@@ -29,7 +29,8 @@ const SelectDeviceComponent = ({
     updateConnectedDevices();
     const cleanUp = devicesManager.continuousUpdateDevices((newList) => {
       handleDevicesListChange(newList);
-    });
+    }, SCAN_INTERVAL);
+
     return () => cleanUp.then((intervalId) => clearInterval(intervalId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [devices.length]);
@@ -64,7 +65,7 @@ const SelectDeviceComponent = ({
   const renderOptions = (list) =>
     list.map((device) => ({
       id: device.id,
-      label: 'Device-' + device.id,
+      label: 'Device-' + device.id + ` (${getDeviceType(device.id).kind})`,
       type: 'option',
     }));
 
@@ -77,7 +78,7 @@ const SelectDeviceComponent = ({
           </h3>
           <Dropdown
             title={deviceType.label}
-            options={[typeOptions]}
+            options={[DEVICE_KINDS_OPTIONS]}
             onSelect={onSelectType}
           />
         </div>
