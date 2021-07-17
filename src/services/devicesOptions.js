@@ -8,17 +8,30 @@ export const DEFAULT_PROTOCOL = 'http'; // old tcp
 
 // Static Values
 
-export const DEVICE_TYPE = {
-  broadcast: 'broadcast',
-  interactive: 'interactive',
-  local: 'local',
-};
-
 export const DEVICE_PROTOCOLS = ['http', 'tcp', 'wss'];
+
+export const COMMANDS = {
+  help: 'h',
+  settings: 'u',
+  compactSettings: 'uc',
+  runExperiment: 'r',
+  kinetic: 'k',
+  reset: 'ur1234',
+  sleep: 'l',
+  setParameter: (label, value) => `${label}${value}`,
+};
 
 export const DEVICE_KINDS = Object.keys(legoinoDeviceInformation).map(
   (key) => legoinoDeviceInformation[key].kind,
 );
+
+export const DEVICE_KINDS_OPTIONS = Object.keys(legoinoDeviceInformation)
+  .filter((key) => legoinoDeviceInformation[key].kind)
+  .map((key) => ({
+    ...legoinoDeviceInformation[key],
+    label: legoinoDeviceInformation[key].kind,
+    type: 'option',
+  }));
 
 export const DEVICE_STATUS = {
   opening: 1,
@@ -28,11 +41,24 @@ export const DEVICE_STATUS = {
   error: 10,
 };
 
-export const COMMANDS = {
-  compactSettings: 'uc',
-  runExperiment: 'r',
-  kinetic: 'k',
-  reset: 'ur1234',
-  sleep: 'l',
-  setParameter: (label, value) => `${label}${value}`,
+export const DEVICE_TYPE = {
+  broadcast: 'broadcast',
+  interactive: 'interactive',
+  local: 'local',
+};
+
+export const getDeviceType = (deviceId) => {
+  try {
+    if (deviceId) {
+      const selectedDeviceType = legoinoDeviceInformation.fromDeviceID(
+        Number(deviceId),
+      );
+      return DEVICE_KINDS_OPTIONS.filter(
+        (element) => element.id === selectedDeviceType.id,
+      )[0];
+    }
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
 };
