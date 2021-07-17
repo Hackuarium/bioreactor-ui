@@ -29,6 +29,8 @@ export const DEVICE_STATUS = {
 };
 
 export const COMMANDS = {
+  help: 'h',
+  settings: 'u',
   compactSettings: 'uc',
   runExperiment: 'r',
   kinetic: 'k',

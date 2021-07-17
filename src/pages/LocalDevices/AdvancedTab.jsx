@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown } from '../../components/tailwind-ui';
 import { ReactComponent as TreeDotsIcon } from '../../assets/icons/treeDots.svg';
 import devicesManager from '../../services/localDeviceService';
+import { COMMANDS } from '../../services/devicesOptions';
 
 const AdvancedTab = ({ device }) => {
   const [deviceId, setDeviceId] = useState();
@@ -17,13 +18,30 @@ const AdvancedTab = ({ device }) => {
     }
   };
 
-  const onReset = () => console.log(results);
-
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       onSend();
     }
   };
+
+  const onHelp = async () => {
+    const data = await devicesManager.sendCommand(deviceId, COMMANDS.help);
+    setResults(data);
+    setTimeout(() => document.activeElement.blur(), 100);
+  };
+
+  const onSettings = async () => {
+    const data = await devicesManager.sendCommand(deviceId, COMMANDS.settings);
+    setResults(data);
+    setTimeout(() => document.activeElement.blur(), 100);
+  };
+
+  const handleDropdownSelect = (option) =>
+    option.label === 'Help'
+      ? onHelp()
+      : option.label === 'Settings'
+      ? onSettings()
+      : null;
 
   return (
     <div className="w-full   ">
@@ -50,11 +68,11 @@ const AdvancedTab = ({ device }) => {
             <Dropdown
               options={[
                 [
-                  { label: 'Reset', type: 'option' },
-                  { label: 'Sleep', type: 'option' },
-                  { label: 'Refresh', type: 'option' },
+                  { label: 'Help', type: 'option' },
+                  { label: 'Settings', type: 'option' },
                 ],
               ]}
+              onSelect={handleDropdownSelect}
             >
               <TreeDotsIcon className="w-5 h-5" fill="currentColor" />
             </Dropdown>
@@ -75,15 +93,17 @@ const AdvancedTab = ({ device }) => {
               className="m-1"
               variant="white"
               size="xSmall"
-              onClick={onReset}
+              onClick={onHelp}
             >
-              Reset
+              Help
             </Button>
-            <Button className="m-1" variant="white" size="xSmall">
-              Sleep
-            </Button>
-            <Button className="m-1" variant="white" size="xSmall">
-              Refresh
+            <Button
+              className="m-1"
+              variant="white"
+              size="xSmall"
+              onClick={onSettings}
+            >
+              Settings
             </Button>
           </div>
         </div>
