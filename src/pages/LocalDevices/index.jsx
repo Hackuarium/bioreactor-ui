@@ -81,7 +81,7 @@ const LocalDevices = () => {
       case 'History':
         return <HistoryTab data={allData} deviceType={selectedType?.label} />;
       case 'Advanced':
-        return <AdvancedTab />;
+        return <AdvancedTab device={selectedDevice} />;
       case 'Configuration':
         return (
           <ConfigTab

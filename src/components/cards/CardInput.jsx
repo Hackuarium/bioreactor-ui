@@ -16,7 +16,7 @@ import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
  * @param {string} className
  */
 
-const CardEditable = ({
+const CardInput = ({
   id,
   title,
   initialValue,
@@ -28,8 +28,10 @@ const CardEditable = ({
   className,
 }) => {
   const [focused, setFocused] = useState(false);
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState('');
   const [myTimeout, setMyTimeout] = useState();
+
+  useEffect(() => setValue(initialValue), [initialValue]);
 
   useEffect(() => {
     if (myTimeout) return clearTimeout(myTimeout);
@@ -95,4 +97,4 @@ const CardEditable = ({
   );
 };
 
-export default CardEditable;
+export default CardInput;
