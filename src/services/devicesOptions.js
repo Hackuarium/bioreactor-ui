@@ -3,8 +3,10 @@ import legoinoDeviceInformation from 'legoino-device-information';
 // Default Values
 
 export const DEVICES_DB = 'BIOREACTOR_devices';
-export const DEFAULT_PORT = '80'; // old '8080'
-export const DEFAULT_PROTOCOL = 'http'; // old tcp
+export const DEFAULT_PORT =
+  window.location.protocol === 'https:' ? '443' : '80'; // old '8080'
+export const DEFAULT_PROTOCOL =
+  window.location.protocol === 'https:' ? 'wss' : 'http'; // old tcp
 
 // Static Values
 
