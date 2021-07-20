@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import * as Yup from 'yup';
-import { isFunction, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import {
   Form,
   InputField,
@@ -23,6 +23,7 @@ import {
   DEFAULT_PROTOCOL,
   DEVICE_KINDS_OPTIONS,
   DEVICE_PROTOCOLS,
+  DEVICE_TYPE,
 } from '../../services/devicesOptions';
 
 //
@@ -78,9 +79,9 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
     try {
       //await addDevice(values);
       updateMode
-        ? isFunction(onUpdate) && (await onUpdate(values))
-        : isFunction(onSave) && (await onSave(values));
-      isFunction(onClose) && onClose();
+        ? await onUpdate(values)
+        : await onSave(DEVICE_TYPE.broadcast, values);
+      onClose();
     } catch (e) {
       throw new Error(e.message);
     }

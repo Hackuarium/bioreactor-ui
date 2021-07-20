@@ -1,4 +1,3 @@
-import { isFunction } from 'lodash';
 import { useState } from 'react';
 import {
   Spinner,
@@ -15,7 +14,7 @@ const DevicesList = ({ data, onSelect, onEdit, onDelete }) => {
     if (!selectedElement) {
       setSelectedElement(element);
       const callback = () => setSelectedElement(null);
-      isFunction(onSelect) && onSelect(element, e, callback);
+      onSelect(element, e, callback);
     }
   };
   return (

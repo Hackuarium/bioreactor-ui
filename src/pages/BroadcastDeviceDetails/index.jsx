@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { HorizontalNavigation } from '../../components/tailwind-ui';
 
-import {
-  connectDevice,
-  getDevice,
-} from '../../services/broadCastDeviceService';
+import { connectDevice } from '../../services/broadCastDeviceService';
+import { getDevice } from '../../services/devicesService';
 import Details from './Details';
 
 const DeviceDetails = ({ match }) => {
