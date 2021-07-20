@@ -129,7 +129,7 @@ const ConfigTab = ({
                 unit={p.unit}
                 info={p.description}
                 onSave={onSaveValue}
-                className="w-full sm:w-1/2  md:w-1/3 lg:w-1/4 flex"
+                className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
               />
             ))}
           </div>

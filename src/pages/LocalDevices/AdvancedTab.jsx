@@ -6,10 +6,22 @@ import { COMMANDS } from '../../services/devicesOptions';
 
 const AdvancedTab = ({ device }) => {
   const [deviceId, setDeviceId] = useState();
-  const [command, setCommand] = useState(COMMANDS.help);
+  const [command, setCommand] = useState('');
   const [results, setResults] = useState('');
 
-  useEffect(() => setDeviceId(device?.id), [device?.id]);
+  useEffect(() => {
+    setDeviceId(device?.id);
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [device?.id]);
+
+  const init = async () => {
+    if (device?.id) {
+      setCommand(COMMANDS.help);
+      const data = await devicesManager.sendCommand(device?.id, COMMANDS.help);
+      setResults(data);
+    }
+  };
 
   const onSend = async () => {
     if (command) {
