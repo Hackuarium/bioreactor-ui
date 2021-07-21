@@ -10,6 +10,8 @@ const throwDbError = (error, additionalMsg) => {
   throw err;
 };
 
+export const concatDeviceId = (type, kind, id) => `${type}_${kind}_${id}`;
+
 export const getDevices = async (type) =>
   DB(DEVICES_DB)
     .getAll({ startkey: `${type}`, endkey: `${type}\uffff` })
@@ -64,6 +66,15 @@ export const addDevice = (
       username,
       password,
     })
+    .catch((e) =>
+      e.name === 'conflict'
+        ? throwDbError(e, `Device name must be unique`)
+        : throwDbError(e, `Insert device error`),
+    );
+
+export const addDevice2 = (device) =>
+  DB(DEVICES_DB)
+    .put(device)
     .catch((e) =>
       e.name === 'conflict'
         ? throwDbError(e, `Device name must be unique`)

@@ -2,17 +2,23 @@ import { useEffect, useState } from 'react';
 
 import { Dropdown, Button } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
-import devicesManager from '../../services/localDeviceService';
 import {
-  DEVICE_KINDS_OPTIONS,
   getDeviceType,
-} from '../../services/devicesOptions';
+  continuousUpdateDevices,
+  getConnectedDevices,
+  requestDevices,
+} from '../../services/localDeviceService';
+import { DEVICE_KINDS } from '../../services/devicesOptions';
 
 const SCAN_INTERVAL = 1000;
 
+const kindOptions = DEVICE_KINDS.map((option) => {
+  return { ...option, label: option.name, type: 'option' };
+});
+
 const SelectDeviceComponent = ({
   device = { label: '--' },
-  deviceType = DEVICE_KINDS_OPTIONS[0],
+  deviceType = kindOptions[0],
   onSelectDevice,
   onSelectType,
 }) => {
@@ -27,7 +33,7 @@ const SelectDeviceComponent = ({
   // continuous update of devices list
   useEffect(() => {
     updateConnectedDevices();
-    const cleanUp = devicesManager.continuousUpdateDevices((newList) => {
+    const cleanUp = continuousUpdateDevices((newList) => {
       handleDevicesListChange(newList);
     }, SCAN_INTERVAL);
 
@@ -36,7 +42,7 @@ const SelectDeviceComponent = ({
   }, [devices.length]);
 
   const updateConnectedDevices = async () => {
-    const newList = await devicesManager.getConnectedDevices();
+    const newList = await getConnectedDevices();
     if (newList.length > 0) {
       if (!device?.id) onSelectDevice(renderOptions(newList)[0]);
       setDevices(newList);
@@ -57,8 +63,8 @@ const SelectDeviceComponent = ({
 
   const onRequest = async () => {
     document.activeElement.blur();
-    await devicesManager.requestDevices();
-    const newList = await devicesManager.getConnectedDevices();
+    await requestDevices();
+    const newList = await getConnectedDevices();
     handleDevicesListChange(newList);
   };
 
@@ -78,7 +84,7 @@ const SelectDeviceComponent = ({
           </h3>
           <Dropdown
             title={deviceType.label}
-            options={[DEVICE_KINDS_OPTIONS]}
+            options={[kindOptions]}
             onSelect={onSelectType}
           />
         </div>
