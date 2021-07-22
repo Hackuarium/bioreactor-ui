@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+  Badge,
+  BadgeSize,
   SvgOutlineChevronRight,
   SvgSolidCog,
   SvgSolidTrash,
@@ -21,9 +23,19 @@ const LocalDevicesList = ({ data, onSelect, onEdit, onDelete }) => {
           <div className="relative flex items-center px-4 py-4 sm:px-6">
             <div className="flex items-center flex-1 min-w-0">
               <div className="flex-1 min-w-0 px-4 sm:grid sm:grid-col-2 sm:gap-4">
-                <p className="col-span-2 text-lg font-semibold truncate text-primary-700">
-                  {element.name}
-                </p>
+                <div className="col-span-2 flex flex-row items-center flex-wrap">
+                  <p className="mr-4 text-lg font-semibold truncate text-primary-700 ">
+                    {element.name}
+                  </p>
+                  <Badge
+                    dot
+                    rounded
+                    label={element.connected ? 'Active' : 'Inactive'}
+                    size={BadgeSize.SMALL}
+                    color={element.connected ? 'success' : 'neutral'}
+                    className="w-min h-min"
+                  />
+                </div>
                 <div className="pt-2 sm:pt-0 flex flex-col text-xs font-italic text-neutral-600 justify-center">
                   <p className="truncate">
                     <span className="font-semibold">{element?.kind?.name}</span>

@@ -16,7 +16,10 @@ import {
   localDeviceInfo,
   requestDevices,
   getConnectedDevices,
+  continuousUpdateDevices,
 } from '../../services/localDeviceService';
+
+const REFRESH_INTERVAL = 1000;
 
 const LocalDevices = ({ history, match }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,6 +28,28 @@ const LocalDevices = ({ history, match }) => {
   const { addInfoNotification } = useNotification();
 
   useEffect(() => refreshDevices(), []);
+
+  // update devices status continuously
+  useEffect(() => {
+    const cleanUp = continuousUpdateDevices((connected) => {
+      let changed;
+      const ids = connected.map((d) => d.id);
+      const _devices = devices.map((d) => {
+        if (ids.includes(d.id) && !d.connected) {
+          d.connected = true;
+          changed = true;
+        } else if (!ids.includes(d.id) && d.connected) {
+          d.connected = false;
+          changed = true;
+        }
+        return d;
+      });
+      if (changed) setDevices(_devices);
+      console.log(_devices);
+    }, REFRESH_INTERVAL);
+
+    return () => cleanUp.then((intervalId) => clearInterval(intervalId));
+  }, [devices]);
 
   const refreshDevices = () => {
     getDevices(DEVICE_TYPE.local).then(setDevices);

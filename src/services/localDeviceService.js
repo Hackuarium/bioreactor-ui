@@ -5,7 +5,7 @@ import { DevicesManager } from 'legoino-navigator-serial';
 import { DEVICE_TYPE } from './devicesOptions';
 import { concatDeviceId } from './devicesService';
 
-const SCAN_INTERVAL = 3000;
+const SCAN_INTERVAL = 1000;
 
 const devicesManager = new DevicesManager(navigator.serial);
 
