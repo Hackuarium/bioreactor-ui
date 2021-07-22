@@ -46,9 +46,9 @@ const ROUTS = [
         component: lazy(() => import('../pages/BroadcastDevices')),
         options: [
           {
-            id: 'device-details',
+            id: 'broadcastDevice-details',
             label: 'Device information',
-            value: '/preferences/broadcast-devices/device/:id',
+            value: '/preferences/broadcast-devices/:id',
             exact: true,
             component: lazy(() => import('../pages/BroadcastDeviceDetails')),
           },
@@ -71,6 +71,15 @@ const ROUTS = [
         exact: true,
         inNavbar: true,
         component: lazy(() => import('../pages/LocalDevices')),
+        options: [
+          {
+            id: 'localDevice-details',
+            label: 'Device information',
+            value: '/preferences/local-devices/:id',
+            exact: true,
+            component: lazy(() => import('../pages/LocalDeviceDetails')),
+          },
+        ],
       },
     ],
   },

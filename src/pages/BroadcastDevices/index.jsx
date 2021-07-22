@@ -40,7 +40,7 @@ const BroadcastDevices = ({ history, match }) => {
       testDeviceConnection(device)
         .then(() => {
           callback();
-          history.push(match.url + '/device/' + device._id);
+          history.push(match.url + '/' + device._id);
         })
         .catch((err) => {
           addErrorNotification(e.name, e.message);

@@ -8,17 +8,13 @@ import {
 } from '../../components/tailwind-ui';
 
 const LocalDevicesList = ({ data, onSelect, onEdit, onDelete }) => {
-  const handleSelect = async (element, e) => {
-    console.log(element);
-  };
-
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       {data.map((element) => (
         <li
           key={element.id}
           className="block transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50 cursor-pointer"
-          onClick={(e) => handleSelect(element, e)}
+          onClick={(e) => onSelect(element, e)}
         >
           <div className="relative flex items-center px-4 py-4 sm:px-6">
             <div className="flex items-center flex-1 min-w-0">

@@ -1,10 +1,10 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Table, Td, Th, useTable } from '../../components/tailwind-ui';
 
-const HistoryTab = ({ data, deviceType }) => {
+const HistoryTab = ({ data }) => {
   const [headers, setHeaders] = useState([]);
 
-  // extract headers from the first element on data (just one time whenever deviceType is changed)
+  // extract headers from the first element on data (just the first time )
   useEffect(() => {
     const heads =
       data && data.length > 0
@@ -12,7 +12,7 @@ const HistoryTab = ({ data, deviceType }) => {
         : [];
     setHeaders(['Epoch', ...heads]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deviceType]);
+  }, []);
 
   const Row = useCallback((val) => {
     const classnames = 'text-xs text-center p-2';

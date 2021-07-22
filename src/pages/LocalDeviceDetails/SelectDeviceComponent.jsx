@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Dropdown, Button } from '../../components/tailwind-ui';
 import useNotification from '../../hooks/useNotification';
 import {
-  getDeviceType,
   continuousUpdateDevices,
   getConnectedDevices,
   requestDevices,
@@ -71,7 +70,7 @@ const SelectDeviceComponent = ({
   const renderOptions = (list) =>
     list.map((device) => ({
       id: device.id,
-      label: 'Device-' + device.id + ` (${getDeviceType(device.id).kind})`,
+      label: 'Device-' + device.id, //+ ` (${getDeviceType(device.id).kind})`,
       type: 'option',
     }));
 

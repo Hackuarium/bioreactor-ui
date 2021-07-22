@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown } from '../../components/tailwind-ui';
 import { ReactComponent as TreeDotsIcon } from '../../assets/icons/treeDots.svg';
-import devicesManager from '../../services/localDeviceService';
+import { sendCommand } from '../../services/localDeviceService';
 import { COMMANDS } from '../../services/devicesOptions';
 
 const AdvancedTab = ({ device }) => {
@@ -18,14 +18,14 @@ const AdvancedTab = ({ device }) => {
   const init = async () => {
     if (device?.id) {
       setCommand(COMMANDS.help);
-      const data = await devicesManager.sendCommand(device?.id, COMMANDS.help);
+      const data = await sendCommand(device?.id, COMMANDS.help);
       setResults(data);
     }
   };
 
   const onSend = async () => {
     if (command) {
-      const data = await devicesManager.sendCommand(deviceId, command);
+      const data = await sendCommand(deviceId, command);
       setResults(data);
     }
   };
@@ -38,14 +38,14 @@ const AdvancedTab = ({ device }) => {
 
   const onHelp = async () => {
     setCommand(COMMANDS.help);
-    const data = await devicesManager.sendCommand(deviceId, COMMANDS.help);
+    const data = await sendCommand(deviceId, COMMANDS.help);
     setResults(data);
     setTimeout(() => document.activeElement.blur(), 100);
   };
 
   const onSettings = async () => {
     setCommand(COMMANDS.settings);
-    const data = await devicesManager.sendCommand(deviceId, COMMANDS.settings);
+    const data = await sendCommand(deviceId, COMMANDS.settings);
     setResults(data);
     setTimeout(() => document.activeElement.blur(), 100);
   };

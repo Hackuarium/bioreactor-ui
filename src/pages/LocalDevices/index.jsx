@@ -45,7 +45,6 @@ const LocalDevices = ({ history, match }) => {
         return d;
       });
       if (changed) setDevices(_devices);
-      console.log(_devices);
     }, REFRESH_INTERVAL);
 
     return () => cleanUp.then((intervalId) => clearInterval(intervalId));
@@ -73,6 +72,10 @@ const LocalDevices = ({ history, match }) => {
         refreshDevices();
       }
     });
+  };
+
+  const onSelectDevice = (device, e) => {
+    history.push(match.url + '/' + device._id);
   };
 
   const onEditDevice = async (device, e) => {
@@ -112,12 +115,24 @@ const LocalDevices = ({ history, match }) => {
           </h3>
           <div className="w-full border-t border-neutral-300" />
         </div>
-        <LocalDevicesList
-          data={devices}
-          //   onSelect={onSelectItem}
-          onEdit={onEditDevice}
-          onDelete={onDeleteDevice}
-        />
+
+        {devices.length > 0 ? (
+          <LocalDevicesList
+            data={devices}
+            onSelect={onSelectDevice}
+            onEdit={onEditDevice}
+            onDelete={onDeleteDevice}
+          />
+        ) : (
+          <div className="mx-5 mt-10 flex flex-col items-center">
+            <h3 className="text-sm font-bold text-gray-300 leading-loose">
+              No connected Devices
+            </h3>
+            <h3 className="text-xs font-base text-gray-300">
+              Please plug your device into the computer
+            </h3>
+          </div>
+        )}
       </div>
 
       <LocalDeviceModal
