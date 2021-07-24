@@ -17,6 +17,7 @@ import {
   requestDevices,
   getConnectedDevices,
   continuousUpdateDevices,
+  clearSavedData,
 } from '../../services/localDeviceService';
 
 const REFRESH_INTERVAL = 1000;
@@ -86,7 +87,8 @@ const LocalDevices = ({ history, match }) => {
 
   const onDeleteDevice = async (device, e) => {
     e.stopPropagation();
-    deleteDevice(device._id).then(() => refreshDevices());
+    clearSavedData(device?._id);
+    deleteDevice(device?._id).then(() => refreshDevices());
   };
 
   const onCloseModal = () => {

@@ -81,6 +81,11 @@ const DB = (dbName) => {
         : reject(new Error('Doc remove : docId is required'));
     });
 
+  const destroy = () => {
+    const db = connect();
+    return db.destroy();
+  };
+
   return {
     getInfo,
     getAll,
@@ -88,6 +93,7 @@ const DB = (dbName) => {
     put,
     update,
     remove,
+    destroy,
   };
 };
 

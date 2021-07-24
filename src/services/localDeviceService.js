@@ -107,3 +107,8 @@ export const getLastSavedData = (deviceId) => {
     })
     .then((res) => res.rows.map((d) => d.doc));
 };
+
+export const clearSavedData = (deviceId) => {
+  const dbClient = DB(deviceId);
+  return dbClient.destroy();
+};
