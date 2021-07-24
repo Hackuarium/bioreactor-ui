@@ -2,7 +2,7 @@ import legoinoDeviceInformation from 'legoino-device-information';
 
 // Default Values
 
-export const DEVICES_DB = 'BIOREACTOR_devices';
+export const DEVICES_DB = 'BIOREACTOR-UI_devices';
 export const DEFAULT_PORT =
   window.location.protocol === 'https:' ? '443' : '80'; // old '8080'
 export const DEFAULT_PROTOCOL =
@@ -11,6 +11,12 @@ export const DEFAULT_PROTOCOL =
 // Static Values
 
 export const DEVICE_PROTOCOLS = ['http', 'tcp', 'wss'];
+
+export const DEVICE_TYPE = {
+  broadcast: 'broadcast',
+  interactive: 'interactive',
+  local: 'local',
+};
 
 export const COMMANDS = {
   help: 'h',
@@ -23,17 +29,12 @@ export const COMMANDS = {
   setParameter: (label, value) => `${label}${value}`,
 };
 
-export const DEVICE_KINDS = Object.keys(legoinoDeviceInformation).map(
-  (key) => legoinoDeviceInformation[key].kind,
-);
-
-export const DEVICE_KINDS_OPTIONS = Object.keys(legoinoDeviceInformation)
+export const DEVICE_KINDS = Object.keys(legoinoDeviceInformation)
   .filter((key) => legoinoDeviceInformation[key].kind)
-  .map((key) => ({
-    ...legoinoDeviceInformation[key],
-    label: legoinoDeviceInformation[key].kind,
-    type: 'option',
-  }));
+  .map((key) => {
+    const { events, parameters, ...info } = legoinoDeviceInformation[key];
+    return info;
+  });
 
 export const DEVICE_STATUS = {
   opening: 1,
@@ -41,26 +42,4 @@ export const DEVICE_STATUS = {
   closed: 3,
   missing: 9,
   error: 10,
-};
-
-export const DEVICE_TYPE = {
-  broadcast: 'broadcast',
-  interactive: 'interactive',
-  local: 'local',
-};
-
-export const getDeviceType = (deviceId) => {
-  try {
-    if (deviceId) {
-      const selectedDeviceType = legoinoDeviceInformation.fromDeviceID(
-        Number(deviceId),
-      );
-      return DEVICE_KINDS_OPTIONS.filter(
-        (element) => element.id === selectedDeviceType.id,
-      )[0];
-    }
-  } catch (e) {
-    console.log(e);
-    return undefined;
-  }
 };

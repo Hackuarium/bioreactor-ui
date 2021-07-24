@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import * as Yup from 'yup';
-import { isFunction, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import {
   Form,
   InputField,
@@ -21,8 +21,9 @@ import { testDeviceConnection } from '../../services/broadCastDeviceService';
 import {
   DEFAULT_PORT,
   DEFAULT_PROTOCOL,
-  DEVICE_KINDS_OPTIONS,
+  DEVICE_KINDS,
   DEVICE_PROTOCOLS,
+  DEVICE_TYPE,
 } from '../../services/devicesOptions';
 
 //
@@ -30,8 +31,8 @@ import {
 const protocolOptions = DEVICE_PROTOCOLS.map((val) => {
   return { label: val.toUpperCase(), value: val };
 });
-const kindOptions = DEVICE_KINDS_OPTIONS.map((option) => {
-  return { ...option, value: option.kind };
+const kindOptions = DEVICE_KINDS.map((option) => {
+  return { ...option, label: option.name, value: option.kind };
 });
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -78,9 +79,9 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
     try {
       //await addDevice(values);
       updateMode
-        ? isFunction(onUpdate) && (await onUpdate(values))
-        : isFunction(onSave) && (await onSave(values));
-      isFunction(onClose) && onClose();
+        ? await onUpdate(values)
+        : await onSave(DEVICE_TYPE.broadcast, values);
+      onClose();
     } catch (e) {
       throw new Error(e.message);
     }
@@ -209,7 +210,7 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
               renderOption={(o) => `${o.label}`}
               getValue={(o) => o.value}
               required
-              className="mt-4 mr-4 w-1/3 "
+              className="mt-4 mr-4 w-1/2 "
               inputClassName="w-full bg-gray-500"
             ></SelectField>
             <InputField

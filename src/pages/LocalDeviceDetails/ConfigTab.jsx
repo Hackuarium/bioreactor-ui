@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button, Dropdown } from '../../components/tailwind-ui';
 import { CardInput, DividerCustom } from '../../components';
 import useNotification from '../../hooks/useNotification';
-import devicesManager from '../../services/localDeviceService';
+import { sendCommand } from '../../services/localDeviceService';
 import { COMMANDS } from '../../services/devicesOptions';
 
 const intervals = [1, 2, 5, 10, 30, 60, 120, 300].map((v) => ({
@@ -52,10 +52,7 @@ const ConfigTab = ({
   const onSaveValue = async (key, value) => {
     try {
       console.log(key + ' is set to: ' + value);
-      await devicesManager.sendCommand(
-        device.id,
-        COMMANDS.setParameter(key, value),
-      );
+      await sendCommand(device.id, COMMANDS.setParameter(key, value));
       refreshData();
       addInfoNotification('saved', '', 1000);
     } catch (e) {
@@ -71,10 +68,7 @@ const ConfigTab = ({
 
   const onReset = async () => {
     try {
-      const resultMsg = await devicesManager.sendCommand(
-        device.id,
-        COMMANDS.reset,
-      );
+      const resultMsg = await sendCommand(device.id, COMMANDS.reset);
       addInfoNotification(resultMsg);
       refreshData();
     } catch (e) {
@@ -85,7 +79,7 @@ const ConfigTab = ({
 
   const onSleep = async () => {
     try {
-      await devicesManager.sendCommand(device.id, COMMANDS.sleep);
+      await sendCommand(device.id, COMMANDS.sleep);
     } catch (e) {
       addErrorNotification(e.message);
     }
@@ -129,7 +123,7 @@ const ConfigTab = ({
                 unit={p.unit}
                 info={p.description}
                 onSave={onSaveValue}
-                className="w-full sm:w-1/2  md:w-1/3 lg:w-1/4 flex"
+                className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
               />
             ))}
           </div>

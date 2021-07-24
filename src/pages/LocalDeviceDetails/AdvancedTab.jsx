@@ -1,20 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown } from '../../components/tailwind-ui';
 import { ReactComponent as TreeDotsIcon } from '../../assets/icons/treeDots.svg';
-import devicesManager from '../../services/localDeviceService';
+import { sendCommand } from '../../services/localDeviceService';
 import { COMMANDS } from '../../services/devicesOptions';
+import useNotification from '../../hooks/useNotification';
 
 const AdvancedTab = ({ device }) => {
   const [deviceId, setDeviceId] = useState();
-  const [command, setCommand] = useState(COMMANDS.help);
+  const [command, setCommand] = useState('');
   const [results, setResults] = useState('');
 
-  useEffect(() => setDeviceId(device?.id), [device?.id]);
+  const { addErrorNotification } = useNotification();
+
+  useEffect(() => {
+    setDeviceId(device?.id);
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [device?.id]);
+
+  const init = async () => {
+    if (device?.id && device?.connected) {
+      setCommand(COMMANDS.help);
+      const data = await sendCommand(device?.id, COMMANDS.help);
+      setResults(data);
+    }
+  };
 
   const onSend = async () => {
     if (command) {
-      const data = await devicesManager.sendCommand(deviceId, command);
-      setResults(data);
+      try {
+        const data = await sendCommand(deviceId, command);
+        setResults(data);
+      } catch (e) {
+        addErrorNotification(
+          e.name,
+          !device?.connected ? `${device?.name} is disconnected` : e.message,
+        );
+      }
     }
   };
 
@@ -25,16 +47,30 @@ const AdvancedTab = ({ device }) => {
   };
 
   const onHelp = async () => {
-    setCommand(COMMANDS.help);
-    const data = await devicesManager.sendCommand(deviceId, COMMANDS.help);
-    setResults(data);
+    try {
+      setCommand(COMMANDS.help);
+      const data = await sendCommand(deviceId, COMMANDS.help);
+      setResults(data);
+    } catch (e) {
+      addErrorNotification(
+        e.name,
+        !device?.connected ? `${device?.name} is disconnected` : e.message,
+      );
+    }
     setTimeout(() => document.activeElement.blur(), 100);
   };
 
   const onSettings = async () => {
-    setCommand(COMMANDS.settings);
-    const data = await devicesManager.sendCommand(deviceId, COMMANDS.settings);
-    setResults(data);
+    try {
+      setCommand(COMMANDS.settings);
+      const data = await sendCommand(deviceId, COMMANDS.settings);
+      setResults(data);
+    } catch (e) {
+      addErrorNotification(
+        e.name,
+        !device?.connected ? `${device?.name} is disconnected` : e.message,
+      );
+    }
     setTimeout(() => document.activeElement.blur(), 100);
   };
 

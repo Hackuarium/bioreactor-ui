@@ -3,7 +3,8 @@ import PouchDB from 'pouchdb';
 // Wrap Db interface in case of switching to another Db other than "PouchDb"
 
 const DB = (dbName) => {
-  const connect = () => new PouchDB(dbName);
+  const connect = () =>
+    new PouchDB(dbName, { revs_limit: 1, auto_compaction: true });
 
   // DB operations to return
 
@@ -80,6 +81,11 @@ const DB = (dbName) => {
         : reject(new Error('Doc remove : docId is required'));
     });
 
+  const destroy = () => {
+    const db = connect();
+    return db.destroy();
+  };
+
   return {
     getInfo,
     getAll,
@@ -87,6 +93,7 @@ const DB = (dbName) => {
     put,
     update,
     remove,
+    destroy,
   };
 };
 

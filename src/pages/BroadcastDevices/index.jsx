@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-import { isFunction } from 'lodash';
 
 import { Button } from '../../components/tailwind-ui';
+import { testDeviceConnection } from '../../services/broadCastDeviceService';
 import {
   addDevice,
   updateDevice,
   deleteDevice,
-  getSavedDevices,
-  testDeviceConnection,
-} from '../../services/broadCastDeviceService';
+  getDevices,
+} from '../../services/devicesService';
 import useNotification from '../../hooks/useNotification';
 import DevicesList from './DevicesList';
 import DeviceModal from './DeviceModal';
+import { DEVICE_TYPE } from '../../services/devicesOptions';
 
 const BroadcastDevices = ({ history, match }) => {
   const [render, setRender] = useState(false);
@@ -22,7 +22,7 @@ const BroadcastDevices = ({ history, match }) => {
 
   useEffect(() => {
     // get saved devices from DB
-    getSavedDevices().then((list) => setDevicesList(list));
+    getDevices(DEVICE_TYPE.broadcast).then((list) => setDevicesList(list));
   }, [render]);
 
   const onOpenModal = () => {
@@ -39,12 +39,12 @@ const BroadcastDevices = ({ history, match }) => {
     setTimeout(async () => {
       testDeviceConnection(device)
         .then(() => {
-          isFunction(callback) && callback();
-          history.push(match.url + '/device/' + device._id);
+          callback();
+          history.push(match.url + '/' + device._id);
         })
         .catch((err) => {
           addErrorNotification(e.name, e.message);
-          isFunction(callback) && callback();
+          callback();
         });
     }, 500);
   };

@@ -1,6 +1,6 @@
 import useNotification from '../../hooks/useNotification';
-import devicesManager from '../../services/localDeviceService';
-import { COMMANDS } from './../../services/devicesOptions';
+import { sendCommand } from '../../services/localDeviceService';
+import { COMMANDS } from '../../services/devicesOptions';
 
 import { DividerCustom, CardValue } from '../../components';
 import { Button } from '../../components/tailwind-ui';
@@ -10,7 +10,7 @@ const GeneralTab = ({ data, device }) => {
 
   const onSendCommand = async (command) => {
     try {
-      const resultMsg = await devicesManager.sendCommand(device.id, command);
+      const resultMsg = await sendCommand(device.id, command);
       console.log('runExperiment');
       console.log(resultMsg);
       addInfoNotification(resultMsg);
@@ -58,7 +58,7 @@ const GeneralTab = ({ data, device }) => {
             value={param.value * param.factor}
             unit={param.unit}
             info={param.description}
-            className="w-full sm:w-1/2  md:w-1/3 lg:w-1/4 flex"
+            className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
           />
         ))}
       </div>
