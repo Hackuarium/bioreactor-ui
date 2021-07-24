@@ -1,18 +1,45 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Table, Td, Th, useTable } from '../../components/tailwind-ui';
+import { getSavedData } from '../../services/localDeviceService';
 
-const HistoryTab = ({ data }) => {
+const ROWS_BY_PAGE = 10;
+
+const HistoryTab = ({ device, refreshInterval }) => {
   const [headers, setHeaders] = useState([]);
+  const [data, setData] = useState([]);
 
-  // extract headers from the first element on data (just the first time )
+  // extract headers from the first element on data
   useEffect(() => {
-    const heads =
-      data && data.length > 0
-        ? data[0].parametersArray?.map((h) => h.name || h.label)
-        : [];
-    setHeaders(['Epoch', ...heads]);
+    if (device?._id) {
+      getSavedData(device?._id).then((rows) => {
+        initHeaders(rows);
+        setData(rows);
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [device?._id]);
+
+  useEffect(() => {
+    if (device?._id && device?.connected) {
+      const timeout = setInterval(
+        () =>
+          getSavedData(device?._id).then((rows) => {
+            initHeaders(rows);
+            setData(rows);
+          }),
+        refreshInterval,
+      );
+      return () => clearInterval(timeout);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [device?._id, device?.connected, refreshInterval]);
+
+  const initHeaders = (dataArray) => {
+    if (headers.length === 0 && dataArray && dataArray.length > 0) {
+      const heads = dataArray[0].parametersArray?.map((h) => h.name || h.label);
+      setHeaders(['Epoch', ...heads]);
+    }
+  };
 
   const Row = useCallback((val) => {
     const classnames = 'text-xs text-center p-2';
@@ -47,7 +74,7 @@ const HistoryTab = ({ data }) => {
   }, [headers]);
 
   const { pagination, data: sliceData } = useTable(data, {
-    itemsPerPage: 10,
+    itemsPerPage: ROWS_BY_PAGE,
     withText: true,
   });
 
@@ -55,7 +82,10 @@ const HistoryTab = ({ data }) => {
     <div className="w-full p-1 overflow-x-auto">
       <Table
         pagination={pagination}
-        data={sliceData.map((d) => ({ ...d, id: d.epoch }))}
+        data={sliceData.map((d, index) => ({
+          ...d,
+          id: d.epoch + index,
+        }))}
         Header={headerValues}
         Tr={Row}
       />

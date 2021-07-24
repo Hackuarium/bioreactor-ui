@@ -3,11 +3,14 @@ import { Button, Dropdown } from '../../components/tailwind-ui';
 import { ReactComponent as TreeDotsIcon } from '../../assets/icons/treeDots.svg';
 import { sendCommand } from '../../services/localDeviceService';
 import { COMMANDS } from '../../services/devicesOptions';
+import useNotification from '../../hooks/useNotification';
 
 const AdvancedTab = ({ device }) => {
   const [deviceId, setDeviceId] = useState();
   const [command, setCommand] = useState('');
   const [results, setResults] = useState('');
+
+  const { addErrorNotification } = useNotification();
 
   useEffect(() => {
     setDeviceId(device?.id);
@@ -16,7 +19,7 @@ const AdvancedTab = ({ device }) => {
   }, [device?.id]);
 
   const init = async () => {
-    if (device?.id) {
+    if (device?.id && device?.connected) {
       setCommand(COMMANDS.help);
       const data = await sendCommand(device?.id, COMMANDS.help);
       setResults(data);
@@ -25,8 +28,15 @@ const AdvancedTab = ({ device }) => {
 
   const onSend = async () => {
     if (command) {
-      const data = await sendCommand(deviceId, command);
-      setResults(data);
+      try {
+        const data = await sendCommand(deviceId, command);
+        setResults(data);
+      } catch (e) {
+        addErrorNotification(
+          e.name,
+          !device?.connected ? `${device?.name} is disconnected` : e.message,
+        );
+      }
     }
   };
 
@@ -37,16 +47,30 @@ const AdvancedTab = ({ device }) => {
   };
 
   const onHelp = async () => {
-    setCommand(COMMANDS.help);
-    const data = await sendCommand(deviceId, COMMANDS.help);
-    setResults(data);
+    try {
+      setCommand(COMMANDS.help);
+      const data = await sendCommand(deviceId, COMMANDS.help);
+      setResults(data);
+    } catch (e) {
+      addErrorNotification(
+        e.name,
+        !device?.connected ? `${device?.name} is disconnected` : e.message,
+      );
+    }
     setTimeout(() => document.activeElement.blur(), 100);
   };
 
   const onSettings = async () => {
-    setCommand(COMMANDS.settings);
-    const data = await sendCommand(deviceId, COMMANDS.settings);
-    setResults(data);
+    try {
+      setCommand(COMMANDS.settings);
+      const data = await sendCommand(deviceId, COMMANDS.settings);
+      setResults(data);
+    } catch (e) {
+      addErrorNotification(
+        e.name,
+        !device?.connected ? `${device?.name} is disconnected` : e.message,
+      );
+    }
     setTimeout(() => document.activeElement.blur(), 100);
   };
 

@@ -1,4 +1,5 @@
 import legoinoDeviceInformation from 'legoino-device-information';
+import DB from './db';
 
 import { isFunction } from 'lodash';
 import { DevicesManager } from 'legoino-navigator-serial';
@@ -81,4 +82,28 @@ export const continuousUpdateDevices = async (
  */
 export const sendCommand = async (deviceId, command) => {
   return await devicesManager.sendCommand(deviceId, command);
+};
+
+export const saveDataRow = (deviceId, data) => {
+  const dbClient = DB(deviceId);
+  return dbClient.put({ _id: Date.now().toString(), ...data });
+};
+
+export const getSavedData = (deviceId) => {
+  const dbClient = DB(deviceId);
+  return dbClient
+    .getAll({
+      descending: true,
+    })
+    .then((res) => res.rows.map((d) => d.doc));
+};
+
+export const getLastSavedData = (deviceId) => {
+  const dbClient = DB(deviceId);
+  return dbClient
+    .getAll({
+      descending: true,
+      limit: 1,
+    })
+    .then((res) => res.rows.map((d) => d.doc));
 };
