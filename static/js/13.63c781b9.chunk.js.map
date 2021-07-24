@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/InteractiveDevices.jsx"],"names":["InteractiveDevices"],"mappings":"yIAIeA,UAJY,WACzB,OAAO","file":"static/js/13.63c781b9.chunk.js","sourcesContent":["const InteractiveDevices = () => {\n  return <div>interactiveDevices</div>;\n};\n\nexport default InteractiveDevices;\n"],"sourceRoot":""}
