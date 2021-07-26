@@ -6,7 +6,7 @@ import { getDevice } from '../../services/devicesService';
 import Details from './Details';
 import DeviceCardInfo from './DeviceCardInfo';
 
-const DeviceDetails = ({ match }) => {
+const DeviceDetails = ({ match, history }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [count, setCount] = useState(0);
@@ -72,7 +72,7 @@ const DeviceDetails = ({ match }) => {
 
   return (
     <div className="mx-4 pb-4">
-      <DeviceCardInfo device={deviceInfos} />
+      <DeviceCardInfo device={deviceInfos} goBack={() => history.goBack()} />
 
       <HorizontalNavigation
         onSelect={(option) => {

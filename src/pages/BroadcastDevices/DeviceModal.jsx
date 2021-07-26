@@ -23,7 +23,6 @@ import {
   DEFAULT_PROTOCOL,
   DEVICE_KINDS,
   DEVICE_PROTOCOLS,
-  DEVICE_TYPE,
 } from '../../services/devicesOptions';
 
 //
@@ -56,18 +55,22 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
   const [footerMessage, setFooterMessage] = useState(<div />);
   const formRef = useRef(null); // Ref the Form
 
-  const _initialValues = {
-    name: 'Computer',
-    url: 'mqtt.hackuarium.org',
-    protocol: protocolOptions.filter((v) => v.value === DEFAULT_PROTOCOL)[0]
-      .value,
-    port: DEFAULT_PORT,
-    kind: kindOptions[0].value,
-    topic: 'lpatiny/Computer/server',
-    username: 'testUser',
-    password: 'word',
-    ...initialValues,
-  };
+  const _initialValues = updateMode
+    ? {
+        ...initialValues,
+        kind: initialValues.kind.kind,
+      }
+    : {
+        name: 'Computer',
+        url: 'mqtt.hackuarium.org',
+        protocol: protocolOptions.filter((v) => v.value === DEFAULT_PROTOCOL)[0]
+          .value,
+        port: DEFAULT_PORT,
+        kind: 'Computer',
+        topic: 'lpatiny/Computer/server',
+        username: 'testUser',
+        password: 'word',
+      };
 
   useEffect(() => {
     // clear footer when modal is closed
@@ -77,10 +80,10 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
   // events functions
   const onSubmit = async (values) => {
     try {
-      //await addDevice(values);
+      const kind = DEVICE_KINDS.filter((k) => k.kind === values.kind)[0];
       updateMode
-        ? await onUpdate(values)
-        : await onSave(DEVICE_TYPE.broadcast, values);
+        ? await onUpdate({ ...values, kind })
+        : await onSave({ ...values, kind });
       onClose();
     } catch (e) {
       throw new Error(e.message);
@@ -157,7 +160,9 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
         className: 'h-full',
       }}
     >
-      <Modal.Header>Connect New Device</Modal.Header>
+      <Modal.Header>
+        {updateMode ? 'Update Device' : 'Connect New Device'}
+      </Modal.Header>
       <Modal.Body>
         <div className="p-2 mt-2">
           <InputField
@@ -205,7 +210,7 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
             <SelectField
               name="kind"
               id="kind"
-              label="Device kind"
+              label="Kind"
               options={kindOptions}
               renderOption={(o) => `${o.label}`}
               getValue={(o) => o.value}

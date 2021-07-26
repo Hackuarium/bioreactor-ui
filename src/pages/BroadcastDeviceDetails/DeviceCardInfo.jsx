@@ -7,13 +7,13 @@ import {
   SvgSolidArrowCircleLeft,
 } from '../../components/tailwind-ui';
 
-const DeviceCardInfo = ({ device, history }) => {
+const DeviceCardInfo = ({ device, goBack }) => {
   console.log(device);
   return (
     <div className="my-2 p-2 flex flex-row items-start rounded-md bg-white shadow ">
       <SvgSolidArrowCircleLeft
         className="my-4 mr-2 h-6 w-6 text-neutral-300 cursor-pointer"
-        onClick={() => history.goBack()}
+        onClick={goBack}
       />
       <div className="w-full my-2 flex flex-col">
         <div className="flex flex-row items-center">

@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 
 import { Button } from '../../components/tailwind-ui';
-import { testDeviceConnection } from '../../services/broadCastDeviceService';
 import {
-  addDevice,
+  testDeviceConnection,
+  broadcastDeviceInfo,
+} from '../../services/broadCastDeviceService';
+import {
   updateDevice,
   deleteDevice,
   getDevices,
+  addDevice,
 } from '../../services/devicesService';
 import useNotification from '../../hooks/useNotification';
 import DevicesList from './DevicesList';
@@ -35,7 +38,7 @@ const BroadcastDevices = ({ history, match }) => {
     setIsModalOpen(false); // close modal
   };
 
-  const onSelectItem = (device, e, callback) => {
+  const onSelectDevice = (device, e, callback) => {
     setTimeout(async () => {
       testDeviceConnection(device)
         .then(() => {
@@ -49,13 +52,18 @@ const BroadcastDevices = ({ history, match }) => {
     }, 500);
   };
 
-  const onEditItem = (device, e) => {
+  const onAddDevice = async (device) => {
+    const deviceInfo = broadcastDeviceInfo(device);
+    await addDevice(deviceInfo);
+  };
+
+  const onEditDevice = (device, e) => {
     e.stopPropagation();
     setOnEditValues(device);
     setIsModalOpen(true);
   };
 
-  const onDeleteItem = (device, e) => {
+  const onDeleteDevice = (device, e) => {
     e.stopPropagation();
     deleteDevice(device._id)
       .then(() => setRender(!render))
@@ -77,9 +85,9 @@ const BroadcastDevices = ({ history, match }) => {
         </div>
         <DevicesList
           data={devicesList}
-          onSelect={onSelectItem}
-          onEdit={onEditItem}
-          onDelete={onDeleteItem}
+          onSelect={onSelectDevice}
+          onEdit={onEditDevice}
+          onDelete={onDeleteDevice}
         />
       </div>
 
@@ -87,7 +95,7 @@ const BroadcastDevices = ({ history, match }) => {
         isOpen={isModalOpen}
         onClose={onCloseModal}
         initialValues={onEditValues}
-        onSave={addDevice}
+        onSave={onAddDevice}
         onUpdate={updateDevice}
       ></DeviceModal>
     </div>

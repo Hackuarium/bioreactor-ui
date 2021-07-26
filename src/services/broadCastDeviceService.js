@@ -1,8 +1,25 @@
 import DB from './db';
 import { connect, subscribe, disconnect } from './mqttService';
-import { DEFAULT_PORT, DEFAULT_PROTOCOL } from './devicesOptions';
+import { DEFAULT_PORT, DEFAULT_PROTOCOL, DEVICE_TYPE } from './devicesOptions';
+import { concatDeviceId } from './devicesService';
 
 // Public Functions
+
+/**
+ * return device information to be stored in DB
+ */
+export const broadcastDeviceInfo = (deviceInfo) => {
+  return {
+    ...deviceInfo,
+    _id: concatDeviceId(
+      DEVICE_TYPE.broadcast,
+      deviceInfo.kind?.kind,
+      deviceInfo.name,
+    ),
+    protocol: deviceInfo?.protocol ? deviceInfo?.protocol : DEFAULT_PROTOCOL,
+    port: deviceInfo?.port ? deviceInfo?.port : DEFAULT_PORT,
+  };
+};
 
 //
 // connect to broadcast device & return a client instance with {subscribe, disconnect, getAllData, getLastData}

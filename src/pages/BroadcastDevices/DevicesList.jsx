@@ -21,7 +21,7 @@ const DevicesList = ({ data, onSelect, onEdit, onDelete }) => {
     <div className="overflow-hidden bg-white shadow sm:rounded-md">
       {data.map((element) => (
         <li
-          key={element.kind + element.name}
+          key={element.kind?.kind + element.name}
           className="block transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50 cursor-pointer"
           onClick={(e) => handleSelect(element, e)}
         >
@@ -41,7 +41,7 @@ const DevicesList = ({ data, onSelect, onEdit, onDelete }) => {
                 <div className="flex flex-col text-xs font-italic text-neutral-600">
                   <p className="truncate">
                     <span className="font-semibold">Device kind : </span>
-                    {element.kind}
+                    {element.kind?.kind}
                   </p>
                   <p className="truncate">
                     <span className="font-semibold">URL : </span>

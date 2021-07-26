@@ -7,7 +7,7 @@ import useNotification from '../../hooks/useNotification';
 import { diffDeviceLists } from '../../services/util';
 import { DEVICE_TYPE } from '../../services/devicesOptions';
 import {
-  addDevice2,
+  addDevice,
   updateDevice,
   getDevices,
   deleteDevice,
@@ -68,7 +68,7 @@ const LocalDevices = ({ history, match }) => {
       if (newDevices.length > 0) {
         addInfoNotification('New device connected');
         newDevices.forEach((_device) => {
-          addDevice2(localDeviceInfo(_device));
+          addDevice(localDeviceInfo(_device));
         });
         refreshDevices();
       }

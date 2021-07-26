@@ -1,5 +1,5 @@
 import DB from './db';
-import { DEVICES_DB, DEFAULT_PORT, DEFAULT_PROTOCOL } from './devicesOptions';
+import { DEVICES_DB } from './devicesOptions';
 
 // Private Functions
 
@@ -41,38 +41,7 @@ export const deleteDevice = (deviceID) =>
 
 // add device to devices DB
 
-export const addDevice = (
-  type,
-  {
-    kind,
-    name,
-    url,
-    protocol = DEFAULT_PROTOCOL,
-    port = DEFAULT_PORT,
-    topic,
-    username,
-    password,
-  },
-) =>
-  DB(DEVICES_DB)
-    .put({
-      _id: `${type}_${kind}_${name}`,
-      name,
-      url,
-      protocol,
-      port,
-      topic,
-      kind,
-      username,
-      password,
-    })
-    .catch((e) =>
-      e.name === 'conflict'
-        ? throwDbError(e, `Device name must be unique`)
-        : throwDbError(e, `Insert device error`),
-    );
-
-export const addDevice2 = (device) =>
+export const addDevice = (device) =>
   DB(DEVICES_DB)
     .put(device)
     .catch((e) =>
