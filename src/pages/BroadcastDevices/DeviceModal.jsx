@@ -80,10 +80,11 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
   // events functions
   const onSubmit = async (values) => {
     try {
-      const kind = DEVICE_KINDS.filter((k) => k.kind === values.kind)[0];
+      const { kind, connected, ...deviceInfo } = values;
+      const _kind = DEVICE_KINDS.filter((k) => k.kind === kind)[0];
       updateMode
-        ? await onUpdate({ ...values, kind })
-        : await onSave({ ...values, kind });
+        ? await onUpdate({ ...deviceInfo, kind: _kind })
+        : await onSave({ ...deviceInfo, kind: _kind });
       onClose();
     } catch (e) {
       throw new Error(e.message);

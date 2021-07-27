@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 
 import { Button } from '../../components/tailwind-ui';
 import {
-  testDeviceConnection,
   broadcastDeviceInfo,
+  continuousListenToDevices,
 } from '../../services/broadCastDeviceService';
 import {
   updateDevice,
@@ -16,8 +16,9 @@ import DevicesList from './DevicesList';
 import DeviceModal from './DeviceModal';
 import { DEVICE_TYPE } from '../../services/devicesOptions';
 
+const SCAN_INTERVAL = 20000;
+
 const BroadcastDevices = ({ history, match }) => {
-  const [render, setRender] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [devicesList, setDevicesList] = useState([]);
   const [onEditValues, setOnEditValues] = useState({});
@@ -25,36 +26,61 @@ const BroadcastDevices = ({ history, match }) => {
 
   useEffect(() => {
     // get saved devices from DB
-    getDevices(DEVICE_TYPE.broadcast).then((list) => setDevicesList(list));
-  }, [render]);
+    refreshDevices();
+  }, []);
 
-  const onOpenModal = () => {
-    setOnEditValues({});
-    setIsModalOpen(true);
-  };
+  useEffect(() => {
+    const cleanup = continuousListenToDevices(
+      devicesList,
+      (res) => {
+        const _devices = [];
+        let isChanged = false;
+        res.forEach((response) => {
+          if (response.status === 'fulfilled') {
+            const device = response.value.device;
+            if (!device.connected) {
+              device.connected = true;
+              isChanged = true;
+            }
+            _devices.push(device);
+          } else {
+            const device = response.reason.device;
+            if (device.connected) {
+              device.connected = false;
+              isChanged = true;
+            }
+            _devices.push(device);
+          }
+        });
+        if (isChanged) setDevicesList(_devices);
+      },
+      SCAN_INTERVAL,
+    );
+
+    return () => cleanup.then((intervalId) => clearInterval(intervalId));
+  }, [devicesList]);
+
+  const refreshDevices = () =>
+    getDevices(DEVICE_TYPE.broadcast).then(setDevicesList);
 
   const onCloseModal = () => {
-    setRender(!render); // refresh devices list
     setIsModalOpen(false); // close modal
+    setOnEditValues({});
   };
 
-  const onSelectDevice = (device, e, callback) => {
-    setTimeout(async () => {
-      testDeviceConnection(device)
-        .then(() => {
-          callback();
-          history.push(match.url + '/' + device._id);
-        })
-        .catch((err) => {
-          addErrorNotification(e.name, e.message);
-          callback();
-        });
-    }, 500);
+  const onSelectDevice = (device, e) => {
+    history.push(match.url + '/' + device._id);
   };
 
   const onAddDevice = async (device) => {
     const deviceInfo = broadcastDeviceInfo(device);
     await addDevice(deviceInfo);
+    refreshDevices();
+  };
+
+  const onUpdateDevice = async (device) => {
+    await updateDevice(device);
+    refreshDevices();
   };
 
   const onEditDevice = (device, e) => {
@@ -66,7 +92,7 @@ const BroadcastDevices = ({ history, match }) => {
   const onDeleteDevice = (device, e) => {
     e.stopPropagation();
     deleteDevice(device._id)
-      .then(() => setRender(!render))
+      .then(() => refreshDevices())
       .catch((e) => addErrorNotification(e.name, e.message));
   };
 
@@ -74,7 +100,7 @@ const BroadcastDevices = ({ history, match }) => {
     <div className="p-8">
       <h2 className="text-3xl font-semibold mb-10">Broadcast devices</h2>
       <div className="w-full flex justify-end mb-4">
-        <Button onClick={onOpenModal}>Add device</Button>
+        <Button onClick={() => setIsModalOpen(true)}>Add device</Button>
       </div>
       <div>
         <div className="w-full my-2 flex flex-row items-center ">
@@ -96,7 +122,7 @@ const BroadcastDevices = ({ history, match }) => {
         onClose={onCloseModal}
         initialValues={onEditValues}
         onSave={onAddDevice}
-        onUpdate={updateDevice}
+        onUpdate={onUpdateDevice}
       ></DeviceModal>
     </div>
   );

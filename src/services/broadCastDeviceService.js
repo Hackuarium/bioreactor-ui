@@ -1,7 +1,10 @@
+import { isFunction } from 'lodash';
 import DB from './db';
 import { connect, subscribe, disconnect } from './mqttService';
 import { DEFAULT_PORT, DEFAULT_PROTOCOL, DEVICE_TYPE } from './devicesOptions';
 import { concatDeviceId } from './devicesService';
+
+const SCAN_INTERVAL = 10000;
 
 // Public Functions
 
@@ -115,4 +118,33 @@ export const testDeviceConnection = ({
   });
 
   return clientPromise;
+};
+
+export const continuousListenToDevices = async (
+  devicesList,
+  callback,
+  scanInterval = SCAN_INTERVAL,
+) => {
+  const testConnection = async () => {
+    const promiseArray = [];
+    devicesList.forEach((device) =>
+      promiseArray.push(
+        testDeviceConnection(device)
+          .then((res) => ({ device, payload: res }))
+          .catch((err) => {
+            err.device = device;
+            throw err;
+          }),
+      ),
+    );
+    isFunction(callback) && callback(await Promise.allSettled(promiseArray));
+  };
+
+  testConnection();
+  const interval = setInterval(
+    async () => await testConnection(),
+    scanInterval,
+  );
+
+  return interval;
 };
