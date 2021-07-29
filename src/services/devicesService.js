@@ -1,3 +1,4 @@
+import legoinoDeviceInformation from 'legoino-device-information';
 import DB from './db';
 import { DEVICES_DB } from './devicesOptions';
 
@@ -11,6 +12,29 @@ const throwDbError = (error, additionalMsg) => {
 };
 
 export const concatDeviceId = (type, kind, id) => `${type}_${kind}_${id}`;
+
+/**
+ * Get device Kind from its ID
+ */
+export const getDeviceKind = (deviceId) => {
+  try {
+    if (deviceId) {
+      const selectedDeviceKind = legoinoDeviceInformation.fromDeviceID(
+        Number(deviceId),
+      );
+      return selectedDeviceKind;
+    }
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
+};
+
+export const mapParameters = (kind, params) =>
+  legoinoDeviceInformation[kind]?.parameters?.map((p) => ({
+    ...p,
+    value: params[p.label],
+  }));
 
 export const getDevices = async (type) =>
   DB(DEVICES_DB)

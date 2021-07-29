@@ -48,7 +48,7 @@ export const connectDevice = ({
           mqttClient,
           topic,
           (payload) => {
-            dbClient.put({ _id: Date.now().toString(), ...payload });
+            dbClient.put({ _id: String(payload.epoch), ...payload });
             onSubscribe(payload);
           },
           onError,

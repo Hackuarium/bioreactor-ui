@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import React from 'react';
 import {
   Badge,
   BadgeSize,
-  Spinner,
   SvgOutlineChevronRight,
   SvgSolidCog,
   SvgSolidTrash,

@@ -8,11 +8,10 @@ import {
 } from '../../components/tailwind-ui';
 
 const DeviceCardInfo = ({ device, goBack }) => {
-  console.log(device);
   return (
     <div className="my-2 p-2 flex flex-row items-start rounded-md bg-white shadow ">
       <SvgSolidArrowCircleLeft
-        className="my-4 mr-2 h-6 w-6 text-neutral-300 cursor-pointer"
+        className="my-3 mr-2 h-6 w-6 text-neutral-300 cursor-pointer"
         onClick={goBack}
       />
       <div className="w-full my-2 flex flex-col">
@@ -33,7 +32,7 @@ const DeviceCardInfo = ({ device, goBack }) => {
           <div className="flex flex-col">
             <h3 className="mt-2 text-xs font-italic text-neutral-600 font-base truncate">
               <span className="font-semibold">Kind: </span>
-              {`${device?.kind}`}
+              {`${device?.kind?.kind}`}
             </h3>
             <h3 className="mt-2 text-xs font-italic text-neutral-600 font-base truncate">
               <span className="font-semibold">Topic: </span>
