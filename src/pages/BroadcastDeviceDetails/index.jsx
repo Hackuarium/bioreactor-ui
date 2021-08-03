@@ -8,10 +8,13 @@ import {
   updateDevice,
   getDeviceKind,
   mapParameters,
+  getLastSavedData,
+  closeDbConnection,
 } from '../../services/devicesService';
 import HistoryTab from './HistoryTab';
 import GeneralTab from './GeneralTab';
 import DeviceCardInfo from './DeviceCardInfo';
+import { useCallback } from 'react';
 
 const TABS = ['General', 'Data'].map((value) => ({
   value: value,
@@ -22,21 +25,47 @@ const DeviceDetails = ({ match, history }) => {
   const [currentDevice, setCurrentDevice] = useState();
   const [selectedTab, setSelectedTab] = useState(TABS[0]);
   const [deviceClient, setDeviceClient] = useState();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
 
   const deviceId = `${match.params.id}`;
+
+  // if it's called multiple times, execute it once in 1000ms
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const updateData = useCallback(
+    throttle(
+      (_data) => {
+        const params = mapParameters(
+          currentDevice.kind?.kind,
+          _data?.parameters,
+        );
+        console.log({ ..._data, parameters: params });
+        setData({ ..._data, parameters: params });
+      },
+      1000,
+      { trailing: true },
+    ),
+    [currentDevice?.kind?.kind],
+  );
 
   // get device from DB at the first render
   useEffect(() => {
     if (deviceId) {
-      getDevice(deviceId)
-        .then((_device) => setCurrentDevice(_device))
-        .catch(console.log);
+      getDevice(deviceId).then(setCurrentDevice).catch(console.log);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceId]);
 
-  // subscribe to device & listen to data (+ correct device kind if it's not right)
+  // fetch data locally at first when remote data is not received yet
+  useEffect(() => {
+    if (currentDevice?._id) {
+      getLastSavedData(currentDevice?._id).then((_data) => {
+        if (_data.length > 0) updateData(_data[0]);
+      });
+    }
+    return () => currentDevice?._id && closeDbConnection(currentDevice?._id);
+  }, [currentDevice?._id, updateData]);
+
+  // get remote data : subscribe to device & listen to data (+ correct device kind if it's not right)
   useEffect(() => {
     let unsubscribe;
     if (currentDevice) {
@@ -69,47 +98,6 @@ const DeviceDetails = ({ match, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDevice]);
 
-  const updateData = throttle(
-    (_data) => {
-      const params = mapParameters(currentDevice.kind?.kind, _data?.parameters);
-      // console.log(params);
-      setData({ ..._data, parameters: params });
-    },
-    1000,
-    { trailing: true },
-  );
-
-  // useEffect(() => {
-  //   if (deviceClient) {
-  //     //getAllDataCount
-  //     deviceClient.getAllDataCount().then((result) => {
-  //       console.log('data count');
-  //       console.log(result);
-  //       setCount(result);
-  //     });
-  //     //console.log(data);
-  //     deviceClient.getPageData(currentPage * 10, 10).then((result) => {
-  //       //console.log(result);
-  //       setPreviousData(result);
-  //     });
-  //     // deviceClient.getAllData().then((result) => {
-  //     //   //console.log(result);
-  //     //   setAllData(result);
-  //     // });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [deviceClient]);
-
-  // useEffect(() => {
-  //   if (deviceClient) {
-  //     deviceClient.getPageData(currentPage * 10, 10).then((result) => {
-  //       //console.log(result);
-  //       setPreviousData(result);
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [currentPage]);
-
   const renderTabContent = (tab) => {
     switch (tab.value) {
       case 'General':
@@ -135,22 +123,6 @@ const DeviceDetails = ({ match, history }) => {
 
       <div className="p-3 mt-4 sm:m-0 flex flex-col items-center rounded-md sm:rounded-t-none bg-white shadow ">
         {renderTabContent(selectedTab)}
-        {/* <ActualDetails DetailType={selectedTab.value} data={data} /> */}
-
-        {/* <DetailsPlot
-            allData={previousData}
-            previousData={previousData}
-            DetailType={selected.value}
-            Header={selected.value + ' Variation Chart'}
-          /> */}
-
-        {/* <DataTable
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          count={count}
-          previousData={previousData}
-          DetailType={selectedTab.value}
-        /> */}
       </div>
     </div>
   );

@@ -138,8 +138,6 @@ const HistoryTab = ({ device }) => {
             withText: true,
             itemsPerPage: ROWS_BY_PAGE,
             maxVisiblePages: 1,
-            // pagesPerSide?: number,
-            // withText?: boolean,
           }}
           data={data.map((d, index) => ({
             ...d,

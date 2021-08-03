@@ -11,6 +11,11 @@ const throwDbError = (error, additionalMsg) => {
   throw err;
 };
 
+// Public Functions
+
+/**
+ * return device _id
+ */
 export const concatDeviceId = (type, kind, id) => `${type}_${kind}_${id}`;
 
 /**
@@ -30,6 +35,9 @@ export const getDeviceKind = (deviceId) => {
   }
 };
 
+/**
+ * map parameters based on kind
+ */
 export const mapParameters = (kind, params) =>
   kind && params
     ? legoinoDeviceInformation[kind]?.parameters?.map((p) => ({
@@ -38,9 +46,10 @@ export const mapParameters = (kind, params) =>
       }))
     : undefined;
 
-//
-// Devices DB operations
-//
+//=====================================
+/**
+ * Devices DB operations
+ */
 
 export const getDevices = async (type) =>
   DB(DEVICES_DB)
@@ -78,69 +87,50 @@ export const addDevice = (device) =>
         : throwDbError(e, `Insert device error`),
     );
 
-//
-// Device Data operations
-//
+//=====================================
+/**
+ * Device Data operations
+ */
 
-export const saveDataRow = (deviceId, data) => {
-  const dbClient = DB(deviceId);
-  return dbClient.put({ _id: Date.now().toString(), ...data });
-};
+// Ps: don't forget to close Db connection in cleanup function
 
-export const getSavedData = (deviceId) => {
-  const dbClient = DB(deviceId);
-  return dbClient
+export const saveDataRow = (deviceId, data) =>
+  DB(deviceId).put({ _id: Date.now().toString(), ...data });
+
+export const getSavedData = (deviceId) =>
+  DB(deviceId)
     .getAll({
       descending: true,
     })
     .then((res) => res.rows.map((d) => d.doc));
-};
 
-export const getSavedDataByPage = (deviceId, page, itemsByPage) => {
-  const dbClient = DB(deviceId);
-  return dbClient
+export const getSavedDataByPage = (deviceId, page, itemsByPage) =>
+  DB(deviceId)
     .getAll({
       descending: true,
       skip: (page - 1) * itemsByPage,
       limit: itemsByPage,
     })
     .then((res) => res.rows.map((d) => d.doc));
-};
 
-export const getSavedDataCount = (deviceId) => {
-  const dbClient = DB(deviceId);
-  return dbClient
+export const getSavedDataCount = (deviceId) =>
+  DB(deviceId)
     .getAll({
       include_docs: false,
     })
     .then((res) => res.total_rows);
-};
 
-export const getLastSavedData = (deviceId) => {
-  const dbClient = DB(deviceId);
-  return dbClient
+export const getLastSavedData = (deviceId) =>
+  DB(deviceId)
     .getAll({
       descending: true,
       limit: 1,
     })
     .then((res) => res.rows.map((d) => d.doc));
-};
 
-export const clearSavedData = (deviceId) => {
-  const dbClient = DB(deviceId);
-  return dbClient.destroy();
-};
+export const clearSavedData = (deviceId) => DB(deviceId).destroy();
 
-// export const  = (deviceId) => {
-//   const dbClient = DB(deviceId);
-//   return dbClient.destroy();
-// };
+export const listenToDataChanges = (deviceId, successCallback, errorCallBack) =>
+  DB(deviceId).listenToChanges(successCallback, errorCallBack);
 
-export const listenToDataChanges = (
-  deviceId,
-  successCallback,
-  errorCallBack,
-) => {
-  const dbClient = DB(deviceId);
-  return dbClient.listenToChanges(successCallback, errorCallBack);
-};
+export const closeDbConnection = (dbName) => DB(dbName).close();
