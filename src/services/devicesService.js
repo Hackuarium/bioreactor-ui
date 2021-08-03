@@ -31,10 +31,16 @@ export const getDeviceKind = (deviceId) => {
 };
 
 export const mapParameters = (kind, params) =>
-  legoinoDeviceInformation[kind]?.parameters?.map((p) => ({
-    ...p,
-    value: params[p.label],
-  }));
+  kind && params
+    ? legoinoDeviceInformation[kind]?.parameters?.map((p) => ({
+        ...p,
+        value: params[p.label],
+      }))
+    : undefined;
+
+//
+// Devices DB operations
+//
 
 export const getDevices = async (type) =>
   DB(DEVICES_DB)
@@ -63,8 +69,6 @@ export const deleteDevice = (deviceID) =>
     .remove(deviceID)
     .catch((e) => throwDbError(e, `Delete device error`));
 
-// add device to devices DB
-
 export const addDevice = (device) =>
   DB(DEVICES_DB)
     .put(device)
@@ -73,3 +77,70 @@ export const addDevice = (device) =>
         ? throwDbError(e, `Device name must be unique`)
         : throwDbError(e, `Insert device error`),
     );
+
+//
+// Device Data operations
+//
+
+export const saveDataRow = (deviceId, data) => {
+  const dbClient = DB(deviceId);
+  return dbClient.put({ _id: Date.now().toString(), ...data });
+};
+
+export const getSavedData = (deviceId) => {
+  const dbClient = DB(deviceId);
+  return dbClient
+    .getAll({
+      descending: true,
+    })
+    .then((res) => res.rows.map((d) => d.doc));
+};
+
+export const getSavedDataByPage = (deviceId, page, itemsByPage) => {
+  const dbClient = DB(deviceId);
+  return dbClient
+    .getAll({
+      descending: true,
+      skip: (page - 1) * itemsByPage,
+      limit: itemsByPage,
+    })
+    .then((res) => res.rows.map((d) => d.doc));
+};
+
+export const getSavedDataCount = (deviceId) => {
+  const dbClient = DB(deviceId);
+  return dbClient
+    .getAll({
+      include_docs: false,
+    })
+    .then((res) => res.total_rows);
+};
+
+export const getLastSavedData = (deviceId) => {
+  const dbClient = DB(deviceId);
+  return dbClient
+    .getAll({
+      descending: true,
+      limit: 1,
+    })
+    .then((res) => res.rows.map((d) => d.doc));
+};
+
+export const clearSavedData = (deviceId) => {
+  const dbClient = DB(deviceId);
+  return dbClient.destroy();
+};
+
+// export const  = (deviceId) => {
+//   const dbClient = DB(deviceId);
+//   return dbClient.destroy();
+// };
+
+export const listenToDataChanges = (
+  deviceId,
+  successCallback,
+  errorCallBack,
+) => {
+  const dbClient = DB(deviceId);
+  return dbClient.listenToChanges(successCallback, errorCallBack);
+};

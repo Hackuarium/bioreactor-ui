@@ -14,11 +14,14 @@ import {
   requestDevices,
   getConnectedDevices,
   continuousUpdateDevices,
-  saveDataRow,
-  getLastSavedData,
 } from '../../services/localDeviceService';
 import { COMMANDS } from '../../services/devicesOptions';
-import { getDevice, updateDevice } from '../../services/devicesService';
+import {
+  getDevice,
+  updateDevice,
+  saveDataRow,
+  getLastSavedData,
+} from '../../services/devicesService';
 import GeneralTab from './GeneralTab';
 import HistoryTab from './HistoryTab';
 import ConfigTab from './ConfigTab';

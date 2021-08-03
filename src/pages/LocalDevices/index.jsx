@@ -11,13 +11,13 @@ import {
   updateDevice,
   getDevices,
   deleteDevice,
+  clearSavedData,
 } from '../../services/devicesService';
 import {
   localDeviceInfo,
   requestDevices,
   getConnectedDevices,
   continuousUpdateDevices,
-  clearSavedData,
 } from '../../services/localDeviceService';
 
 const REFRESH_INTERVAL = 1000;

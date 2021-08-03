@@ -24,22 +24,14 @@ const DeviceDetails = ({ match, history }) => {
   const [deviceClient, setDeviceClient] = useState();
   const [data, setData] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [count, setCount] = useState(0);
-
-  // const [allData, setAllData] = useState([]);
-  const [previousData, setPreviousData] = useState([]);
-
   const deviceId = `${match.params.id}`;
 
   // get device from DB at the first render
   useEffect(() => {
     if (deviceId) {
-      getDevice(deviceId).then((_device) => {
-        // console.log(_device);
-        setCurrentDevice(_device);
-      });
+      getDevice(deviceId)
+        .then((_device) => setCurrentDevice(_device))
+        .catch(console.log);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceId]);
@@ -74,6 +66,7 @@ const DeviceDetails = ({ match, history }) => {
       unsubscribe && unsubscribe();
       deviceClient?.disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDevice]);
 
   const updateData = throttle(

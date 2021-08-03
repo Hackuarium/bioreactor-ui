@@ -1,9 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Button, Table, Td, Th, useTable } from '../../components/tailwind-ui';
-import {
-  getSavedData,
-  clearSavedData,
-} from '../../services/localDeviceService';
+import { getSavedData, clearSavedData } from '../../services/devicesService';
 
 const ROWS_BY_PAGE = 10;
 
