@@ -4,7 +4,7 @@ import { connect, subscribe, disconnect } from './mqttService';
 import { DEFAULT_PORT, DEFAULT_PROTOCOL, DEVICE_TYPE } from './devicesOptions';
 import { concatDeviceId } from './devicesService';
 
-const SCAN_INTERVAL = 10000;
+const SCAN_INTERVAL_CONNECTED_DEVICES = 10000;
 
 // Public Functions
 
@@ -48,15 +48,17 @@ export const connectDevice = ({
           mqttClient,
           topic,
           (payload) => {
-            dbClient.put({ _id: String(payload.epoch), ...payload });
-            onSubscribe(payload);
+            dbClient
+              .put({ _id: `${Date.now()}_${payload.epoch}`, ...payload })
+              .then(() => onSubscribe(payload))
+              .catch(() => {});
           },
           onError,
         );
         return unsubscribe;
       };
 
-      const _disconnect = () => disconnect(mqttClient);
+      const _disconnect = (callback) => disconnect(mqttClient, callback);
 
       const getAllData = () =>
         dbClient.getAll().then((res) => res.rows.map((i) => i.doc));
@@ -123,7 +125,7 @@ export const testDeviceConnection = ({
 export const continuousListenToDevices = async (
   devicesList,
   callback,
-  scanInterval = SCAN_INTERVAL,
+  scanInterval = SCAN_INTERVAL_CONNECTED_DEVICES,
 ) => {
   const testConnection = async () => {
     const promiseArray = [];

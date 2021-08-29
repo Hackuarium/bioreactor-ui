@@ -78,6 +78,7 @@ const HistoryTab = ({ device }) => {
         setData([]);
         setPage(1);
         setCount(0);
+        document.activeElement.blur();
       });
     });
   };

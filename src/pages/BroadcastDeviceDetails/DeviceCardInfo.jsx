@@ -7,7 +7,7 @@ import {
   SvgSolidArrowCircleLeft,
 } from '../../components/tailwind-ui';
 
-const DeviceCardInfo = ({ device, goBack }) => {
+const DeviceCardInfo = ({ device, isConnected, goBack, onOpenModel }) => {
   return (
     <div className="my-2 p-2 flex flex-row items-start rounded-md bg-white shadow ">
       <SvgSolidArrowCircleLeft
@@ -22,9 +22,9 @@ const DeviceCardInfo = ({ device, goBack }) => {
           <Badge
             dot
             rounded
-            label={device?.connected ? 'Active' : 'Inactive'}
+            label={isConnected ? 'Active' : 'Inactive'}
             size={BadgeSize.SMALL}
-            color={device?.connected ? 'success' : 'neutral'}
+            color={isConnected ? 'success' : 'neutral'}
             className="w-min h-min"
           />
         </div>
@@ -32,15 +32,15 @@ const DeviceCardInfo = ({ device, goBack }) => {
           <div className="flex flex-col">
             <h3 className="mt-2 text-xs font-italic text-neutral-600 font-base truncate">
               <span className="font-semibold">Kind: </span>
-              {`${device?.kind?.kind}`}
-            </h3>
-            <h3 className="mt-2 text-xs font-italic text-neutral-600 font-base truncate">
-              <span className="font-semibold">Topic: </span>
-              {`${device?.topic}`}
+              {`${device?.kind?.name} (${device?.kind?.kind})`}
             </h3>
             <h3 className="mt-2 text-xs font-italic text-neutral-600 font-base truncate">
               <span className="font-semibold">URL: </span>
               {`${device?.protocol}://${device?.url}:${device?.port}`}
+            </h3>
+            <h3 className="mt-2 text-xs font-italic text-neutral-600 font-base truncate">
+              <span className="font-semibold">Topic: </span>
+              {`${device?.topic}`}
             </h3>
           </div>
           <div className="flex flex-row mt-2 ">
@@ -48,7 +48,7 @@ const DeviceCardInfo = ({ device, goBack }) => {
               size="small"
               variant="white"
               className="mr-2 "
-              //   onClick={() => setIsModalOpen(true)}
+              onClick={() => onOpenModel(true)}
             >
               <SvgSolidPencilAlt className="text-gray-700" />
             </Button>

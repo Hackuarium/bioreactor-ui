@@ -16,7 +16,7 @@ import DevicesList from './DevicesList';
 import DeviceModal from './DeviceModal';
 import { DEVICE_TYPE } from '../../services/devicesOptions';
 
-const SCAN_INTERVAL = 20000;
+const SCAN_INTERVAL = 10000;
 
 const BroadcastDevices = ({ history, match }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
