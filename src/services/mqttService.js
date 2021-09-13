@@ -3,7 +3,6 @@ import { isFunction } from 'lodash';
 import { parseCurrentSettings } from 'legoino-util';
 
 // Private Functions
-let client;
 
 const getClientInstance = (
   url,
@@ -14,23 +13,19 @@ const getClientInstance = (
   onSuccess,
   onError,
 ) => {
-  // if client is already connected
-  if (client && client.connected && client.options.hostname === url)
-    isFunction(onSuccess) && onSuccess(client);
-
   const brokerUrl = `${protocol}://${url}:${port}`;
-  client = mqtt.connect(brokerUrl, {
+  const client = mqtt.connect(brokerUrl, {
     keepalive: 300,
     reconnectPeriod: 5000,
   });
 
   client.on('connect', () => {
-    console.log(`connected to ${brokerUrl} : ${client.connected}`);
+    // console.log(`connected to ${brokerUrl} : ${client.connected}`);
     isFunction(onSuccess) && onSuccess(client);
   });
 
   client.stream.on('error', (err) => {
-    console.log(err);
+    // console.log(err);
     const error = new Error(`Couldn't connect to BROKER "${brokerUrl}"`);
     error.name = 'Mqtt Error';
     client.end();
@@ -78,6 +73,6 @@ export const subscribe = (client, topic, onMessageReceived, onError) => {
 
 export const disconnect = (client, callback) =>
   client.end(() => {
-    console.log(`mqtt broker "${client.options.hostname}" disconnected`);
+    // console.log(`mqtt broker "${client.options.hostname}" disconnected`);
     isFunction(callback) && callback();
   });

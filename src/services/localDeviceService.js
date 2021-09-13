@@ -1,10 +1,7 @@
-import legoinoDeviceInformation from 'legoino-device-information';
-import DB from './db';
-
 import { isFunction } from 'lodash';
 import { DevicesManager } from 'legoino-navigator-serial';
 import { DEVICE_TYPE } from './devicesOptions';
-import { concatDeviceId } from './devicesService';
+import { concatDeviceId, getDeviceKind } from './devicesService';
 
 const SCAN_INTERVAL = 1000;
 
@@ -21,23 +18,6 @@ export const localDeviceInfo = ({ id, name }) => {
     name: name ? name : `${kind?.kind}-${id}`,
     kind: kind,
   };
-};
-
-/**
- * Get device Kind from its ID
- */
-export const getDeviceKind = (deviceId) => {
-  try {
-    if (deviceId) {
-      const selectedDeviceType = legoinoDeviceInformation.fromDeviceID(
-        Number(deviceId),
-      );
-      return selectedDeviceType;
-    }
-  } catch (e) {
-    console.log(e);
-    return undefined;
-  }
 };
 
 /**
@@ -82,33 +62,4 @@ export const continuousUpdateDevices = async (
  */
 export const sendCommand = async (deviceId, command) => {
   return await devicesManager.sendCommand(deviceId, command);
-};
-
-export const saveDataRow = (deviceId, data) => {
-  const dbClient = DB(deviceId);
-  return dbClient.put({ _id: Date.now().toString(), ...data });
-};
-
-export const getSavedData = (deviceId) => {
-  const dbClient = DB(deviceId);
-  return dbClient
-    .getAll({
-      descending: true,
-    })
-    .then((res) => res.rows.map((d) => d.doc));
-};
-
-export const getLastSavedData = (deviceId) => {
-  const dbClient = DB(deviceId);
-  return dbClient
-    .getAll({
-      descending: true,
-      limit: 1,
-    })
-    .then((res) => res.rows.map((d) => d.doc));
-};
-
-export const clearSavedData = (deviceId) => {
-  const dbClient = DB(deviceId);
-  return dbClient.destroy();
 };

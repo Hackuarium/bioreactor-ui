@@ -11,3 +11,16 @@ export const diffDeviceLists = (firstArray, secondArray) => {
 
   return firstArray.filter(compare(secondArray));
 };
+
+export const msToTime = (duration) => {
+  const seconds = Math.floor((duration / 1000) % 60),
+    minutes = Math.floor((duration / (1000 * 60)) % 60),
+    hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+  let time = `${seconds}s`;
+  if (hours) {
+    time = `${hours}h ${minutes}m ` + time;
+  } else if (minutes) {
+    time = `${minutes}m ` + time;
+  }
+  return time;
+};

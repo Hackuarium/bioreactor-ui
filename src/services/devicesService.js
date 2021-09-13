@@ -1,5 +1,6 @@
+import legoinoDeviceInformation from 'legoino-device-information';
 import DB from './db';
-import { DEVICES_DB, DEFAULT_PORT, DEFAULT_PROTOCOL } from './devicesOptions';
+import { DEVICES_DB } from './devicesOptions';
 
 // Private Functions
 
@@ -10,7 +11,45 @@ const throwDbError = (error, additionalMsg) => {
   throw err;
 };
 
+// Public Functions
+
+/**
+ * return device _id
+ */
 export const concatDeviceId = (type, kind, id) => `${type}_${kind}_${id}`;
+
+/**
+ * Get device Kind from its ID
+ */
+export const getDeviceKind = (deviceId) => {
+  try {
+    if (deviceId) {
+      const selectedDeviceKind = legoinoDeviceInformation.fromDeviceID(
+        Number(deviceId),
+      );
+      return selectedDeviceKind;
+    }
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
+};
+
+/**
+ * map parameters based on kind
+ */
+export const mapParameters = (kind, params) =>
+  kind && params
+    ? legoinoDeviceInformation[kind]?.parameters?.map((p) => ({
+        ...p,
+        value: params[p.label],
+      }))
+    : undefined;
+
+//=====================================
+/**
+ * Devices DB operations
+ */
 
 export const getDevices = async (type) =>
   DB(DEVICES_DB)
@@ -39,40 +78,7 @@ export const deleteDevice = (deviceID) =>
     .remove(deviceID)
     .catch((e) => throwDbError(e, `Delete device error`));
 
-// add device to devices DB
-
-export const addDevice = (
-  type,
-  {
-    kind,
-    name,
-    url,
-    protocol = DEFAULT_PROTOCOL,
-    port = DEFAULT_PORT,
-    topic,
-    username,
-    password,
-  },
-) =>
-  DB(DEVICES_DB)
-    .put({
-      _id: `${type}_${kind}_${name}`,
-      name,
-      url,
-      protocol,
-      port,
-      topic,
-      kind,
-      username,
-      password,
-    })
-    .catch((e) =>
-      e.name === 'conflict'
-        ? throwDbError(e, `Device name must be unique`)
-        : throwDbError(e, `Insert device error`),
-    );
-
-export const addDevice2 = (device) =>
+export const addDevice = (device) =>
   DB(DEVICES_DB)
     .put(device)
     .catch((e) =>
@@ -80,3 +86,51 @@ export const addDevice2 = (device) =>
         ? throwDbError(e, `Device name must be unique`)
         : throwDbError(e, `Insert device error`),
     );
+
+//=====================================
+/**
+ * Device Data operations
+ */
+
+// Ps: don't forget to close Db connection in cleanup function
+
+export const saveDataRow = (deviceId, data) =>
+  DB(deviceId).put({ _id: Date.now().toString(), ...data });
+
+export const getSavedData = (deviceId) =>
+  DB(deviceId)
+    .getAll({
+      descending: true,
+    })
+    .then((res) => res.rows.map((d) => d.doc));
+
+export const getSavedDataByPage = (deviceId, page, itemsByPage) =>
+  DB(deviceId)
+    .getAll({
+      descending: true,
+      skip: (page - 1) * itemsByPage,
+      limit: itemsByPage,
+    })
+    .then((res) => res.rows.map((d) => d.doc));
+
+export const getSavedDataCount = (deviceId) =>
+  DB(deviceId)
+    .getAll({
+      include_docs: false,
+    })
+    .then((res) => res.total_rows);
+
+export const getLastSavedData = (deviceId) =>
+  DB(deviceId)
+    .getAll({
+      descending: true,
+      limit: 1,
+    })
+    .then((res) => res.rows.map((d) => d.doc));
+
+export const clearSavedData = (deviceId) => DB(deviceId).destroy();
+
+export const listenToDataChanges = (deviceId, successCallback, errorCallBack) =>
+  DB(deviceId).listenToChanges(successCallback, errorCallBack);
+
+export const closeDbConnection = (dbName) => DB(dbName).close();
