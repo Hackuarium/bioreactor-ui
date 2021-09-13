@@ -3,19 +3,18 @@ import {
   Badge,
   BadgeSize,
   Button,
+  SvgSolidArrowCircleLeft,
   SvgSolidPencilAlt,
 } from '../../components/tailwind-ui';
 
 const DeviceCardInfo = ({ device, goBack, onOpenModel, onRequest }) => {
   return (
-    <div className="my-4 py-3 px-4 flex flex-col rounded-md bg-white shadow ">
-      <p
-        className="text-xs font-semibold underline text-primary-500 cursor-pointer"
+    <div className="my-2 p-2 flex flex-row items-start rounded-md bg-white shadow">
+      <SvgSolidArrowCircleLeft
+        className="my-3 mr-2 h-6 w-6 text-neutral-300 cursor-pointer"
         onClick={goBack}
-      >
-        {'<< Back to devices list'}
-      </p>
-      <div className="mt-4 flex flex-col">
+      />
+      <div className="w-full my-2 flex flex-col">
         <div className="flex flex-row items-center">
           <h1 className="mr-4 text-lg font-semibold truncate text-primary-800">
             {device?.name}

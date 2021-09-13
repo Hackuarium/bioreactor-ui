@@ -1,4 +1,5 @@
 import { CardValue } from '../../components';
+import { msToTime } from '../../services/util';
 
 const GeneralTab = ({ data }) => {
   return (
@@ -7,7 +8,7 @@ const GeneralTab = ({ data }) => {
         <p className="mx-2 my-2 text-base font-medium text-black self-end">
           Awake time:
           <span className="mx-1 text-sm text-neutral-500">
-            {data?.epoch / 1000 + 's'}
+            {msToTime(data?.epoch)}
           </span>
         </p>
       )}
