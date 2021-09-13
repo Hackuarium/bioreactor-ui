@@ -23,7 +23,6 @@ const TABS = ['General', 'Data'].map((value) => ({
 const DeviceDetails = ({ match, history }) => {
   const [currentDevice, setCurrentDevice] = useState();
   const [selectedTab, setSelectedTab] = useState(TABS[0]);
-  const [deviceClient, setDeviceClient] = useState();
   const [data, setData] = useState({});
   const [isModalOpen, setModelOpen] = useState(false);
   const [isConnected, setConnected] = useState(false);
@@ -74,9 +73,8 @@ const DeviceDetails = ({ match, history }) => {
     if (currentDevice?._id) {
       // let isFirstTime = true;
       connectDevice(currentDevice)
-        .then((_deviceClient) => {
-          setDeviceClient(_deviceClient);
-          unsubscribe = _deviceClient?.subscribe(
+        .then((deviceClient) => {
+          unsubscribe = deviceClient?.subscribe(
             (_data) => {
               // set device connected
               !isConnected && setConnected(true);

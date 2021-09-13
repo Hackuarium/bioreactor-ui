@@ -1,33 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { parseCurrentSettings } from 'legoino-util';
 
-import {
-  BadgeSize,
-  Badge,
-  HorizontalNavigation,
-  Button,
-  SvgSolidPencilAlt,
-} from '../../components/tailwind-ui';
+import GeneralTab from './GeneralTab';
+import HistoryTab from './HistoryTab';
+import ConfigTab from './ConfigTab';
+import AdvancedTab from './AdvancedTab';
+import DeviceCardInfo from './DeviceCardInfo';
+import LocalDeviceModal from '../LocalDevices/LocalDeviceModal';
 import useNotification from '../../hooks/useNotification';
+import { COMMANDS } from '../../services/devicesOptions';
+import { HorizontalNavigation } from '../../components/tailwind-ui';
 import {
   sendCommand,
   requestDevices,
   getConnectedDevices,
   continuousUpdateDevices,
 } from '../../services/localDeviceService';
-import { COMMANDS } from '../../services/devicesOptions';
 import {
   getDevice,
   updateDevice,
   saveDataRow,
   getLastSavedData,
 } from '../../services/devicesService';
-import GeneralTab from './GeneralTab';
-import HistoryTab from './HistoryTab';
-import ConfigTab from './ConfigTab';
-import AdvancedTab from './AdvancedTab';
-import LocalDeviceModal from '../LocalDevices/LocalDeviceModal';
-import { useCallback } from 'react';
 
 const SCAN_INTERVAL = 1000;
 
@@ -40,6 +34,7 @@ const LocalDevices = ({ match, history }) => {
   const [currentDevice, setCurrentDevice] = useState();
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [forceRender, setForceRender] = useState(false);
 
   const [currentData, setCurrentData] = useState({}); // data to display
   const [refreshInterval, setRefreshInterval] = useState(2000);
@@ -91,7 +86,7 @@ const LocalDevices = ({ match, history }) => {
     getCurrentData();
   }, [getCurrentData]);
 
-  // Listen to data from device every {refreshInterval}
+  // Listen continuously to data from device every {refreshInterval}
   useEffect(() => {
     if (currentDevice?.id && currentDevice?.connected) {
       const timeout = setInterval(() => getCurrentData(), refreshInterval);
@@ -116,7 +111,7 @@ const LocalDevices = ({ match, history }) => {
 
     return () => cleanUp.then((intervalId) => clearInterval(intervalId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDevice?.id, currentDevice?.connected]);
+  }, [currentDevice?.id, currentDevice?.connected, forceRender]);
 
   const setDeviceConnectivity = async () => {
     const connectedDevices = await getConnectedDevices();
@@ -134,15 +129,16 @@ const LocalDevices = ({ match, history }) => {
   const onSaveDevice = async (device) => {
     const { connected, ...deviceInfo } = device;
     updateDevice(deviceInfo).then(() => {
-      setIsModalOpen(false);
       setCurrentDevice(device);
+      setForceRender(!forceRender);
+      setIsModalOpen(false);
     });
   };
 
   const renderTabContent = (tab) => {
     switch (tab.value) {
       case 'General':
-        return <GeneralTab data={currentData} device={currentDevice} />;
+        return <GeneralTab data={currentData} />;
       case 'History':
         return (
           <HistoryTab
@@ -169,49 +165,13 @@ const LocalDevices = ({ match, history }) => {
 
   return (
     <div className="mx-4 pb-4">
-      <div className="my-4 py-3 px-4 flex flex-col rounded-md bg-white shadow ">
-        <p
-          className="text-xs font-semibold underline text-primary-500 cursor-pointer"
-          onClick={() => history.goBack()}
-        >
-          {'<< Back to devices list'}
-        </p>
-        <div className="mt-4 flex flex-col">
-          <div className="flex flex-row items-center">
-            <h1 className="mr-4 text-lg font-semibold truncate text-primary-800">
-              {currentDevice?.name}
-            </h1>
-            <Badge
-              dot
-              rounded
-              label={currentDevice?.connected ? 'Active' : 'Inactive'}
-              size={BadgeSize.SMALL}
-              color={currentDevice?.connected ? 'success' : 'neutral'}
-              className="w-min h-min"
-            />
-          </div>
-          <div className="flex flex-row flex-wrap justify-between items-center">
-            <h3 className="mt-2 text-xs font-italic text-neutral-600 font-semibold truncate">
-              {`${currentDevice?.kind?.name} (${currentDevice?.kind?.kind})`}
-            </h3>
-            <div className="flex flex-row mt-2 ">
-              <Button
-                size="small"
-                variant="white"
-                className="mr-2 "
-                onClick={() => setIsModalOpen(true)}
-              >
-                <SvgSolidPencilAlt className="text-gray-700" />
-              </Button>
-              {!currentDevice?.connected && (
-                <Button size="xSmall" onClick={onRequest}>
-                  Request
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      <DeviceCardInfo
+        device={currentDevice}
+        goBack={() => history.goBack()}
+        onOpenModel={setIsModalOpen}
+        onRequest={onRequest}
+      />
+
       <HorizontalNavigation
         onSelect={setSelectedTab}
         selected={selectedTab}

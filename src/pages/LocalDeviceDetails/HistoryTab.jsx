@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Button, Table, Td, Th, useTable } from '../../components/tailwind-ui';
 import { getSavedData, clearSavedData } from '../../services/devicesService';
+import { msToTime } from '../../services/util';
 
 const ROWS_BY_PAGE = 10;
 
@@ -37,7 +38,7 @@ const HistoryTab = ({ device, refreshInterval }) => {
   const initHeaders = (dataArray) => {
     if (headers.length === 0 && dataArray && dataArray.length > 0) {
       const heads = dataArray[0].parametersArray?.map((h) => h.name || h.label);
-      setHeaders(['Epoch', ...heads]);
+      setHeaders(['Time', ...heads]);
     }
   };
 
@@ -50,7 +51,7 @@ const HistoryTab = ({ device, refreshInterval }) => {
     return (
       <tr>
         <Td compact={true} className={classnames + ' font-medium'}>
-          {val.value.epoch}
+          {msToTime(val.value.epoch)}
         </Td>
         {val.value.parametersArray?.map((p, index) => (
           <Td key={index} compact={true} className={classnames}>
