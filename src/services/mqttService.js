@@ -3,7 +3,6 @@ import { isFunction } from 'lodash';
 import { parseCurrentSettings } from 'legoino-util';
 
 // Private Functions
-// let client;
 
 const getClientInstance = (
   url,
@@ -14,10 +13,6 @@ const getClientInstance = (
   onSuccess,
   onError,
 ) => {
-  // if client is already connected
-  // if (client && client.connected && client.options.hostname === url)
-  //   isFunction(onSuccess) && onSuccess(client);
-
   const brokerUrl = `${protocol}://${url}:${port}`;
   const client = mqtt.connect(brokerUrl, {
     keepalive: 300,

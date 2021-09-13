@@ -26,7 +26,7 @@ import {
 } from '../../services/devicesOptions';
 
 //
-// Pre-defined Vars
+// Pre-defined variables
 const protocolOptions = DEVICE_PROTOCOLS.map((val) => {
   return { label: val.toUpperCase(), value: val };
 });
@@ -61,15 +61,15 @@ const DeviceModal = ({ isOpen, onClose, onSave, onUpdate, initialValues }) => {
         kind: initialValues.kind.kind,
       }
     : {
-        name: 'Computer',
+        name: 'Computer_01',
         url: 'mqtt.hackuarium.org',
         protocol: protocolOptions.filter((v) => v.value === DEFAULT_PROTOCOL)[0]
           .value,
         port: DEFAULT_PORT,
         kind: 'Computer',
         topic: 'lpatiny/Computer/server',
-        username: 'testUser',
-        password: 'word',
+        username: 'user',
+        password: 'password',
       };
 
   useEffect(() => {

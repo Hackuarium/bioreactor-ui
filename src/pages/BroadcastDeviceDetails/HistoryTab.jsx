@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { throttle } from 'lodash';
 import { Button, Table, Td, Th } from '../../components/tailwind-ui';
+
 import {
   getSavedDataCount,
   getSavedDataByPage,
@@ -8,6 +9,7 @@ import {
   clearSavedData,
   listenToDataChanges,
 } from '../../services/devicesService';
+import { msToTime } from '../../services/util';
 
 const ROWS_BY_PAGE = 10;
 
@@ -18,13 +20,14 @@ const HistoryTab = ({ device }) => {
   const [count, setCount] = useState(0);
   const [initDataListener, setInitDataListener] = useState(false);
 
+  // initialize headers the first time the data is received
   const initHeaders = useCallback(
     (dataArray) => {
       if (headers.length === 0 && dataArray && dataArray.length > 0) {
         const heads = dataArray[0]?.parametersArray?.map(
           (h) => h.name || h.label,
         );
-        setHeaders(['Epoch', ...heads]);
+        setHeaders(['Time', ...heads]);
       }
     },
     [headers.length],
@@ -37,7 +40,7 @@ const HistoryTab = ({ device }) => {
         if (device?._id) {
           getSavedDataByPage(device?._id, _page, ROWS_BY_PAGE).then((_data) => {
             const params = _data.map((d) => ({
-              epoch: d?.epoch,
+              epoch: msToTime(d?.epoch),
               parametersArray: mapParameters(device?.kind?.kind, d?.parameters),
             }));
             initHeaders(params);

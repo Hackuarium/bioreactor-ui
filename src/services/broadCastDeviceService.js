@@ -40,6 +40,7 @@ export const connectDevice = ({
 }) => {
   const clientPromise = new Promise(async (resolve, reject) => {
     try {
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       const mqttClient = await connect(url, protocol, port, username, password);
       const dbClient = DB(deviceId);
 
@@ -122,6 +123,13 @@ export const testDeviceConnection = ({
   return clientPromise;
 };
 
+/**
+ *
+ * @param {object[]} devicesList
+ * @param {function} callback res=> array of Promise results (fulfilled/rejected)
+ * @param {integer} scanInterval in ms
+ * @returns {object}  to clear interval later on
+ */
 export const continuousListenToDevices = async (
   devicesList,
   callback,
@@ -141,7 +149,7 @@ export const continuousListenToDevices = async (
     );
     isFunction(callback) && callback(await Promise.allSettled(promiseArray));
   };
-
+  // execute it every scanInterval
   testConnection();
   const interval = setInterval(
     async () => await testConnection(),

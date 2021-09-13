@@ -1,21 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { throttle } from 'lodash';
 import { HorizontalNavigation } from '../../components/tailwind-ui';
 
+import HistoryTab from './HistoryTab';
+import GeneralTab from './GeneralTab';
+import DeviceCardInfo from './DeviceCardInfo';
+import DeviceModal from '../BroadcastDevices/DeviceModal';
 import { connectDevice } from '../../services/broadCastDeviceService';
 import {
   getDevice,
   updateDevice,
-  getDeviceKind,
   mapParameters,
   getLastSavedData,
   closeDbConnection,
 } from '../../services/devicesService';
-import HistoryTab from './HistoryTab';
-import GeneralTab from './GeneralTab';
-import DeviceCardInfo from './DeviceCardInfo';
-import { useCallback } from 'react';
-import DeviceModal from '../BroadcastDevices/DeviceModal';
 
 const TABS = ['General', 'Data'].map((value) => ({
   value: value,
@@ -70,13 +68,11 @@ const DeviceDetails = ({ match, history }) => {
     return () => currentDevice?._id && closeDbConnection(currentDevice?._id);
   }, [currentDevice?._id, updateData]);
 
-  // get remote data : subscribe to device & listen to data (+ correct device kind if it's not right)
+  // get remote data : subscribe to device & listen to data
   useEffect(() => {
-    console.log(currentDevice?._id + ' ' + isConnected + forceRender);
     let unsubscribe;
-    // console.log(currentDevice);
     if (currentDevice?._id) {
-      let isFirstTime = true;
+      // let isFirstTime = true;
       connectDevice(currentDevice)
         .then((_deviceClient) => {
           setDeviceClient(_deviceClient);
@@ -108,10 +104,14 @@ const DeviceDetails = ({ match, history }) => {
         });
     }
     return () => {
-      unsubscribe && unsubscribe(() => deviceClient?.disconnect());
+      unsubscribe &&
+        unsubscribe(() => {
+          console.log('unsubscribe');
+          // deviceClient?.disconnect();
+        });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDevice?._id, currentDevice?.kind?.kind, isConnected, forceRender]);
+  }, [currentDevice?._id, isConnected, forceRender]);
 
   const renderTabContent = (tab) => {
     switch (tab.value) {

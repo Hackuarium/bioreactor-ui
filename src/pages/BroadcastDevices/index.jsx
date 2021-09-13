@@ -16,7 +16,7 @@ import DevicesList from './DevicesList';
 import DeviceModal from './DeviceModal';
 import { DEVICE_TYPE } from '../../services/devicesOptions';
 
-const SCAN_INTERVAL = 10000;
+const SCAN_INTERVAL = 10000; // refresh devices status every 10s
 
 const BroadcastDevices = ({ history, match }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,11 +24,12 @@ const BroadcastDevices = ({ history, match }) => {
   const [onEditValues, setOnEditValues] = useState({});
   const { addErrorNotification } = useNotification();
 
+  // get saved devices from DB
   useEffect(() => {
-    // get saved devices from DB
     refreshDevices();
   }, []);
 
+  // listen continuously to devices status
   useEffect(() => {
     const cleanup = continuousListenToDevices(
       devicesList,
@@ -100,7 +101,7 @@ const BroadcastDevices = ({ history, match }) => {
     <div className="p-8">
       <h2 className="text-3xl font-semibold mb-10">Broadcast devices</h2>
       <div className="w-full flex justify-end mb-4">
-        <Button onClick={() => setIsModalOpen(true)}>Add device</Button>
+        <Button onClick={() => setIsModalOpen(true)}>Add</Button>
       </div>
       <div>
         <div className="w-full my-2 flex flex-row items-center ">
