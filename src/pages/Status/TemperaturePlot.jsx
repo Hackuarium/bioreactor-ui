@@ -23,8 +23,8 @@ const TemperaturePlot = () => {
   return (
     <div className="w-max h-max m-2 p-4 flex justify-center items-center rounded-md bg-white shadow">
       <Plot
-        width={900}
-        height={400}
+        width={740}
+        height={329}
         margin={{ bottom: 50, left: 55, top: 20, right: 20 }}
         seriesViewportStyle={{
           stroke: 'black',
@@ -47,7 +47,7 @@ const TemperaturePlot = () => {
           xAxis="x"
           yAxis="y"
           lineStyle={{ stroke: 'red', strokeWidth: 2 }}
-          label="Current temperature °C"
+          label="Current Temp. [°C]"
         />
 
         <LineSeries
@@ -55,7 +55,7 @@ const TemperaturePlot = () => {
           xAxis="x"
           yAxis="y"
           lineStyle={{ stroke: 'green', strokeWidth: 2 }}
-          label="Target temperature °C"
+          label="Target Temp. [°C]"
         />
         <Legend position="embedded" bottom="80" left="0"></Legend>
       </Plot>
