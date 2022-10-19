@@ -7,10 +7,8 @@ const Status = () => {
   return (
     <div className="w-full h-full p-6 lg:p-8 flex justify-center">
       <div className="w-max h-max flex flex-col items-center justify-start lg:justify-center">
-        <div className="w-full flex flex-row justify-around items-center lg:justify-center">
-          <h2 className="text-2xl font-semibold mb-7">Active Services</h2>
-        </div>
-        <div className="w-full flex flex-row justify-around items-center lg:justify-end mb-4">
+        <h2 className="text-2xl font-semibold mb-7">Active Services</h2>
+        <div className="w-full flex flex-row justify-around items-center lg:justify-end">
           <TagDisplay
             title="PID"
             value="Active"
