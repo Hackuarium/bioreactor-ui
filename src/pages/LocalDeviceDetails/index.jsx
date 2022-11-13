@@ -58,15 +58,29 @@ const LocalDevices = ({ match, history }) => {
             currentDevice?.id,
             COMMANDS.compactSettings,
           );
+          // let checkDigit = 0;
+          // for (let i = 0; i < compressedResults.length; i = i + 2) {
+          //   checkDigit ^= parseInt(`${compressedResults[i]}${compressedResults[i+1]}`, 16);
+          //   // console.log('i', checkDigit.toString(16));
+          // }
+          // console.log('Final prev', checkDigit);
+          // if (checkDigit === 0) {
+          //   console.log('checkDigit', checkDigit.toString(16));
+          // }
+          // else {
+          //   addWarningNotification('CheckDigit error');
+          // }
           const results = parseCurrentSettings(compressedResults, {
-            kind: currentDevice?.kind?.kind,
+            // kind: currentDevice?.kind?.kind,
             parameterInfo: true,
             parametersArray: true,
           });
+          // console.log('results', results);
+
           setCurrentData(results);
           saveDataRow(currentDevice._id, results);
         } catch (e) {
-          //  console.log(e.message);
+           console.log(e.message);
         }
       } else {
         // get local saved data
