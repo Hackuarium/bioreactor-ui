@@ -15,7 +15,7 @@ const COLOR_CHANGED_TIMEOUT = 700;
  * @param {string} className
  */
 
-const CardValue = ({ title, value, unit, info, className }) => {
+const CardValue = ({ title, value, unit, info, className, errorParameter }) => {
   const [_value, setValue] = useState('');
   const [color, setColor] = useState(0);
 
@@ -69,6 +69,8 @@ const CardValue = ({ title, value, unit, info, className }) => {
               'text-xl font-bold text-neutral-800',
               color > 0 && 'text-success-600',
               color < 0 && 'text-danger-600',
+              errorParameter > 0 && 'text-danger-600',
+              errorParameter < 0 && 'text-danger-600',
             )}
           >
             {_value}

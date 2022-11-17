@@ -5,6 +5,7 @@ import GeneralTab from './GeneralTab';
 import HistoryTab from './HistoryTab';
 import ConfigTab from './ConfigTab';
 import AdvancedTab from './AdvancedTab';
+import BioreactorTab from "./BioreactorTab";
 import DeviceCardInfo from './DeviceCardInfo';
 import LocalDeviceModal from '../LocalDevices/LocalDeviceModal';
 import useNotification from '../../hooks/useNotification';
@@ -25,7 +26,7 @@ import {
 
 const SCAN_INTERVAL = 1000;
 
-const tabs = ['General', 'History', 'Advanced', 'Configuration'].map((v) => ({
+const tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor'].map((v) => ({
   value: v,
   label: v,
 }));
@@ -63,7 +64,7 @@ const LocalDevices = ({ match, history }) => {
             parameterInfo: true,
             parametersArray: true,
           });
-          setCurrentData(results);
+          setCurrentData(results);  // Update current data on-line
           saveDataRow(currentDevice._id, results);
         } catch (e) {
           //  console.log(e.message);
@@ -158,6 +159,8 @@ const LocalDevices = ({ match, history }) => {
             refreshData={() => getCurrentData()}
           />
         );
+      case 'Bioreactor':
+          return <BioreactorTab data={currentData} />;
       default:
         return <div />;
     }
