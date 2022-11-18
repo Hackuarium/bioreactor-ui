@@ -15,7 +15,7 @@ const COLOR_CHANGED_TIMEOUT = 700;
  * @param {string} className
  */
 
-const CardValue = ({ title, value, unit, info, className, errorParameter }) => {
+const CardValue = ({ title, value, unit, info, className, errorParameter=0 }) => {
   const [_value, setValue] = useState('');
   const [color, setColor] = useState(0);
 
@@ -46,7 +46,12 @@ const CardValue = ({ title, value, unit, info, className, errorParameter }) => {
     <div className={clsx('flex', className)}>
       <div className="w-full m-2 p-2 flex flex-col justify-between items-center sm:items-start rounded-md bg-blue-gray-100 shadow-md">
         <div className="w-full py-1 flex flex-row justify-between items-start relative">
-          <h3 className="text-sm font-medium text-neutral-700">{title}</h3>
+          <h3 className={clsx(
+              'text-sm font-medium text-neutral-700',
+              errorParameter !== 0 && 'text-danger-600',
+              // errorParameter < 0 && 'text-danger-600',
+            )}
+          >{title}</h3>
           {info && (
             <div className=" group">
               <InfoIcon
@@ -69,8 +74,8 @@ const CardValue = ({ title, value, unit, info, className, errorParameter }) => {
               'text-xl font-bold text-neutral-800',
               color > 0 && 'text-success-600',
               color < 0 && 'text-danger-600',
-              errorParameter > 0 && 'text-danger-600',
-              errorParameter < 0 && 'text-danger-600',
+              errorParameter !== 0 && 'text-danger-600',
+              // errorParameter < 0 && 'text-danger-600',
             )}
           >
             {_value}

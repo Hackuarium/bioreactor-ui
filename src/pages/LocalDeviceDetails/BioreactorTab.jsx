@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+
 import { CardValue } from '../../components';
 import { msToTime } from '../../services/util';
+
+const COLOR_CHANGED_TIMEOUT = 700;
 
 const BioreactorTab = ({ data }) => {
   const [_value, setValue] = useState('');
   const [color, setColor] = useState(0);
+  // const [errorParameter, setErrorParameter] = useState(0);	
 
   let errorParameter = data?.parametersArray?.find(param => param.name === 'Error');
+  // let statusParameter = 0;
+  
+  // setErrorParameter(errorParameter.value);
 
   // console.log('errorParameter', errorParameter);
+  console.log('errorParameter', errorParameter);
+  console.log('errorParameter.value', errorParameter.value);
   // console.log('errorParameterValue', errorParameter.value);
-
+  
   // change color when Error is not zero
   useEffect(() => {
     let timeout;
@@ -19,11 +28,12 @@ const BioreactorTab = ({ data }) => {
       // don't execute it on the first render
       if (_value) {
         setValue((_oldV) => {
-          // const newV = Number(errorParameter) ;
-          Number(errorParameter.value) > 0 ? setColor(-1) : Number(errorParameter.value) < 0 ? setColor(-1) : setColor(0);
-          // timeout = setTimeout(() => {
-          //   setColor(0);
-          // }, COLOR_CHANGED_TIMEOUT);
+          const newV = Number(errorParameter.value);
+          newV > 0 ? setColor(-1) : newV < 0 ? setColor(-1) : setColor(0);
+          timeout = setTimeout(() => {
+            setColor(0);
+          }, COLOR_CHANGED_TIMEOUT);
+          console.log(color);
         });
       }
     } catch (e) {
@@ -32,7 +42,7 @@ const BioreactorTab = ({ data }) => {
     setValue(errorParameter.value);
     return () => timeout && clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorParameter.value]);
+  }, [data?.epoch]);
 
   return (
     <div className="flex flex-col">
@@ -51,10 +61,20 @@ const BioreactorTab = ({ data }) => {
           value={errorParameter.value * errorParameter.factor}
           unit={errorParameter.unit}
           info={errorParameter.description}
-          className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
+          className="w-full sm:w-1/2  md:w-1/4 lg:w-full flex"
           errorParameter={color}
         />
       </div>
+      {/* <div className=" flex flex-row justify-around flex-wrap">
+        <CardValue
+          key={errorParameter.index}
+          title={errorParameter.name || errorParameter.label}
+          value={errorParameter.value * errorParameter.factor}
+          unit={errorParameter.unit}
+          info={errorParameter.description}
+          className="w-full sm:w-1/2  md:w-1/4 lg:w-1/2 flex"
+        />
+      </div> */}
     </div>
   );
 };
