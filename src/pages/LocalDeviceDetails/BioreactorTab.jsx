@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
-import { CardValue } from '../../components';
+import { CardValue, CardStatus } from '../../components';
 import { msToTime } from '../../services/util';
 
 const COLOR_CHANGED_TIMEOUT = 700;
@@ -12,13 +12,18 @@ const BioreactorTab = ({ data }) => {
   // const [errorParameter, setErrorParameter] = useState(0);	
 
   let errorParameter = data?.parametersArray?.find(param => param.name === 'Error');
-  // let statusParameter = 0;
+  let statusParameter = data?.parametersArray?.find(param => param.name === 'Status');
   
+  console.log('flags', errorParameter.flags);
+  console.log('flag 0', errorParameter.flags[0]);
+
   // setErrorParameter(errorParameter.value);
 
   // console.log('errorParameter', errorParameter);
   console.log('errorParameter', errorParameter);
   console.log('errorParameter.value', errorParameter.value);
+  console.log('statusParameter', statusParameter);
+  console.log('statusParameter.value', statusParameter.value);
   // console.log('errorParameterValue', errorParameter.value);
   
   // change color when Error is not zero
@@ -65,16 +70,17 @@ const BioreactorTab = ({ data }) => {
           errorParameter={color}
         />
       </div>
-      {/* <div className=" flex flex-row justify-around flex-wrap">
-        <CardValue
-          key={errorParameter.index}
-          title={errorParameter.name || errorParameter.label}
-          value={errorParameter.value * errorParameter.factor}
-          unit={errorParameter.unit}
-          info={errorParameter.description}
-          className="w-full sm:w-1/2  md:w-1/4 lg:w-1/2 flex"
+      <div className=" flex flex-row justify-around flex-wrap">
+        <CardStatus
+          key={statusParameter.index}
+          title={statusParameter.name || statusParameter.label}
+          value={statusParameter.value * statusParameter.factor}
+          unit={statusParameter.unit}
+          info={statusParameter.description}
+          flags={statusParameter.flags}
+          className="w-full sm:w-1/2  md:w-1/4 lg:w-full flex"
         />
-      </div> */}
+      </div>
     </div>
   );
 };
