@@ -28,7 +28,7 @@
     "clsx": "^1.1.1",
     "date-fns": "^2.23.0",
     "formik": "^2.2.9",
-    "legoino-device-information": "^1.2.1",
+    "legoino-device-information": "^2.2.0",
     "legoino-navigator-serial": "0.0.1",
     "legoino-util": "^1.7.0",
     "lodash": "^4.17.21",
