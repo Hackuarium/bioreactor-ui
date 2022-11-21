@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
@@ -17,21 +17,8 @@ const COLOR_CHANGED_TIMEOUT = 1000;
 
 const CardStatus = ({ title, value, unit, info, flags, className }) => {
 
-  // const [_value, setValue] = useState('');
-
   const [_flag, setFlag] = useState(false);
 
-  // console.log('flags', flags);
-  
-  // let result = [];
-  // let aa;
-  // result += Number(value | 0)
-  // .toString(16)
-  // .padStart(14, '0');
-  
-  // aa = Number(value | 0)
-  // .toString(2)
-  // .padStart(14, '0');
   let result = Number(value | 0)
   .toString(2)
   .padStart(14, '0')
@@ -51,10 +38,8 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
       if (_flag) {
         // setFlagCheck((_oldV) => {
           let checkChange = result;
-          // const newV = result;
-          // const oldV = _oldV;
           checkChange = checkChange.map((v, i) => v === _flagCheck[i] ? false : true);
-          let timeout = setTimeout(() => {
+          timeout = setTimeout(() => {
             setFlagCheck(_flagCheck => checkChange);
           }, COLOR_CHANGED_TIMEOUT);
         // });
@@ -91,19 +76,6 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
             </div>
           )}
         </div>
-        {/* <div className="w-full mt-2 flex flex-row justify-center sm:justify-end items-center">
-          <p
-            className={clsx(
-              'text-xl font-bold text-neutral-800',
-              color > 0 && 'text-success-600',
-              color < 0 && 'text-danger-600',
-              // errorParameter < 0 && 'text-danger-600',
-            )}
-          >
-            {result.reverse()}
-          </p>
-          <p className="ml-1 text-sm font-medium text-gray-500">{unit}</p>
-        </div> */}
         {result.map((item, index) => {
           
           return (
@@ -111,8 +83,6 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
             <p
               className={clsx(
                 'text-xl text-neutral-800',
-                // color > 0 && 'text-success-600',
-                // color < 0 && 'text-danger-600',
                 _flagCheck[index] === '0' && 'text-danger-600',
                 _flagCheck[index] === '1' && 'text-success-600',
               )}
