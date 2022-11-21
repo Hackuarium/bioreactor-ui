@@ -14,19 +14,8 @@ const BioreactorTab = ({ data }) => {
   let errorParameter = data?.parametersArray?.find(param => param.name === 'Error');
   let statusParameter = data?.parametersArray?.find(param => param.name === 'Status');
   
-  console.log('flags', errorParameter.flags);
-  console.log('flag 0', errorParameter.flags[0]);
-
   // setErrorParameter(errorParameter.value);
 
-  // console.log('errorParameter', errorParameter);
-  console.log('errorParameter', errorParameter);
-  console.log('errorParameter.value', errorParameter.value);
-  console.log('statusParameter', statusParameter);
-  console.log('statusParameter.value', statusParameter.value);
-  console.log('statusParameter.flags', statusParameter.flags);
-  // console.log('errorParameterValue', errorParameter.value);
-  
   // change color when Error is not zero
   useEffect(() => {
     let timeout;

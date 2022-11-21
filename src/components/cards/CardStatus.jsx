@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import clsx from 'clsx';
 
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
 import { useEffect } from 'react';
 
-const COLOR_CHANGED_TIMEOUT = 700;
+const COLOR_CHANGED_TIMEOUT = 1000;
 
 /**
  *
@@ -16,25 +16,29 @@ const COLOR_CHANGED_TIMEOUT = 700;
  */
 
 const CardStatus = ({ title, value, unit, info, flags, className }) => {
-  const [_value, setValue] = useState('');
-  const [color, setColor] = useState(0);
 
-  const [_flag, setFlag] = useState('');
+  // const [_value, setValue] = useState('');
 
-  console.log('flags', flags);
+  const [_flag, setFlag] = useState(false);
+
+  // console.log('flags', flags);
   
-  let result = [];
-  let aa;
-  result += Number(value | 0)
-  .toString(16)
-  .padStart(16, '0');
+  // let result = [];
+  // let aa;
+  // result += Number(value | 0)
+  // .toString(16)
+  // .padStart(14, '0');
   
-  aa = Number(value | 0)
+  // aa = Number(value | 0)
+  // .toString(2)
+  // .padStart(14, '0');
+  let result = Number(value | 0)
   .toString(2)
-  .padStart(16, '0');
-  result = aa.split('').reverse();
+  .padStart(14, '0')
+  .split('')
+  .reverse();
   
-  console.log('aa', aa);
+  // console.log('aa', aa);
   console.log('result', result);
   
   const [_flagCheck, setFlagCheck] = useState(result);
@@ -42,19 +46,18 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
   // change color when value is changed
   useEffect(() => {
     let timeout;
-    let checkChange = result;
     try {
       // don't execute it on the first render
       if (_flag) {
-        setFlag((_oldV) => {
-          const newV = result;
-          const oldV = _oldV;
-          checkChange = newV.map((v, i) => v === oldV[i] ? false : true);
-          setFlagCheck(checkChange);
-          timeout = setTimeout(() => {
-            setFlag(0);
+        // setFlagCheck((_oldV) => {
+          let checkChange = result;
+          // const newV = result;
+          // const oldV = _oldV;
+          checkChange = checkChange.map((v, i) => v === _flagCheck[i] ? false : true);
+          let timeout = setTimeout(() => {
+            setFlagCheck(_flagCheck => checkChange);
           }, COLOR_CHANGED_TIMEOUT);
-        });
+        // });
       }
     } catch (e) {
       // console.log(e);
@@ -62,32 +65,9 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
     setFlag(true);
     return () => timeout && clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, []);
 
   console.log('checkFlag', _flagCheck);
-
-  // change color when value is changed
-  useEffect(() => {
-    let timeout;
-    try {
-      // don't execute it on the first render
-      if (_value) {
-        setValue((_oldV) => {
-          const newV = Number(value);
-          const oldV = Number(_oldV);
-          newV > oldV ? setColor(1) : newV < oldV ? setColor(-1) : setColor(0);
-          timeout = setTimeout(() => {
-            setColor(0);
-          }, COLOR_CHANGED_TIMEOUT);
-        });
-      }
-    } catch (e) {
-      // console.log(e);
-    }
-    setValue(value);
-    return () => timeout && clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
 
   return (
     <div className={clsx('flex', className)}>
@@ -127,13 +107,14 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
         {result.map((item, index) => {
           
           return (
-          <div className="w-full mt-2 flex flex-row justify-center sm:justify-end items-center">
+          <div className="w-full mt-2 flex flex-row justify-between sm:justify-end items-center">
             <p
               className={clsx(
-                'text-xl font-bold text-neutral-800',
+                'text-xl text-neutral-800',
                 // color > 0 && 'text-success-600',
                 // color < 0 && 'text-danger-600',
-                _flagCheck[index] === true && 'text-danger-600',
+                _flagCheck[index] === '0' && 'text-danger-600',
+                _flagCheck[index] === '1' && 'text-success-600',
               )}
             >
               {flags[index]}
