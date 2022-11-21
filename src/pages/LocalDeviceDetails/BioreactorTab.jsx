@@ -24,6 +24,7 @@ const BioreactorTab = ({ data }) => {
   console.log('errorParameter.value', errorParameter.value);
   console.log('statusParameter', statusParameter);
   console.log('statusParameter.value', statusParameter.value);
+  console.log('statusParameter.flags', statusParameter.flags);
   // console.log('errorParameterValue', errorParameter.value);
   
   // change color when Error is not zero

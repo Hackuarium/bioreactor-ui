@@ -19,44 +19,52 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
   const [_value, setValue] = useState('');
   const [color, setColor] = useState(0);
 
-  const [_flag, setFlag] = useState(0);	
+  const [_flag, setFlag] = useState('');
 
+  console.log('flags', flags);
+  
   let result = [];
   let aa;
   result += Number(value | 0)
-    .toString(16)
-    .padStart(16, '0');
-
-  aa = Number(value | 0).toString(2);
+  .toString(16)
+  .padStart(16, '0');
+  
+  aa = Number(value | 0)
+  .toString(2)
+  .padStart(16, '0');
   result = aa.split('').reverse();
-
+  
   console.log('aa', aa);
   console.log('result', result);
+  
+  const [_flagCheck, setFlagCheck] = useState(result);
 
   // change color when value is changed
   useEffect(() => {
     let timeout;
+    let checkChange = result;
     try {
       // don't execute it on the first render
       if (_flag) {
-        setValue((_oldV) => {
+        setFlag((_oldV) => {
           const newV = result;
           const oldV = _oldV;
-          newV > oldV ? setColor(1) : newV < oldV ? setColor(-1) : setColor(0);
+          checkChange = newV.map((v, i) => v === oldV[i] ? false : true);
+          setFlagCheck(checkChange);
           timeout = setTimeout(() => {
-            setColor(0);
+            setFlag(0);
           }, COLOR_CHANGED_TIMEOUT);
         });
       }
     } catch (e) {
       // console.log(e);
     }
-    setValue(value);
+    setFlag(true);
     return () => timeout && clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-
+  console.log('checkFlag', _flagCheck);
 
   // change color when value is changed
   useEffect(() => {
@@ -117,24 +125,22 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
           <p className="ml-1 text-sm font-medium text-gray-500">{unit}</p>
         </div> */}
         {result.map((item, index) => {
-          if(item === '0') return null;
-          else {
-            return (
-            <div className="w-full mt-2 flex flex-row justify-center sm:justify-end items-center">
-              <p
-                className={clsx(
-                  'text-xl font-bold text-neutral-800',
-                  color > 0 && 'text-success-600',
-                  color < 0 && 'text-danger-600',
-                  // errorParameter < 0 && 'text-danger-600',
-                )}
-              >
-                {flags[index]}
-              </p>
-              <p className="ml-1 text-sm font-medium text-gray-500">{unit}</p>
-            </div>
-            )
-          }
+          
+          return (
+          <div className="w-full mt-2 flex flex-row justify-center sm:justify-end items-center">
+            <p
+              className={clsx(
+                'text-xl font-bold text-neutral-800',
+                // color > 0 && 'text-success-600',
+                // color < 0 && 'text-danger-600',
+                _flagCheck[index] === true && 'text-danger-600',
+              )}
+            >
+              {flags[index]}
+            </p>
+            <p className="ml-1 text-sm font-medium text-gray-500">{unit}</p>
+          </div>
+          )
         }
         )}
       </div>

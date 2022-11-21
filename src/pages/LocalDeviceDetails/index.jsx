@@ -160,6 +160,7 @@ const LocalDevices = ({ match, history }) => {
           />
         );
       case 'Bioreactor':
+          console.log(currentData);
           return <BioreactorTab data={currentData} />;
       default:
         return <div />;

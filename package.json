@@ -30,7 +30,7 @@
     "formik": "^2.2.9",
     "legoino-device-information": "^2.2.0",
     "legoino-navigator-serial": "0.0.1",
-    "legoino-util": "^1.7.0",
+    "legoino-util": "^2.0.2",
     "lodash": "^4.17.21",
     "ml-spectra-processing": "^6.8.0",
     "mqtt": "^4.2.8",
