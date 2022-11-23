@@ -36,11 +36,9 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
     try {
       // don't execute it on the first render
       if (_flag) {
-        // setFlagCheck((_oldV) => {
-          let checkChange = result;
-          checkChange = checkChange.map((v, i) => v === _flagCheck[i] ? false : true);
           timeout = setTimeout(() => {
-            setFlagCheck(_flagCheck => checkChange);
+            // setFlagCheck(_flagCheck => checkChange.map((v, i) => v === _flagCheck[i] ? '0' : '1'));
+            setFlagCheck(_flagCheck => [...result]);
           }, COLOR_CHANGED_TIMEOUT);
         // });
       }
@@ -50,7 +48,7 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
     setFlag(true);
     return () => timeout && clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [value]);
 
   console.log('checkFlag', _flagCheck);
 
