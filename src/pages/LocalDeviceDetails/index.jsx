@@ -26,7 +26,7 @@ import {
 
 const SCAN_INTERVAL = 1000;
 
-const tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor'].map((v) => ({
+let tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor'].map((v) => ({
   value: v,
   label: v,
 }));
@@ -47,6 +47,13 @@ const LocalDevices = ({ match, history }) => {
     const deviceId = `${match.params.id}`;
     getDevice(deviceId).then((_device) => {
       setCurrentDevice(_device);
+      let check = Number(_device?.id).toString(16).slice(0,2);
+      // console.log('currentDevice', check);
+      if (!(check === '36' || check === 'Na')) {
+        let newTab = [...tabs];
+        newTab = newTab.filter((tab) => tab.value !== 'Bioreactor');
+        tabs = newTab;
+      }
     });
   }, [match.params.id]);
 
@@ -135,8 +142,9 @@ const LocalDevices = ({ match, history }) => {
       setIsModalOpen(false);
     });
   };
-
+  
   const renderTabContent = (tab) => {
+    // console.log('Check', Number(currentDevice?.id).toString(16).slice(0,2));
     switch (tab.value) {
       case 'General':
         return <GeneralTab data={currentData} />;
@@ -160,7 +168,8 @@ const LocalDevices = ({ match, history }) => {
           />
         );
       case 'Bioreactor':
-          console.log(currentData);
+          // console.log(currentData);
+          // console.log(currentDevice);
           return <BioreactorTab data={currentData} />;
       default:
         return <div />;
