@@ -6,6 +6,30 @@ import { useEffect } from 'react';
 
 const COLOR_CHANGED_TIMEOUT = 1000;
 
+const intervals = [1, 2, 5, 10, 30, 60, 120, 300].map((v) => ({
+  label: v > 59 ? `${v / 60} m` : `${v} s`,
+  value: v * 1000,
+  type: 'option',
+}));
+
+const config = [0, 1].map((v) => ({
+  label: v === 0 ? `Action` : 'Parameter',
+  value: v,
+  type: 'option',
+}));
+
+const flags = ['Temperature control', 'Agitation control', 'Food control 1', 'Food control 2', 'Food control 3', 'Food control 4',].map((v, i) => ({
+  label: v,
+  value: 2 ** i,
+  type: 'option',
+}));
+
+const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for weight reduction to yy% of maximum weight', 'Wait for weight increase to yy% of maximum weight', 'Wait for temperature change (continue if delta < yy [°C/100])', 'Set all the flags'].map((v, i) => ({
+  label: v === 0 ? `Action` : 'Parameter',
+  value: v,
+  type: 'option',
+}));
+
 /**
  *
  * @param {string} title
@@ -15,7 +39,17 @@ const COLOR_CHANGED_TIMEOUT = 1000;
  * @param {string} className
  */
 
-const CardStatus = ({ title, value, unit, info, flags, className }) => {
+const CardStatus = ({ title, value, unit, info, steps, className }) => {
+
+  let resultSteps = steps.map((step, index) => {
+    let result = Number(step | 0)
+    .toString(2)
+    .padStart(16, '0')
+    .split('')
+    .reverse();
+    return result[index];
+  });
+  
 
   const [_flag, setFlag] = useState(false);
 

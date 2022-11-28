@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
-import { CardValue, CardParams} from '../../components';
+import { CardValue, CardParams, CardSteps} from '../../components';
 import { msToTime } from '../../services/util';
 
 const COLOR_CHANGED_TIMEOUT = 700;
@@ -13,6 +13,12 @@ const BioreactorTab = ({ data }) => {
 
   let errorParameter = data?.parametersArray?.find(param => param.name === 'Error');
   let statusParameter = data?.parametersArray?.find(param => param.name === 'Status');
+
+  let stepParameter = data?.parametersArray?.find(param => param.name === 'Current step');
+
+  let steps = [...Array(16).keys()].map((v) => v+1);
+
+  let stepsParameters = steps.map(v => (data?.parametersArray?.find(param => param.name === `Step ${v}`)));
   
   // setErrorParameter(errorParameter.value);
 
@@ -80,6 +86,15 @@ const BioreactorTab = ({ data }) => {
             unit={errorParameter.unit}
             info={errorParameter.description}
             flags={errorParameter.flags}
+            className="w-full sm:w-1/2  md:w-1/4 lg:w-full flex"
+          />
+          <CardSteps
+            key={stepParameter.index}
+            title={stepParameter.name || stepParameter.label}
+            value={stepParameter.value * stepParameter.factor}
+            unit={stepParameter.unit}
+            info={stepParameter.description}
+            steps={stepsParameters}
             className="w-full sm:w-1/2  md:w-1/4 lg:w-full flex"
           />
         </div>
