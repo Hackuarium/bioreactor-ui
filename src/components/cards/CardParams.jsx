@@ -45,7 +45,6 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
   .split('')
   .reverse();
   
-  // console.log('aa', aa);
   console.log('result', result);
   
   const [_flagCheck, setFlagCheck] = useState(result);
@@ -101,8 +100,8 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
             <p
               className={clsx(
                 'text-xl text-neutral-800',
-                _flagCheck[index] === '0' && 'text-danger-600',
-                _flagCheck[index] === '1' && 'text-success-600',
+                _flagCheck[index] === '0' && 'text-success-600',
+                _flagCheck[index] === '1' && 'text-danger-600',
               )}
             >
               {flags[index]}

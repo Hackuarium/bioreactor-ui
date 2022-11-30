@@ -6,14 +6,8 @@ import { useEffect } from 'react';
 
 const COLOR_CHANGED_TIMEOUT = 1000;
 
-const intervals = [1, 2, 5, 10, 30, 60, 120, 300].map((v) => ({
-  label: v > 59 ? `${v / 60} m` : `${v} s`,
-  value: v * 1000,
-  type: 'option',
-}));
-
 const config = [0, 1].map((v) => ({
-  label: v === 0 ? `Action` : 'Parameter',
+  label: v === 0 ? `Action` : 'Change Parameter',
   value: v,
   type: 'option',
 }));
@@ -25,8 +19,8 @@ const flags = ['Temperature control', 'Agitation control', 'Food control 1', 'Fo
 }));
 
 const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for weight reduction to yy% of maximum weight', 'Wait for weight increase to yy% of maximum weight', 'Wait for temperature change (continue if delta < yy [°C/100])', 'Set all the flags'].map((v, i) => ({
-  label: v === 0 ? `Action` : 'Parameter',
-  value: v,
+  label: v,
+  value: i,
   type: 'option',
 }));
 
@@ -40,51 +34,106 @@ const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for wei
  */
 
 const CardStatus = ({ title, value, unit, info, steps, className }) => {
+  console.log('steps',steps);
 
-  let resultSteps = steps.map((step, index) => {
-    let result = Number(step | 0)
-    .toString(2)
-    .padStart(16, '0')
-    .split('')
-    .reverse();
-    return result[index];
-  });
-  
+  // const [_flag, setFlag] = useState(false);
 
-  const [_flag, setFlag] = useState(false);
+  const [_steps, setSteps] = useState([]);
 
-  let result = Number(value | 0)
-  .toString(2)
-  .padStart(14, '0')
-  .split('')
-  .reverse();
-  
-  // console.log('aa', aa);
-  console.log('result', result);
-  
-  const [_flagCheck, setFlagCheck] = useState(result);
-
-  // change color when value is changed
+  // change _steps when steps is changed
   useEffect(() => {
     let timeout;
     try {
       // don't execute it on the first render
-      if (_flag) {
+      // if (_flag) {
           timeout = setTimeout(() => {
-            // setFlagCheck(_flagCheck => checkChange.map((v, i) => v === _flagCheck[i] ? '0' : '1'));
-            setFlagCheck(_flagCheck => [...result]);
+            let result = [];
+            result = steps.map((step, index) => {
+              result = [...result, Number(step.value | 0)
+              .toString(2)
+              .padStart(16, '0')
+              .split('')];
+              return result[index];
+            });
+            setSteps(_steps => [...result]);
           }, COLOR_CHANGED_TIMEOUT);
         // });
-      }
+      // }
     } catch (e) {
       // console.log(e);
     }
-    setFlag(true);
+    // setFlag(true);
     return () => timeout && clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [steps]);
 
-  console.log('checkFlag', _flagCheck);
+  // setSteps(steps.map((step, index) => {
+  //   let result = [Number(step.value | 0)
+  //   .toString(2)
+  //   .padStart(16, '0')
+  //   .split('')];
+  //   return result[index];
+  // }));
+
+  // let result = [];
+  // result = steps.map((step, index) => {
+  //   result = [...result, Number(step.value | 0)
+  //   .toString(2)
+  //   .padStart(16, '0')
+  //   .split('')];
+  //   return result[index];
+  // });
+  // console.log('result', result);
+
+  console.log('_steps', _steps);
+
+  let ii = [...Array(16).keys()];
+
+  console.log('ii', ii);
+
+  _steps.map((step, index) => {
+    let configStep = config[`${step[0]}`].label;
+    console.log('configStep', configStep);
+    let actionStep = step.slice(1, 5).join('');
+    console.log('actionStep', actionStep);
+    console.log('actionStepNumber', Number(`0b${actionStep}`));
+    switch (actionStep) {
+      case '0000':
+        // let actionStep0 = actions[Number(`0b${actionStep}`)].label;
+        console.log('Do nothing', actions[Number(`0b${actionStep}`)].label);        
+        break;
+      case '0001':
+        console.log('Wait in minutes', actions[Number(`0b${actionStep}`)].label);
+        break;
+      case '0010':
+        console.log('Wait in hours', actions[Number(`0b${actionStep}`)].label);
+        break;
+      case '0011':
+        console.log('Wait for weight reduction to yy% of maximum weight', actions[Number(`0b${actionStep}`)].label);
+        break;
+      case '0100':
+        console.log('Wait for weight increase to yy% of maximum weight', actions[Number(`0b${actionStep}`)].label);
+        break;
+      case '0101':
+        console.log('Wait for temperature change (continue if delta < yy [°C/100])', actions[Number(`0b${actionStep}`)].label);
+        break;
+      case '1000':
+        console.log('Set all the flags', actions[Number(`0b${actionStep}`)].label);
+        break;
+      default:
+        break;
+    }
+    // step.forEach((v, i) => {
+    //   console.log('v', v);
+    //   return true;
+    // })
+  });
+
+  _steps.forEach((step, index) => {
+  });
+  
+  // let ans = ii.map((v, i) => {console.log(`_flagSteps${i}`, _flagSteps[`${i}`][`${i}`])});
+  // console.log('_flagSteps', _flagSteps[`${ii[0]}`]);
 
   return (
     <div className={clsx('flex', className)}>
@@ -108,24 +157,7 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
             </div>
           )}
         </div>
-        {result.map((item, index) => {
-          
-          return (
-          <div className="w-full mt-2 flex flex-row justify-between sm:justify-end items-center">
-            <p
-              className={clsx(
-                'text-xl text-neutral-800',
-                _flagCheck[index] === '0' && 'text-danger-600',
-                _flagCheck[index] === '1' && 'text-success-600',
-              )}
-            >
-              {flags[index]}
-            </p>
-            <p className="ml-1 text-sm font-medium text-gray-500">{unit}</p>
-          </div>
-          )
-        }
-        )}
+        
       </div>
     </div>
   );
