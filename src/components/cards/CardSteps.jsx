@@ -34,9 +34,6 @@ const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for wei
  */
 
 const CardStatus = ({ title, value, unit, info, steps, className }) => {
-  console.log('steps',steps);
-
-  // const [_flag, setFlag] = useState(false);
 
   const [_steps, setSteps] = useState([]);
 
@@ -67,71 +64,88 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [steps]);
 
-  // setSteps(steps.map((step, index) => {
-  //   let result = [Number(step.value | 0)
-  //   .toString(2)
-  //   .padStart(16, '0')
-  //   .split('')];
-  //   return result[index];
-  // }));
-
-  // let result = [];
-  // result = steps.map((step, index) => {
-  //   result = [...result, Number(step.value | 0)
-  //   .toString(2)
-  //   .padStart(16, '0')
-  //   .split('')];
-  //   return result[index];
-  // });
-  // console.log('result', result);
-
   console.log('_steps', _steps);
 
-  let ii = [...Array(16).keys()];
+  const [_configStep, _setConfigStep] = useState(0);
+  const [_actionStep, _setActionStep] = useState(0);
+  const [_flagStep, _setFlagStep] = useState(0);
 
-  console.log('ii', ii);
+  // Store 16 Steps(16 bits) into: config (1 bit), action (4 bits) and flags (11 bits)
+  let confStep = [];
+  let actStep = [];
+  let flagStep = '';
 
   _steps.map((step, index) => {
-    let configStep = config[`${step[0]}`].label;
-    console.log('configStep', configStep);
-    let actionStep = step.slice(1, 5).join('');
-    console.log('actionStep', actionStep);
-    console.log('actionStepNumber', Number(`0b${actionStep}`));
-    switch (actionStep) {
-      case '0000':
-        // let actionStep0 = actions[Number(`0b${actionStep}`)].label;
-        console.log('Do nothing', actions[Number(`0b${actionStep}`)].label);        
-        break;
-      case '0001':
-        console.log('Wait in minutes', actions[Number(`0b${actionStep}`)].label);
-        break;
-      case '0010':
-        console.log('Wait in hours', actions[Number(`0b${actionStep}`)].label);
-        break;
-      case '0011':
-        console.log('Wait for weight reduction to yy% of maximum weight', actions[Number(`0b${actionStep}`)].label);
-        break;
-      case '0100':
-        console.log('Wait for weight increase to yy% of maximum weight', actions[Number(`0b${actionStep}`)].label);
-        break;
-      case '0101':
-        console.log('Wait for temperature change (continue if delta < yy [°C/100])', actions[Number(`0b${actionStep}`)].label);
-        break;
-      case '1000':
-        console.log('Set all the flags', actions[Number(`0b${actionStep}`)].label);
-        break;
-      default:
-        break;
+    // Check Step parameters
+    let confTemp = step.slice(0, 1).join('');
+    let actTemp = step.slice(1, 5).join('');
+    let flagTemp = step.slice(5, 16).join('');
+
+    // Set Action/Parameter Array
+    // confStep = [...confStep, config[`${step[0]}`].label];
+    confStep = [...confStep, config[`${confTemp}`].label];
+    console.log('confStep', confStep);
+
+    if (confStep[index] === 'Action') {
+      // Check Action
+      console.log('actionStepNumber', Number(`0b${actTemp}`));
+
+      let actionTemp = '';
+      switch (actTemp) {
+        case '0000':
+          // let actionStep0 = actions[Number(`0b${actionStep}`)].label;
+          actionTemp = actions[Number(`0b${actTemp}`)].label;
+          console.log(actionTemp);
+          break;
+        case '0001':
+          actionTemp = actions[Number(`0b${actTemp}`)].label;
+          console.log(actionTemp);        
+          break;
+        case '0010':
+          actionTemp = actions[Number(`0b${actTemp}`)].label;
+          console.log(actionTemp);
+          break;
+        case '0011':
+          actionTemp = actions[Number(`0b${actTemp}`)].label;
+          console.log(actionTemp);
+          break;
+        case '0100':
+          actionTemp = actions[Number(`0b${actTemp}`)].label;
+          console.log(actionTemp);
+          break;
+        case '0101':
+          actionTemp = actions[Number(`0b${actTemp}`)].label;
+          console.log(actionTemp);
+          break;
+        case '1000':
+          actionTemp = actions[6].label;
+          console.log(actionTemp);
+          break;
+        default:
+          actionTemp = 'Not an action';
+          console.log(actionTemp);
+          break;
+      }
+      actStep = [...actStep, actionTemp];
+      console.log('actStepArray', actStep);
+
+      
+      console.log(actions.findIndex((action) => action.label === 'Set all the flags'));
+
+      if (actStep[index] === actions[6].label) {
+        console.log(actions[6].label);
+        
+      } else {
+        
+      }
+
+
+    } else if (confStep[index] === 'Change Parameter'){
+      
     }
-    // step.forEach((v, i) => {
-    //   console.log('v', v);
-    //   return true;
-    // })
   });
 
-  _steps.forEach((step, index) => {
-  });
-  
+
   // let ans = ii.map((v, i) => {console.log(`_flagSteps${i}`, _flagSteps[`${i}`][`${i}`])});
   // console.log('_flagSteps', _flagSteps[`${ii[0]}`]);
 
