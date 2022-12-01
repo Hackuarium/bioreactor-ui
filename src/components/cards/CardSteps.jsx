@@ -36,25 +36,29 @@ const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for wei
 const CardStatus = ({ title, value, unit, info, steps, className }) => {
 
   console.log("steps", steps);
-
+  
   const [_steps, setSteps] = useState([]);
-
+  
   // change _steps when steps is changed
   useEffect(() => {
     let timeout;
     try {
       // don't execute it on the first render
       // if (_flag) {
-          timeout = setTimeout(() => {
-            let result = [];
-            result = steps.map((step, index) => {
+        timeout = setTimeout(() => {
+          let result = [];
+          result = steps.map((step, index) => {
+            step.value < 0 
+              ?
+              result = [...result, (step.value >>> 0).toString(2).slice(16,32).split('')]
+              :
               result = [...result, Number(step.value | 0)
-              .toString(2)
-              .padStart(16, '0')
-              .split('')];
-              return result[index];
-            });
-            setSteps(_steps => [...result]);
+                .toString(2)
+                .padStart(16, '0')
+                .split('')];
+            return result[index];
+          });
+          setSteps(_steps => [...result]);
           }, COLOR_CHANGED_TIMEOUT);
         // });
       // }
@@ -87,7 +91,6 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
 
 
 
-    // let dataConvert = (data >>> 0).toString(2).slice(16,32);
 
     
 
