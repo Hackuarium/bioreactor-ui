@@ -12,7 +12,7 @@ const config = [0, 1].map((v) => ({
   type: 'option',
 }));
 
-const flags = ['Temperature control', 'Agitation control', 'Food control 1', 'Food control 2', 'Food control 3', 'Food control 4',].map((v, i) => ({
+const flags = ['Temperature control', 'Agitation control', 'Food control 1', 'Food control 2', 'Food control 3', 'Food control 4'].map((v, i) => ({
   label: v,
   value: 2 ** i,
   type: 'option',
@@ -34,6 +34,8 @@ const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for wei
  */
 
 const CardStatus = ({ title, value, unit, info, steps, className }) => {
+
+  console.log("steps", steps);
 
   const [_steps, setSteps] = useState([]);
 
@@ -73,13 +75,25 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
   // Store 16 Steps(16 bits) into: config (1 bit), action (4 bits) and flags (11 bits)
   let confStep = [];
   let actStep = [];
-  let flagStep = '';
+  let flagStep = [];
 
   _steps.map((step, index) => {
     // Check Step parameters
-    let confTemp = step.slice(0, 1).join('');
+    let confTemp = Number(step.slice(0, 1).join(''));
+    console.log('confTemp', confTemp);
     let actTemp = step.slice(1, 5).join('');
     let flagTemp = step.slice(5, 16).join('');
+    console.log("flagTemp", flagTemp);
+
+
+
+    // let dataConvert = (data >>> 0).toString(2).slice(16,32);
+
+    
+
+
+
+
 
     // Set Action/Parameter Array
     // confStep = [...confStep, config[`${step[0]}`].label];
@@ -130,12 +144,30 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
       console.log('actStepArray', actStep);
 
       
-      console.log(actions.findIndex((action) => action.label === 'Set all the flags'));
+      // console.log(actions.findIndex((action) => action.label === 'Set all the flags'));
 
       if (actStep[index] === actions[6].label) {
-        console.log(actions[6].label);
+        // Check Parameter to set
+        let tempFlag = step.slice(5, 16).reverse();
+        console.log("flag without slice", tempFlag);
+        let activeFlag = [];
+        tempFlag.map((flag, index) => {
+          if (index < 6) {
+            let temp = flag === '1' ? activeFlag = [...activeFlag, flags[index].label] : null;
+
+            // activeFlag = [...activeFlag, flags[index && Boolean(flag)].label];
+          }
+          // activeFlag = [...activeFlag, flags[index && Number(flag)].label];
+          return activeFlag;
+        });
+        console.log("activeFlag", activeFlag);
+
+        flagStep = [...flagStep, activeFlag];
+        console.log("flagStep", flagStep);
         
       } else {
+        let tempFlag = Number(`0b${step.slice(5, 16).join('')}`);
+        console.log("tempFlagPAram", tempFlag);
         
       }
 
