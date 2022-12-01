@@ -81,13 +81,15 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
   let actStep = [];
   let flagStep = [];
 
+  let flagStep2 = new Array(16).fill(0);
+
   _steps.map((step, index) => {
     // Check Step parameters
     let confTemp = Number(step.slice(0, 1).join(''));
-    console.log('confTemp', confTemp);
+    // console.log('confTemp', confTemp);
     let actTemp = step.slice(1, 5).join('');
     let flagTemp = step.slice(5, 16).join('');
-    console.log("flagTemp", flagTemp);
+    // console.log("flagTemp", flagTemp);
 
 
 
@@ -154,9 +156,9 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
         let tempFlag = step.slice(5, 16).reverse();
         console.log("flag without slice", tempFlag);
         let activeFlag = [];
-        tempFlag.map((flag, index) => {
-          if (index < 6) {
-            let temp = flag === '1' ? activeFlag = [...activeFlag, flags[index].label] : null;
+        tempFlag.map((flag, indexFlag) => {
+          if (indexFlag < 6) {
+            let temp = flag === '1' ? activeFlag = [...activeFlag, flags[indexFlag].label] : null;
 
             // activeFlag = [...activeFlag, flags[index && Boolean(flag)].label];
           }
@@ -167,6 +169,8 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
 
         flagStep = [...flagStep, activeFlag];
         console.log("flagStep", flagStep);
+        flagStep2[index] = [activeFlag];
+        console.log("flagStep2", flagStep2);
         
       } else {
         let tempFlag = Number(`0b${step.slice(5, 16).join('')}`);
