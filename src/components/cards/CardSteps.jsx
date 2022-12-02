@@ -91,15 +91,6 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
     let flagTemp = step.slice(5, 16).join('');
     // console.log("flagTemp", flagTemp);
 
-
-
-
-    
-
-
-
-
-
     // Set Action/Parameter Array
     // confStep = [...confStep, config[`${step[0]}`].label];
     confStep = [...confStep, config[`${confTemp}`].label];
@@ -151,11 +142,11 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
       
       // console.log(actions.findIndex((action) => action.label === 'Set all the flags'));
 
+      let activeFlag = [];
       if (actStep[index] === actions[6].label) {
         // Check Parameter to set
         let tempFlag = step.slice(5, 16).reverse();
         console.log("flag without slice", tempFlag);
-        let activeFlag = [];
         tempFlag.map((flag, indexFlag) => {
           if (indexFlag < 6) {
             let temp = flag === '1' ? activeFlag = [...activeFlag, flags[indexFlag].label] : null;
@@ -166,23 +157,37 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
           return activeFlag;
         });
         console.log("activeFlag", activeFlag);
-
         flagStep = [...flagStep, activeFlag];
         console.log("flagStep", flagStep);
-        flagStep2[index] = [activeFlag];
-        console.log("flagStep2", flagStep2);
         
       } else {
-        let tempFlag = Number(`0b${step.slice(5, 16).join('')}`);
-        console.log("tempFlagPAram", tempFlag);
-        
+        activeFlag = [...activeFlag, Number(`0b${step.slice(5, 16).join('')}`)];
+        console.log("tempFlagPAram", activeFlag);
       }
+      flagStep2[index] = [activeFlag];
+      console.log("flagStep2", flagStep2);
 
 
     } else if (confStep[index] === 'Change Parameter'){
-      
+      let tempFlag = [];
+      switch (actTemp) {
+        case '0000':
+          actStep[index] = 'Temperature';
+          tempFlag = [...tempFlag, Number(`0b${step.slice(5, 16).join('')}`)];
+          // tempFlag = Number(`0b${step.slice(5, 16).join('')}`);
+          break;
+        default:
+          actStep[index] = 'Not a parameter';
+          tempFlag = [...tempFlag, 'Not a parameter'];
+          break;
+      }
+      console.log("tempFlagPAram for Change Parameter", tempFlag);
+      flagStep2[index] = [tempFlag];
+      console.log("flagStep2 for CP", flagStep2);
     }
   });
+
+  console.log("flagStep2", flagStep2[0]);
 
 
   // let ans = ii.map((v, i) => {console.log(`_flagSteps${i}`, _flagSteps[`${i}`][`${i}`])});
@@ -210,7 +215,24 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
             </div>
           )}
         </div>
-        
+        <div>
+        </div>
+        {confStep.map((step, index) => (
+          <div className="w-full mt-2 flex flex-row justify-center sm:justify-end items-center">
+            <p>
+              Step: {index+1}: {step}: 
+            </p>
+            <p>
+              {actStep[index]}: 
+            </p>
+            {flagStep2[index].map((flag, indexFlag) => (
+              <p>
+                {`${flag}, `}  
+              </p>
+            ))}
+          </div>
+          )
+        )}
       </div>
     </div>
   );
