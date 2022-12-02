@@ -167,7 +167,6 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
       flagStep2[index] = [activeFlag];
       console.log("flagStep2", flagStep2);
 
-
     } else if (confStep[index] === 'Change Parameter'){
       let tempFlag = [];
       switch (actTemp) {
@@ -195,7 +194,7 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
 
   return (
     <div className={clsx('flex', className)}>
-      <div className="w-full m-2 p-2 flex flex-col justify-between items-center sm:items-start rounded-md bg-blue-gray-100 shadow-md">
+      <div className="w-3/4 m-2 p-2 flex flex-col justify-between items-center sm:items-start rounded-md bg-blue-gray-100 shadow-md">
         <div className="w-full py-1 flex flex-row justify-between items-start relative">
           <h3 className='text-sm font-medium text-neutral-700'>
             {title}</h3>
@@ -217,7 +216,41 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
         </div>
         <div>
         </div>
-        {confStep.map((step, index) => (
+        <table>
+          <thead>
+            <tr className='text-left'>
+              <th className="lg:w-1/6">Step</th>
+              <th className="lg:w-1/4">Action/Set</th>
+              <th className="lg:w-1/4">Description</th>
+              <th className="lg:w-1/3">Parameter/Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {confStep.map((step, index) => {
+              let classTemp = '';
+              Number(flagStep2[index][0]) === 0 ? classTemp = 'text-gray-600' : classTemp = 'text-warning-600';
+              value === index ? classTemp = 'text-success-600' : classTemp = classTemp;
+              return (
+                <tr className={classTemp}>
+                  <td>
+                    {index+1} 
+                  </td>
+                  <td>
+                    {step}
+                  </td>
+                  <td>
+                    {actStep[index]}
+                  </td>
+                  <td>
+                  {flagStep2[index].join(`, `)}
+                  </td>
+                </tr>
+              )
+            }
+          )}
+          </tbody>
+        </table>
+        {/* {confStep.map((step, index) => (
           <div className="w-full mt-2 flex flex-row justify-center sm:justify-end items-center">
             <p>
               Step: {index+1}: {step}: 
@@ -227,12 +260,12 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
             </p>
             {flagStep2[index].map((flag, indexFlag) => (
               <p>
-                {`${flag}, `}  
+                {`${flag}, `}<br />  
               </p>
             ))}
           </div>
           )
-        )}
+        )} */}
       </div>
     </div>
   );

@@ -73,7 +73,7 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
 
   return (
     <div className={clsx('flex', className)}>
-      <div className="w-full m-2 p-2 flex flex-col justify-between items-center sm:items-start rounded-md bg-blue-gray-100 shadow-md">
+      <div className="w-full m-2 p-2 flex flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
         <div className="w-full py-1 flex flex-row justify-between items-start relative">
           <h3 className='text-sm font-medium text-neutral-700'>
             {title}</h3>
@@ -94,20 +94,18 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
           )}
         </div>
         {result.map((item, index) => {
-          
           return (
-          <div className="w-full mt-2 flex flex-row justify-between sm:justify-end items-center">
+          <div className="w-full mt-2 flex flex-row justify-between sm:justify-end items-left">
             <p
               className={clsx(
-                'text-xl text-neutral-800',
-                _flagCheck[index] === '0' && 'text-success-600',
-                _flagCheck[index] === '1' && 'text-danger-600',
+                'text-md text-neutral-600',
+                _flagCheck[index] === '0' && 'text-danger-600',
+                _flagCheck[index] === '1' && 'text-gray-600',
               )}
             >
               {flags[index]}
               {/* {prevFlagMessage[index]} */}
             </p>
-            <p className="ml-1 text-sm font-medium text-gray-500">{unit}</p>
           </div>
           )
         }

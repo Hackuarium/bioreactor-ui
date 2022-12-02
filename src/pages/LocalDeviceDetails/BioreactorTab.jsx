@@ -56,6 +56,7 @@ const BioreactorTab = ({ data }) => {
         </p>
       )}
       <div className=" flex flex-row justify-around flex-wrap">
+        {/* Display Error Detector */}
         <CardValue
           key={errorParameter.index}
           title={errorParameter.name || errorParameter.label}
@@ -68,26 +69,7 @@ const BioreactorTab = ({ data }) => {
       </div>
       <div className=" flex flex-row justify-around flex-wrap">
         <div className=" flex flex-row justify-around flex-wrap">
-          <CardParams
-            key={statusParameter.index}
-            title={statusParameter.name || statusParameter.label}
-            value={statusParameter.value * statusParameter.factor}
-            unit={statusParameter.unit}
-            info={statusParameter.description}
-            flags={statusParameter.flags}
-            className="w-full sm:w-1/2  md:w-1/4 lg:w-full flex"
-          />
-        </div>
-        <div className=" flex flex-row justify-around flex-wrap">
-          <CardParams
-            key={errorParameter.index}
-            title={errorParameter.name || errorParameter.label}
-            value={errorParameter.value * errorParameter.factor}
-            unit={errorParameter.unit}
-            info={errorParameter.description}
-            flags={errorParameter.flags}
-            className="w-full sm:w-1/2  md:w-1/4 lg:w-full flex"
-          />
+          {/* Display Current Steps */}
           <CardSteps
             key={stepParameter.index}
             title={stepParameter.name || stepParameter.label}
@@ -96,6 +78,30 @@ const BioreactorTab = ({ data }) => {
             info={stepParameter.description}
             steps={stepsParameters}
             className="w-full sm:w-1/2  md:w-1/4 lg:w-full flex"
+          />
+        </div>
+        <div className=" flex flex-row justify-around flex-wrap">
+          {/* Display Status */}
+          <CardParams
+            key={statusParameter.index}
+            title={statusParameter.name || statusParameter.label}
+            value={statusParameter.value * statusParameter.factor}
+            unit={statusParameter.unit}
+            info={statusParameter.description}
+            flags={statusParameter.flags}
+            className="w-full sm:w-1/2 md:w-1/4 lg:w-full flex"
+          />
+        </div>
+        <div className=" flex flex-row lg:w-1/3 justify-around flex-wrap">
+          {/* Display Errors */}
+          <CardParams
+            key={errorParameter.index}
+            title={errorParameter.name || errorParameter.label}
+            value={errorParameter.value * errorParameter.factor}
+            unit={errorParameter.unit}
+            info={errorParameter.description}
+            flags={errorParameter.flags}
+            className="w-full sm:w-1/2 md:w-1/4 lg:w-3/4 flex"
           />
         </div>
       </div>
