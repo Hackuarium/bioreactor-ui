@@ -214,15 +214,13 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
             </div>
           )}
         </div>
-        <div>
-        </div>
-        <table>
+        <table className='table-auto'>
           <thead>
-            <tr className='text-left'>
-              <th className="lg:w-1/6">Step</th>
-              <th className="lg:w-1/4">Action/Set</th>
-              <th className="lg:w-1/4">Description</th>
-              <th className="lg:w-1/3">Parameter/Value</th>
+            <tr>
+              <th>Step</th>
+              <th>Action/Set</th>
+              <th>Description</th>
+              <th>Parameter/Value</th>
             </tr>
           </thead>
           <tbody>

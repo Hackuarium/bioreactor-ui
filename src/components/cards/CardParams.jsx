@@ -45,7 +45,7 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
   .split('')
   .reverse();
   
-  console.log('result', result);
+  console.log(`result ${flagSize}`, result);
   
   const [_flagCheck, setFlagCheck] = useState(result);
 
@@ -93,23 +93,35 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
             </div>
           )}
         </div>
-        {result.map((item, index) => {
-          return (
+        <ul className="list-disc">
           <div className="w-full mt-2 flex flex-row justify-between sm:justify-end items-left">
-            <p
-              className={clsx(
-                'text-md text-neutral-600',
-                _flagCheck[index] === '0' && 'text-danger-600',
-                _flagCheck[index] === '1' && 'text-gray-600',
-              )}
-            >
-              {flags[index]}
-              {/* {prevFlagMessage[index]} */}
-            </p>
+            {result.map((item, index) => {
+              if (_flagCheck[index] === '0') {
+                return (
+                    <li
+                    className={clsx(
+                      'text-md text-neutral-600',
+                      'text-gray-600',
+                    )}>
+                      {flags[index]}
+                    </li>
+                  );
+              } else {
+                return (
+
+                    <li
+                    className={clsx(
+                      'text-md text-neutral-600',
+                      'text-danger-600',
+                    )}>
+                      {flags[index]}
+                    </li>
+                  );
+              }
+            }
+            )}
           </div>
-          )
-        }
-        )}
+        </ul>
       </div>
     </div>
   );
