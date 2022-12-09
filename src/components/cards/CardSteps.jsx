@@ -194,7 +194,7 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
 
   return (
     <div className={clsx('flex', className)}>
-      <div className="w-3/4 m-2 p-2 flex flex-col justify-between items-center sm:items-start rounded-md bg-blue-gray-100 shadow-md">
+      <div className="m-2 p-2 flex flex-col justify-between items-center sm:items-start rounded-md bg-blue-gray-100 shadow-md">
         <div className="w-full py-1 flex flex-row justify-between items-start relative">
           <h3 className='text-sm font-medium text-neutral-700'>
             {title}</h3>

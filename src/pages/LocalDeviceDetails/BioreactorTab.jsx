@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
-import { CardValue, CardParams, CardSteps} from '../../components';
+import { CardValue, CardParams, CardSteps } from '../../components';
 import { msToTime } from '../../services/util';
 
 const COLOR_CHANGED_TIMEOUT = 700;
@@ -75,11 +75,11 @@ const BioreactorTab = ({ data }) => {
           value={errorParameter.value * errorParameter.factor}
           unit={errorParameter.unit}
           info={errorParameter.description}
-          className="w-full sm:w-1/2  md:w-1/5 lg:w-full flex"
+          className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
           errorParameter={color}
         />
       </div>
-      <div className=" flex flex-row justify-around flex-wrap self-end">
+      <div className="flex flex-row justify-around flex-wrap">
         {/* Display Errors */}
         <CardParams
           key={errorParameter.index}
@@ -91,7 +91,7 @@ const BioreactorTab = ({ data }) => {
           className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
         />
       </div>
-      <div className="flex flex-col justify-around flex-wrap">
+      <div className="flex flex-row justify-around flex-wrap">
         {/* Display Current Steps */}
         <CardSteps
           key={stepParameter.index}

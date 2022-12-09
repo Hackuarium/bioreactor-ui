@@ -93,10 +93,11 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
             </div>
           )}
         </div>
-        <ul className="list-disc">
+        <ul className="list-inside list-disc">
           <div className="w-full mt-2 flex flex-row justify-between sm:justify-end items-left">
             {result.map((item, index) => {
               if (_flagCheck[index] === '0') {
+                if (title !== 'Error')
                 return (
                     <li
                     className={clsx(
@@ -108,7 +109,6 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
                   );
               } else {
                 return (
-
                     <li
                     className={clsx(
                       'text-md text-neutral-600',
