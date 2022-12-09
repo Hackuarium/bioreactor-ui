@@ -67,18 +67,6 @@ const BioreactorTab = ({ data }) => {
           className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
         />
       </div>
-      <div className=" flex flex-row justify-around flex-wrap">
-        {/* Display Error Detector */}
-        <CardValue
-          key={errorParameter.index}
-          title={errorParameter.name || errorParameter.label}
-          value={errorParameter.value * errorParameter.factor}
-          unit={errorParameter.unit}
-          info={errorParameter.description}
-          className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
-          errorParameter={color}
-        />
-      </div>
       <div className="flex flex-row justify-around flex-wrap">
         {/* Display Errors */}
         <CardParams
@@ -89,6 +77,7 @@ const BioreactorTab = ({ data }) => {
           info={errorParameter.description}
           flags={errorParameter.flags}
           className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
+          parameter={color}
         />
       </div>
       <div className="flex flex-row justify-around flex-wrap">
@@ -100,7 +89,7 @@ const BioreactorTab = ({ data }) => {
           unit={stepParameter.unit}
           info={stepParameter.description}
           steps={stepsParameters}
-          className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
+          className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
         />
       </div>
     </div>

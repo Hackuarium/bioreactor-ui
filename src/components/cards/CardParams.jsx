@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
 import { useEffect } from 'react';
 
-const COLOR_CHANGED_TIMEOUT = 1000;
+const COLOR_CHANGED_TIMEOUT = 700;
 
 /**
  *
@@ -15,7 +15,34 @@ const COLOR_CHANGED_TIMEOUT = 1000;
  * @param {string} className
  */
 
-const CardStatus = ({ title, value, unit, info, flags, className }) => {
+const TableSteps = ({ title, stepBit, stepFlag }) => {
+  console.log('stepBit', stepBit);
+  if (stepBit === '0') {
+    if (title !== 'Error') {
+      return (
+          <li className={clsx(
+            'text-md text-neutral-600',
+            'text-gray-600',
+          )}>
+            {stepFlag}
+          </li>
+        );
+    } else {
+      return null;
+    }
+  } else {
+    return (
+        <li className={clsx(
+          'text-md text-neutral-600',
+          'text-danger-600',
+        )}>
+          {stepFlag}
+        </li>
+      );
+  }
+}
+
+const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 }) => {
 
   const [_flag, setFlag] = useState(false);
 
@@ -71,12 +98,51 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
 
   console.log('checkFlag', _flagCheck);
 
+  // const stepTable = result.map((item, index) => {
+  //   // console.log('IN');
+  //   <TableSteps key={flags[index]} title={title} stepBit={item} stepFlag={flags[index]} />
+  //   });
+
+  const stepTable = result.map((item, index) => {
+    if (item === '0') {
+      if (title !== 'Error') {
+        return (
+            <li key={flags[index]}
+            className={clsx(
+              'text-md text-neutral-600',
+              'text-gray-600',
+            )}>
+              {flags[index]}
+            </li>
+          );
+      } else {
+        return null;
+      }
+    } else {
+      return (
+          <li key={flags[index]}
+          className={clsx(
+            'text-md text-neutral-600',
+            parameter !== 0 && 'text-danger-600',
+            title === 'Status' && 'text-success-600',
+
+          )}>
+            {flags[index]}
+          </li>
+        );
+    }
+  }
+  );
+
   return (
     <div className={clsx('flex', className)}>
       <div className="w-full m-2 p-2 flex flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
         <div className="w-full py-1 flex flex-row justify-between items-start relative">
-          <h3 className='text-sm font-medium text-neutral-700'>
-            {title}</h3>
+          <h3 className={clsx('text-sm font-medium text-neutral-700',
+            parameter > 0 && 'text-success-700',
+            parameter < 0 && 'text-danger-700',
+            parameter !== 0 && 'text-danger-700')}>
+            {title}: {value}</h3>
           {info && (
             <div className=" group">
               <InfoIcon
@@ -88,39 +154,15 @@ const CardStatus = ({ title, value, unit, info, flags, className }) => {
                 className="absolute bottom-full right-0 hidden group-hover:flex z-10 p-1 bg-neutral-50 shadow-md rounded"
                 max-content={100}
               >
-                <span className=" text-xs text-neutral-400 ">{info}</span>
+                <span className="text-xs text-neutral-400 ">{info}</span>
               </div>
             </div>
           )}
         </div>
         <ul className="list-inside list-disc">
-          <div className="w-full mt-2 flex flex-row justify-between sm:justify-end items-left">
-            {result.map((item, index) => {
-              if (_flagCheck[index] === '0') {
-                if (title !== 'Error')
-                return (
-                    <li
-                    className={clsx(
-                      'text-md text-neutral-600',
-                      'text-gray-600',
-                    )}>
-                      {flags[index]}
-                    </li>
-                  );
-              } else {
-                return (
-                    <li
-                    className={clsx(
-                      'text-md text-neutral-600',
-                      'text-danger-600',
-                    )}>
-                      {flags[index]}
-                    </li>
-                  );
-              }
-            }
-            )}
-          </div>
+          <div className="fw-full mt-2 flex flex-row justify-between sm:justify-end">
+              {stepTable}
+            </div>
         </ul>
       </div>
     </div>

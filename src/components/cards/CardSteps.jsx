@@ -188,9 +188,27 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
 
   console.log("flagStep2", flagStep2[0]);
 
-
-  // let ans = ii.map((v, i) => {console.log(`_flagSteps${i}`, _flagSteps[`${i}`][`${i}`])});
-  // console.log('_flagSteps', _flagSteps[`${ii[0]}`]);
+  const handleTable = confStep.map((step, index) => {
+    let classTemp = '';
+    Number(flagStep2[index][0]) === 0 ? classTemp = 'text-gray-600' : classTemp = 'text-warning-600';
+    if (value === index) classTemp = 'text-success-600';
+    return (
+      <tr className={classTemp}>
+        <td>
+          {index+1} 
+        </td>
+        <td>
+          {step}
+        </td>
+        <td>
+          {actStep[index]}
+        </td>
+        <td>
+        {flagStep2[index].join(`, `)}
+        </td>
+      </tr>
+    );
+  });
 
   return (
     <div className={clsx('flex', className)}>
@@ -224,46 +242,9 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
             </tr>
           </thead>
           <tbody>
-            {confStep.map((step, index) => {
-              let classTemp = '';
-              Number(flagStep2[index][0]) === 0 ? classTemp = 'text-gray-600' : classTemp = 'text-warning-600';
-              if (value === index) classTemp = 'text-success-600';
-              return (
-                <tr className={classTemp}>
-                  <td>
-                    {index+1} 
-                  </td>
-                  <td>
-                    {step}
-                  </td>
-                  <td>
-                    {actStep[index]}
-                  </td>
-                  <td>
-                  {flagStep2[index].join(`, `)}
-                  </td>
-                </tr>
-              )
-            }
-          )}
+            {handleTable}
           </tbody>
         </table>
-        {/* {confStep.map((step, index) => (
-          <div className="w-full mt-2 flex flex-row justify-center sm:justify-end items-center">
-            <p>
-              Step: {index+1}: {step}: 
-            </p>
-            <p>
-              {actStep[index]}: 
-            </p>
-            {flagStep2[index].map((flag, indexFlag) => (
-              <p>
-                {`${flag}, `}<br />  
-              </p>
-            ))}
-          </div>
-          )
-        )} */}
       </div>
     </div>
   );
