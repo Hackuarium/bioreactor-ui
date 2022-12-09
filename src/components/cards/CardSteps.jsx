@@ -149,7 +149,7 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
         console.log("flag without slice", tempFlag);
         tempFlag.map((flag, indexFlag) => {
           if (indexFlag < 6) {
-            let temp = flag === '1' ? activeFlag = [...activeFlag, flags[indexFlag].label] : null;
+            if (flag === '1') activeFlag = [...activeFlag, flags[indexFlag].label];
 
             // activeFlag = [...activeFlag, flags[index && Boolean(flag)].label];
           }
@@ -227,7 +227,7 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
             {confStep.map((step, index) => {
               let classTemp = '';
               Number(flagStep2[index][0]) === 0 ? classTemp = 'text-gray-600' : classTemp = 'text-warning-600';
-              value === index ? classTemp = 'text-success-600' : classTemp = classTemp;
+              if (value === index) classTemp = 'text-success-600';
               return (
                 <tr className={classTemp}>
                   <td>
