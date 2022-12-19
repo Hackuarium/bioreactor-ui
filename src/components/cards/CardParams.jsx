@@ -15,31 +15,48 @@ const COLOR_CHANGED_TIMEOUT = 700;
  * @param {string} className
  */
 
-const TableSteps = ({ title, stepBit, stepFlag }) => {
-  console.log('stepBit', stepBit);
-  if (stepBit === '0') {
-    if (title !== 'Error') {
+const TableSteps = ({ title, result, flags, parameter }) => {
+
+  console.log('result in TableSteps', result);
+  
+  // const [option, setOption] = useState([]);
+
+  const checkOption = result.map((item, index) => {
+    if (item === '0') {
+      if (title !== 'Error') {
+        return (
+            <li key={flags[index]}
+            className={clsx(
+              'text-md text-neutral-600',
+              'text-gray-600',
+            )}>
+              {flags[index]}
+            </li>
+          );
+      } else {
+        return null;
+      }
+    } else {
       return (
-          <li className={clsx(
+          <li key={flags[index]}
+          className={clsx(
             'text-md text-neutral-600',
-            'text-gray-600',
+            parameter !== 0 && 'text-danger-600',
+            title === 'Status' && 'text-success-600',
           )}>
-            {stepFlag}
+            {flags[index]}
           </li>
         );
-    } else {
-      return null;
     }
-  } else {
-    return (
-        <li className={clsx(
-          'text-md text-neutral-600',
-          'text-danger-600',
-        )}>
-          {stepFlag}
-        </li>
-      );
   }
+  );
+
+  // const check = checkOption !== option ? setOption(checkOption) : null;
+  // setOption(checkOption);
+
+  // setOption(checkValues);
+
+  return checkOption;
 }
 
 const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 }) => {
@@ -161,7 +178,8 @@ const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 })
         </div>
         <ul className="list-inside list-disc">
           <div className="fw-full mt-2 flex flex-row justify-between sm:justify-end">
-              {stepTable}
+              {/* {stepTable} */}
+              <TableSteps title={title} result={result} flags={flags} parameter={parameter} />
             </div>
         </ul>
       </div>
