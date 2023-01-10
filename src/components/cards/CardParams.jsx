@@ -27,7 +27,7 @@ const TableSteps = ({ title, result, flags, parameter }) => {
         return (
             <li key={flags[index]}
             className={clsx(
-              'text-md text-neutral-600',
+              'text-sm text-neutral-600',
               'text-gray-600',
             )}>
               {flags[index]}
@@ -40,11 +40,11 @@ const TableSteps = ({ title, result, flags, parameter }) => {
       return (
           <li key={flags[index]}
           className={clsx(
-            'text-md text-neutral-600',
+            'text-sm text-neutral-600',
             parameter !== 0 && 'text-danger-600',
             title === 'Status' && 'text-success-600',
           )}>
-            {flags[index]}
+            <b>{flags[index]}</b>
           </li>
         );
     }
@@ -57,11 +57,15 @@ const TableSteps = ({ title, result, flags, parameter }) => {
   // setOption(checkValues);
 
   return checkOption;
+  // console.log('option', option);
+  // return option;
 }
 
 const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 }) => {
 
   const [_flag, setFlag] = useState(false);
+
+  const [option, setOption] = useState([]);
 
   console.log('value', value);
   
@@ -179,7 +183,7 @@ const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 })
         <ul className="list-inside list-disc">
           <div className="fw-full mt-2 flex flex-row justify-between sm:justify-end">
               {/* {stepTable} */}
-              <TableSteps title={title} result={result} flags={flags} parameter={parameter} />
+              <TableSteps setOption={setOption} title={title} result={result} flags={flags} parameter={parameter} />
             </div>
         </ul>
       </div>
