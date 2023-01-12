@@ -40,6 +40,10 @@ const LocalDevices = ({ match, history }) => {
   const [currentData, setCurrentData] = useState({}); // data to display
   const [refreshInterval, setRefreshInterval] = useState(2000);
 
+  const [statusParameter, setStatusParameter] = useState([]);
+  const [errorParameter, setErrorParameter] = useState([]);
+  const [stepParameter, setStepParameter] = useState([]);
+
   const { addWarningNotification } = useNotification();
 
   // get device from DB just in the first render
@@ -73,6 +77,9 @@ const LocalDevices = ({ match, history }) => {
           });
           setCurrentData(results);  // Update current data on-line
           saveDataRow(currentDevice._id, results);
+          setStatusParameter(results.parametersArray?.find(param => param.name === 'Status'));
+          setErrorParameter(results.parametersArray?.find(param => param.name === 'Error'));
+          setStepParameter(results.parametersArray?.find(param => param.name === 'Current step'));
         } catch (e) {
           //  console.log(e.message);
         }
@@ -82,6 +89,9 @@ const LocalDevices = ({ match, history }) => {
           console.log(row);
           if (row.length > 0) {
             setCurrentData(row[0]);
+            setStatusParameter(row[0].parametersArray?.find(param => param.name === 'Status'));
+            setErrorParameter(row[0].parametersArray?.find(param => param.name === 'Error'));
+            setStepParameter(row[0].parametersArray?.find(param => param.name === 'Current step'));
           }
         });
       }
@@ -171,6 +181,7 @@ const LocalDevices = ({ match, history }) => {
           // console.log(currentData);
           // console.log(currentDevice);
           return <BioreactorTab data={currentData} />;
+          // return <BioreactorTab statusParameter={statusParameter} errorParameter={errorParameter} stepParameter={stepParameter} />;
       default:
         return <div />;
     }

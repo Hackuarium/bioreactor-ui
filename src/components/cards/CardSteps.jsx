@@ -33,7 +33,7 @@ const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for wei
  * @param {string} className
  */
 
-const CardStatus = ({ title, value, unit, info, steps, className }) => {
+const CardSteps = ({ title, value, unit, info, steps, className }) => {
 
   console.log("steps", steps);
   
@@ -250,4 +250,4 @@ const CardStatus = ({ title, value, unit, info, steps, className }) => {
   );
 };
 
-export default CardStatus;
+export default CardSteps;

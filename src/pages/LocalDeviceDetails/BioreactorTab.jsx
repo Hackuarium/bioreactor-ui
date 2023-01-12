@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect, memo, useMemo, useReducer } from 'react';
 
 import { CardValue, CardParams, CardSteps } from '../../components';
 import { msToTime } from '../../services/util';
 
 const COLOR_CHANGED_TIMEOUT = 700;
 
+
+const setStatus = data => {
+  console.log('Check status');
+  return data.parametersArray?.find(param => param.name === 'Status');
+}
+
 const BioreactorTab = ({ data }) => {
   const [_value, setValue] = useState('');
   const [color, setColor] = useState(0);
-  // const [errorParameter, setErrorParameter] = useState(0);	
 
-  let errorParameter = data?.parametersArray?.find(param => param.name === 'Error');
-  let statusParameter = data?.parametersArray?.find(param => param.name === 'Status');
+  console.log('BioreactorTab');
+
+  const [statusParameter, setStatusParameter] = useState(data.parametersArray?.find(param => param.name === 'Status'));
+  // const statusParameter = useMemo(() => setStatus(data), [data]);
+  const [errorParameter, setErrorParameter] = useState(data.parametersArray?.find(param => param.name === 'Error'));
+
+  // useEffect(() => {
+  //   console.log('status', status);
+  //   setStatusParameter(status);
+  //   // setErrorParameter(data.parametersArray?.find(param => param.name === 'Error'));
+  // }, [status]);
+
+  // let statusParameter = data?.parametersArray?.find(param => param.name === 'Status');
+
+  // let errorParameter = data?.parametersArray?.find(param => param.name === 'Error');
 
   let stepParameter = data?.parametersArray?.find(param => param.name === 'Current step');
 
@@ -77,7 +94,7 @@ const BioreactorTab = ({ data }) => {
           info={errorParameter.description}
           flags={errorParameter.flags}
           className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
-          parameter={color}
+          color={color}
         />
       </div>
       <div className="flex flex-row justify-around flex-wrap">
@@ -96,4 +113,4 @@ const BioreactorTab = ({ data }) => {
   );
 };
 
-export default BioreactorTab;
+export default memo(BioreactorTab);

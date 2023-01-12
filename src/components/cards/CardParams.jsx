@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import clsx from 'clsx';
 
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
@@ -15,7 +15,7 @@ const COLOR_CHANGED_TIMEOUT = 700;
  * @param {string} className
  */
 
-const TableSteps = ({ title, result, flags, parameter }) => {
+const TableSteps = ({ title, result, flags, color }) => {
 
   console.log('result in TableSteps', result);
   
@@ -41,7 +41,7 @@ const TableSteps = ({ title, result, flags, parameter }) => {
           <li key={flags[index]}
           className={clsx(
             'text-sm text-neutral-600',
-            parameter !== 0 && 'text-danger-600',
+            color !== 0 && 'text-danger-600',
             title === 'Status' && 'text-success-600',
           )}>
             <b>{flags[index]}</b>
@@ -61,7 +61,7 @@ const TableSteps = ({ title, result, flags, parameter }) => {
   // return option;
 }
 
-const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 }) => {
+const CardParams = ({ title, value, info, flags, className, color=0 }) => {
 
   const [_flag, setFlag] = useState(false);
 
@@ -144,7 +144,7 @@ const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 })
           <li key={flags[index]}
           className={clsx(
             'text-md text-neutral-600',
-            parameter !== 0 && 'text-danger-600',
+            color !== 0 && 'text-danger-600',
             title === 'Status' && 'text-success-600',
 
           )}>
@@ -160,9 +160,9 @@ const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 })
       <div className="w-full m-2 p-2 flex flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
         <div className="w-full py-1 flex flex-row justify-between items-start relative">
           <h3 className={clsx('text-sm font-medium text-neutral-700',
-            parameter > 0 && 'text-success-700',
-            parameter < 0 && 'text-danger-700',
-            parameter !== 0 && 'text-danger-700')}>
+            color > 0 && 'text-success-700',
+            color < 0 && 'text-danger-700',
+            color !== 0 && 'text-danger-700')}>
             {title}: {value}</h3>
           {info && (
             <div className=" group">
@@ -183,7 +183,7 @@ const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 })
         <ul className="list-inside list-disc">
           <div className="fw-full mt-2 flex flex-row justify-between sm:justify-end">
               {/* {stepTable} */}
-              <TableSteps setOption={setOption} title={title} result={result} flags={flags} parameter={parameter} />
+              <TableSteps setOption={setOption} title={title} result={result} flags={flags} color={color} />
             </div>
         </ul>
       </div>
@@ -191,4 +191,4 @@ const CardStatus = ({ title, value, unit, info, flags, className, parameter=0 })
   );
 };
 
-export default CardStatus;
+export default memo(CardParams);
