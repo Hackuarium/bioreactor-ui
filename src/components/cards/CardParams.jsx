@@ -62,38 +62,58 @@ const TableSteps = ({ title, result, flags, color }) => {
 }
 
 const CardParams = ({ title, value, info, flags, className, color=0 }) => {
-
   const [_flag, setFlag] = useState(false);
 
   const [option, setOption] = useState([]);
 
   console.log('value', value);
+  console.log('value 2', Number(value | 0).toString(2));
   
   let flagSize = 0;
   switch (title) {
     case 'Status':
-      flagSize = 14;      
+      flagSize = 14;
       break;
     case 'Enable':
       flagSize = 8;
       break;
     case 'Error':
       flagSize = 8;
-      break;  
+      break;
     default:
       break;
   }
 
+  let result;
+  Math.sign(value) === 1 
+    ? 
+    result = Number(value | 0)
+      .toString(2)
+      .padStart(flagSize, '0')
+      .split('')
+      .reverse()
+    :
+    result = Number(value | 0)
+      .toString(2)
+      .substring(1)
+      .padStart(flagSize, '0')
+      .split('')
+      .reverse();
 
-  console.log('value size', Number(value | 0).length);
+  console.log('value 3', result);
 
-  let result = Number(value | 0)
-  .toString(2)
-  .padStart(flagSize, '0')
-  .split('')
-  .reverse();
+        
+  console.log('value size', Number(value | 0).toString(2).length);
+  console.log('value 3', Number(value | 0).toString(2).padStart(flagSize, '0'));
+  console.log(flagSize);
+
+  // let result = Number(value | 0)
+  // .toString(2)
+  // .padStart(flagSize, '0')
+  // .split('')
+  // .reverse();
   
-  console.log(`result ${flagSize}`, result);
+  // console.log(`result ${flagSize}`, result);
   
   const [_flagCheck, setFlagCheck] = useState(result);
 
@@ -105,7 +125,7 @@ const CardParams = ({ title, value, info, flags, className, color=0 }) => {
       if (_flag) {
           timeout = setTimeout(() => {
             // setFlagCheck(_flagCheck => checkChange.map((v, i) => v === _flagCheck[i] ? '0' : '1'));
-            setFlagCheck(_flagCheck => [...result]);
+            setFlagCheck([...result]);
           }, COLOR_CHANGED_TIMEOUT);
         // });
       }
@@ -117,7 +137,7 @@ const CardParams = ({ title, value, info, flags, className, color=0 }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  console.log('checkFlag', _flagCheck);
+  // console.log('checkFlag', _flagCheck);
 
   // const stepTable = result.map((item, index) => {
   //   // console.log('IN');
