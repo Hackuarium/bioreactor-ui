@@ -85,7 +85,7 @@ const CardParams = ({ title, value, info, flags, className, color=0 }) => {
   }
 
   let result;
-  Math.sign(value) === 1 
+  Math.sign(value) === 1 && flagSize === 8
     ? 
     result = Number(value | 0)
       .toString(2)
