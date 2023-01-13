@@ -7,8 +7,6 @@ import { useEffect } from 'react';
 import { useContext } from 'react';
 import { StatusParameterContext } from '../../pages/LocalDeviceDetails/Contexts';
 
-const COLOR_CHANGED_TIMEOUT = 700;
-
 /**
  *
  * @param {string} title
@@ -19,10 +17,6 @@ const COLOR_CHANGED_TIMEOUT = 700;
  */
 
 const TableSteps = ({ result, flags }) => {
-
-  console.log('result in TableSteps', result);
-  
-  // const [option, setOption] = useState([]);
 
   const checkOption = result.map((item, index) => {
     if (item === '0') {
@@ -58,7 +52,7 @@ const CardStatus = () => {
   console.log('statusParameter', statusParameter);
   
   let flagSize = 14;
-  
+
   let result;
   Math.sign(statusParameter.value) === 1
     ? 

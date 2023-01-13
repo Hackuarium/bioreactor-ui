@@ -16,7 +16,6 @@ const BioreactorTab = ({ data }) => {
   console.log('Z value', data.parametersArray?.find(param => param.label === 'Z').value);
   console.log('AZ value', data.parametersArray?.find(param => param.label === 'AZ').value);
 
-  // const statusParameter = useMemo(() => setStatus(data), [data]);
   const [errorParameter, setErrorParameter] = useState(data.parametersArray?.find(param => param.name === 'Error'));
 
   // useEffect(() => {
@@ -95,6 +94,7 @@ const BioreactorTab = ({ data }) => {
           className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
           color={color}
         /> */}
+        <CardParams color={color} />
       </div>
       <div className="flex flex-row justify-around flex-wrap">
         {/* Display Current Steps */}

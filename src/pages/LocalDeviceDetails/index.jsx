@@ -24,7 +24,7 @@ import {
   getLastSavedData,
 } from '../../services/devicesService';
 
-import { StatusParameterContext } from './Contexts';
+import { StatusParameterContext, ErrorParameterContext } from './Contexts';
 
 const SCAN_INTERVAL = 1000;
 
@@ -186,7 +186,9 @@ const LocalDevices = ({ match, history }) => {
           // console.log(currentDevice);
           return (
             <StatusParameterContext.Provider value={statusParameter}>
-              <BioreactorTab data={currentData} statusParameter={statusParameter} />
+              <ErrorParameterContext.Provider value={errorParameter}>
+                <BioreactorTab data={currentData} statusParameter={statusParameter} />
+              </ErrorParameterContext.Provider>
             </StatusParameterContext.Provider>
           );
           // return <BioreactorTab statusParameter={statusParameter} errorParameter={errorParameter} stepParameter={stepParameter} />;
