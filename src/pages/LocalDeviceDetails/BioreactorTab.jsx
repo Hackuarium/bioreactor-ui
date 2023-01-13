@@ -10,6 +10,11 @@ const BioreactorTab = ({ data }) => {
   const [color, setColor] = useState(0);
 
   console.log('BioreactorTab');
+  console.log('W value', data.parametersArray?.find(param => param.label === 'W').value);
+  console.log('X value', data.parametersArray?.find(param => param.label === 'X').value);
+  console.log('Y value', data.parametersArray?.find(param => param.label === 'Y').value);
+  console.log('Z value', data.parametersArray?.find(param => param.label === 'Z').value);
+  console.log('AZ value', data.parametersArray?.find(param => param.label === 'AZ').value);
 
   // const statusParameter = useMemo(() => setStatus(data), [data]);
   const [errorParameter, setErrorParameter] = useState(data.parametersArray?.find(param => param.name === 'Error'));
@@ -80,7 +85,7 @@ const BioreactorTab = ({ data }) => {
       </div>
       <div className="flex flex-row justify-around flex-wrap">
         {/* Display Errors */}
-        <CardParams
+        {/* <CardParams
           key={errorParameter.index}
           title={errorParameter.name || errorParameter.label}
           value={errorParameter.value * errorParameter.factor}
@@ -89,11 +94,11 @@ const BioreactorTab = ({ data }) => {
           flags={errorParameter.flags}
           className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
           color={color}
-        />
+        /> */}
       </div>
       <div className="flex flex-row justify-around flex-wrap">
         {/* Display Current Steps */}
-        <CardSteps
+        {/* <CardSteps
           key={stepParameter.index}
           title={stepParameter.name || stepParameter.label}
           value={stepParameter.value * stepParameter.factor}
@@ -101,7 +106,7 @@ const BioreactorTab = ({ data }) => {
           info={stepParameter.description}
           steps={stepsParameters}
           className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
-        />
+        /> */}
       </div>
     </div>
   );
