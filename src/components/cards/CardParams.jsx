@@ -64,8 +64,6 @@ const TableSteps = ({ title, result, flags, color }) => {
 const CardParams = ({ title, value, info, flags, className, color=0 }) => {
   const [_flag, setFlag] = useState(false);
 
-  const [option, setOption] = useState([]);
-
   console.log('value', value);
   console.log('value 2', Number(value | 0).toString(2));
   
@@ -106,14 +104,6 @@ const CardParams = ({ title, value, info, flags, className, color=0 }) => {
   console.log('value size', Number(value | 0).toString(2).length);
   console.log('value 3', Number(value | 0).toString(2).padStart(flagSize, '0'));
   console.log(flagSize);
-
-  // let result = Number(value | 0)
-  // .toString(2)
-  // .padStart(flagSize, '0')
-  // .split('')
-  // .reverse();
-  
-  // console.log(`result ${flagSize}`, result);
   
   const [_flagCheck, setFlagCheck] = useState(result);
 
@@ -136,44 +126,6 @@ const CardParams = ({ title, value, info, flags, className, color=0 }) => {
     return () => timeout && clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
-
-  // console.log('checkFlag', _flagCheck);
-
-  // const stepTable = result.map((item, index) => {
-  //   // console.log('IN');
-  //   <TableSteps key={flags[index]} title={title} stepBit={item} stepFlag={flags[index]} />
-  //   });
-
-  const stepTable = result.map((item, index) => {
-    if (item === '0') {
-      if (title !== 'Error') {
-        return (
-            <li key={flags[index]}
-            className={clsx(
-              'text-md text-neutral-600',
-              'text-gray-600',
-            )}>
-              {flags[index]}
-            </li>
-          );
-      } else {
-        return null;
-      }
-    } else {
-      return (
-          <li key={flags[index]}
-          className={clsx(
-            'text-md text-neutral-600',
-            color !== 0 && 'text-danger-600',
-            title === 'Status' && 'text-success-600',
-
-          )}>
-            {flags[index]}
-          </li>
-        );
-    }
-  }
-  );
 
   return (
     <div className={clsx('flex', className)}>
@@ -203,7 +155,7 @@ const CardParams = ({ title, value, info, flags, className, color=0 }) => {
         <ul className="list-inside list-disc">
           <div className="fw-full mt-2 flex flex-row justify-between sm:justify-end">
               {/* {stepTable} */}
-              <TableSteps setOption={setOption} title={title} result={result} flags={flags} color={color} />
+              <TableSteps title={title} result={result} flags={flags} color={color} />
             </div>
         </ul>
       </div>

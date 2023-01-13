@@ -24,12 +24,16 @@ import {
   getLastSavedData,
 } from '../../services/devicesService';
 
+import { StatusParameterContext } from './Contexts';
+
 const SCAN_INTERVAL = 1000;
 
 let tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor'].map((v) => ({
   value: v,
   label: v,
 }));
+
+// export const StatusParameterContext = createContext();
 
 const LocalDevices = ({ match, history }) => {
   const [currentDevice, setCurrentDevice] = useState();
@@ -180,7 +184,11 @@ const LocalDevices = ({ match, history }) => {
       case 'Bioreactor':
           // console.log(currentData);
           // console.log(currentDevice);
-          return <BioreactorTab data={currentData} />;
+          return (
+            <StatusParameterContext.Provider value={statusParameter}>
+              <BioreactorTab data={currentData} statusParameter={statusParameter} />
+            </StatusParameterContext.Provider>
+          );
           // return <BioreactorTab statusParameter={statusParameter} errorParameter={errorParameter} stepParameter={stepParameter} />;
       default:
         return <div />;

@@ -1,15 +1,9 @@
 import React, { useState, useEffect, memo, useMemo, useReducer } from 'react';
 
-import { CardValue, CardParams, CardSteps } from '../../components';
+import { CardValue, CardParams, CardSteps, CardStatus } from '../../components';
 import { msToTime } from '../../services/util';
 
 const COLOR_CHANGED_TIMEOUT = 700;
-
-
-const setStatus = data => {
-  console.log('Check status');
-  return data.parametersArray?.find(param => param.name === 'Status');
-}
 
 const BioreactorTab = ({ data }) => {
   const [_value, setValue] = useState('');
@@ -17,7 +11,6 @@ const BioreactorTab = ({ data }) => {
 
   console.log('BioreactorTab');
 
-  const [statusParameter, setStatusParameter] = useState(data.parametersArray?.find(param => param.name === 'Status'));
   // const statusParameter = useMemo(() => setStatus(data), [data]);
   const [errorParameter, setErrorParameter] = useState(data.parametersArray?.find(param => param.name === 'Error'));
 
@@ -74,7 +67,7 @@ const BioreactorTab = ({ data }) => {
       )}
       <div className=" flex flex-row justify-around flex-wrap">
         {/* Display Status */}
-        <CardParams
+        {/* <CardParams
           key={statusParameter.index}
           title={statusParameter.name || statusParameter.label}
           value={statusParameter.value * statusParameter.factor}
@@ -82,7 +75,8 @@ const BioreactorTab = ({ data }) => {
           info={statusParameter.description}
           flags={statusParameter.flags}
           className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
-        />
+        /> */}
+        <CardStatus />
       </div>
       <div className="flex flex-row justify-around flex-wrap">
         {/* Display Errors */}
