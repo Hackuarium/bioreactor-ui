@@ -90,38 +90,69 @@ const CardParams = ({ color=0 }) => {
   // }, [errorParameter.value]);
 
   return (
+    // <div className={clsx('flex', "w-full sm:w-1/2 md:w-1/2 lg:w-full flex")}>
+    //   <div className="w-full m-2 p-2 flex flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
+    //     <div className="w-full py-1 flex flex-row justify-between items-start relative flex-auto">
+    //       <h3 className={clsx('text-sm font-medium text-neutral-700',
+    //         color > 0 && 'text-success-700',
+    //         color < 0 && 'text-danger-700',
+    //         color !== 0 && 'text-danger-700')}>
+    //         {errorParameter.name || errorParameter.label}: {errorParameter.value}</h3>
+    //       {errorParameter.info && (
+    //         <div className=" group">
+    //           <InfoIcon
+    //             height="12"
+    //             width="12"
+    //             className="my-1 fill-current text-neutral-400 group-hover:text-primary-600"
+    //           />
+    //           <div
+    //             className="absolute bottom-full right-0 hidden group-hover:flex z-10 p-1 bg-neutral-50 shadow-md rounded"
+    //             max-content={100}
+    //           >
+    //             <span className="text-xs text-neutral-400 ">{errorParameter.info}</span>
+    //           </div>
+    //         </div>
+    //       )}
+    //     </div>
+    //     <ul className="list-inside list-disc">
+    //       <div className="fw-full mt-2 flex flex-col flex-wrap justify-between sm:justify-end">
+    //           {/* {stepTable} */}
+    //           <TableSteps result={result} flags={errorParameter.flags} color={color} />
+    //         </div>
+    //     </ul>
+    //   </div>
+    // </div>
     <div className={clsx('flex', "w-full sm:w-1/2 md:w-1/2 lg:w-full flex")}>
-      <div className="w-full m-2 p-2 flex flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
-        <div className="w-full py-1 flex flex-row justify-between items-start relative">
-          <h3 className={clsx('text-sm font-medium text-neutral-700',
-            color > 0 && 'text-success-700',
-            color < 0 && 'text-danger-700',
-            color !== 0 && 'text-danger-700')}>
-            {errorParameter.name || errorParameter.label}: {errorParameter.value}</h3>
-          {errorParameter.info && (
-            <div className=" group">
-              <InfoIcon
-                height="12"
-                width="12"
-                className="my-1 fill-current text-neutral-400 group-hover:text-primary-600"
-              />
-              <div
-                className="absolute bottom-full right-0 hidden group-hover:flex z-10 p-1 bg-neutral-50 shadow-md rounded"
-                max-content={100}
-              >
-                <span className="text-xs text-neutral-400 ">{errorParameter.info}</span>
+       <div className="w-full m-2 p-2 flex-1 flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
+        <div className="w-full py-1 flex items-start relative">
+            <h3 className={clsx('text-sm font-medium text-neutral-700',
+              color > 0 && 'text-success-700',
+              color < 0 && 'text-danger-700',
+              color !== 0 && 'text-danger-700')}>
+              {errorParameter.name || errorParameter.label}: {errorParameter.value}</h3>
+            {errorParameter.info && (
+              <div className=" group">
+                <InfoIcon
+                  height="12"
+                  width="12"
+                  className="my-1 fill-current text-neutral-400 group-hover:text-primary-600"
+                />
+                <div
+                  className="absolute bottom-full right-0 hidden group-hover:flex z-10 p-1 bg-neutral-50 shadow-md rounded"
+                  max-content={100}
+                >
+                  <span className="text-xs text-neutral-400 ">{errorParameter.info}</span>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-        <ul className="list-inside list-disc">
-          <div className="fw-full mt-2 flex flex-col flex-wrap justify-between sm:justify-end">
-              {/* {stepTable} */}
-              <TableSteps result={result} flags={errorParameter.flags} color={color} />
-            </div>
-        </ul>
-      </div>
+            )}
+          </div>
+          <ul className="list-inside list-disc flex flex-col">
+            {/* {stepTable} */}
+            <TableSteps result={result} flags={errorParameter.flags} color={color} />
+          </ul>
+       </div>
     </div>
+
   );
 };
 

@@ -61,52 +61,56 @@ const BioreactorTab = ({ data }) => {
 
   return (
     <div className="flex flex-col">
-      {data?.epoch && (
-        <p className="mx-2 my-2 text-base font-medium text-black self-end">
-          Awake time:
-          <span className="mx-1 text-sm text-neutral-500">
-            {msToTime(data?.epoch)}
-          </span>
-        </p>
-      )}
-      <div className=" flex flex-row justify-around flex-wrap">
-        {/* Display Status */}
-        {/* <CardParams
-          key={statusParameter.index}
-          title={statusParameter.name || statusParameter.label}
-          value={statusParameter.value * statusParameter.factor}
-          unit={statusParameter.unit}
-          info={statusParameter.description}
-          flags={statusParameter.flags}
-          className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
-        /> */}
-        <CardStatus />
+      <div className="ml-auto">
+        {data?.epoch && (
+          <p className="mx-2 my-2 text-base font-medium text-black self-end">
+            Awake time:
+            <span className="mx-1 text-sm text-neutral-500">
+              {msToTime(data?.epoch)}
+            </span>
+          </p>
+        )}
       </div>
       <div className="flex flex-row justify-around flex-wrap">
-        {/* Display Errors */}
-        {/* <CardParams
-          key={errorParameter.index}
-          title={errorParameter.name || errorParameter.label}
-          value={errorParameter.value * errorParameter.factor}
-          unit={errorParameter.unit}
-          info={errorParameter.description}
-          flags={errorParameter.flags}
-          className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
-          color={color}
-        /> */}
-        <CardParams color={color} />
-      </div>
-      <div className="flex flex-row justify-around flex-wrap">
-        {/* Display Current Steps */}
-        {/* <CardSteps
-          key={stepParameter.index}
-          title={stepParameter.name || stepParameter.label}
-          value={stepParameter.value * stepParameter.factor}
-          unit={stepParameter.unit}
-          info={stepParameter.description}
-          steps={stepsParameters}
-          className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
-        /> */}
+        <div className="flex flex-row justify-around flex-wrap">
+          {/* Display Status */}
+          {/* <CardParams
+            key={statusParameter.index}
+            title={statusParameter.name || statusParameter.label}
+            value={statusParameter.value * statusParameter.factor}
+            unit={statusParameter.unit}
+            info={statusParameter.description}
+            flags={statusParameter.flags}
+            className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
+          /> */}
+          <CardStatus />
+        </div>
+        <div className="flex flex-colum justify-around flex-wrap">
+          {/* Display Errors */}
+          {/* <CardParams
+            key={errorParameter.index}
+            title={errorParameter.name || errorParameter.label}
+            value={errorParameter.value * errorParameter.factor}
+            unit={errorParameter.unit}
+            info={errorParameter.description}
+            flags={errorParameter.flags}
+            className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
+            color={color}
+          /> */}
+          <CardParams color={color} />
+        </div>
+        <div className="flex flex-row justify-around flex-wrap">
+          {/* Display Current Steps */}
+          {/* <CardSteps
+            key={stepParameter.index}
+            title={stepParameter.name || stepParameter.label}
+            value={stepParameter.value * stepParameter.factor}
+            unit={stepParameter.unit}
+            info={stepParameter.description}
+            steps={stepsParameters}
+            className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
+          /> */}
+        </div>
       </div>
     </div>
   );
