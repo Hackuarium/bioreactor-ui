@@ -1,6 +1,6 @@
-import React, { useState, useEffect, memo, useMemo, useReducer } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
-import { CardValue, CardParams, CardSteps, CardStatus } from '../../components';
+import { CardValue, CardStatus, CardErrors, CardSteps } from '../../components';
 import { msToTime } from '../../services/util';
 
 const COLOR_CHANGED_TIMEOUT = 700;
@@ -17,16 +17,6 @@ const BioreactorTab = ({ data }) => {
   console.log('AZ value', data.parametersArray?.find(param => param.label === 'AZ').value);
 
   const [errorParameter, setErrorParameter] = useState(data.parametersArray?.find(param => param.name === 'Error'));
-
-  // useEffect(() => {
-  //   console.log('status', status);
-  //   setStatusParameter(status);
-  //   // setErrorParameter(data.parametersArray?.find(param => param.name === 'Error'));
-  // }, [status]);
-
-  // let statusParameter = data?.parametersArray?.find(param => param.name === 'Status');
-
-  // let errorParameter = data?.parametersArray?.find(param => param.name === 'Error');
 
   let stepParameter = data?.parametersArray?.find(param => param.name === 'Current step');
 
@@ -71,35 +61,16 @@ const BioreactorTab = ({ data }) => {
           </p>
         )}
       </div>
-      <div className="flex flex-row justify-around flex-wrap">
+      <div className="flex flex-col justify-around flex-wrap">
         <div className="flex flex-row justify-around flex-wrap">
           {/* Display Status */}
-          {/* <CardParams
-            key={statusParameter.index}
-            title={statusParameter.name || statusParameter.label}
-            value={statusParameter.value * statusParameter.factor}
-            unit={statusParameter.unit}
-            info={statusParameter.description}
-            flags={statusParameter.flags}
-            className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
-          /> */}
           <CardStatus />
         </div>
-        <div className="flex flex-colum justify-around flex-wrap">
-          {/* Display Errors */}
-          {/* <CardParams
-            key={errorParameter.index}
-            title={errorParameter.name || errorParameter.label}
-            value={errorParameter.value * errorParameter.factor}
-            unit={errorParameter.unit}
-            info={errorParameter.description}
-            flags={errorParameter.flags}
-            className="w-full sm:w-1/2 md:w-1/2 lg:w-full flex"
-            color={color}
-          /> */}
-          <CardParams color={color} />
-        </div>
         <div className="flex flex-row justify-around flex-wrap">
+          {/* Display Errors */}
+          <CardErrors color={color} />
+        </div>
+        <div className="flex flex-col justify-around flex-wrap">
           {/* Display Current Steps */}
           {/* <CardSteps
             key={stepParameter.index}

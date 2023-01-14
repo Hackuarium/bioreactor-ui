@@ -1,23 +1,15 @@
-import React, { useState, memo } from 'react';
+import React, { useContext, memo } from 'react';
 import clsx from 'clsx';
 
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
-import { useEffect } from 'react';
-
-import { useContext } from 'react';
 import { StatusParameterContext } from '../../pages/LocalDeviceDetails/Contexts';
 
 /**
  *
- * @param {string} title
- * @param {string} value
- * @param {string} unit
- * @param {string} info
- * @param {string} className
+ * @param {string} statusParameter
  */
 
 const TableSteps = ({ result, flags }) => {
-
   const checkOption = result.map((item, index) => {
     if (item === '0') {
       return (
@@ -49,8 +41,6 @@ const TableSteps = ({ result, flags }) => {
 const CardStatus = () => {
   const statusParameter = useContext(StatusParameterContext);
 
-  console.log('statusParameter', statusParameter);
-  
   let flagSize = 14;
 
   let result;
@@ -71,7 +61,7 @@ const CardStatus = () => {
 
   return (
     <div className={clsx('flex', "w-full sm:w-1/2 md:w-1/2 lg:w-full flex")}>
-      <div className="w-full m-2 p-2 flex flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
+      <div className="w-full m-2 p-2 flex-1 flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
         <div className="w-full py-1 flex flex-row justify-between items-start relative">
           <h3 className={'text-sm font-medium text-neutral-700'}>
             {statusParameter.name}: {statusParameter.value}
