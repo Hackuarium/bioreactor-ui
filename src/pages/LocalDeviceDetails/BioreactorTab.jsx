@@ -61,28 +61,27 @@ const BioreactorTab = ({ data }) => {
           </p>
         )}
       </div>
-      <div className="flex flex-col justify-around flex-wrap">
-        <div className="flex flex-row justify-around flex-wrap">
-          {/* Display Status */}
-          <CardStatus />
+      <div className="flex flex-row flex-wrap">
+        <div className="flex flex-col flex-auto">
+          <div className="flex flex-row justify-around flex-wrap">
+            {/* Display Status */}
+            <CardStatus />
+          </div>
+          <div className="flex flex-row justify-around flex-auto">
+            {/* Display Errors */}
+            <CardErrors color={color} />
+          </div>
         </div>
         <div className="flex flex-row justify-around flex-wrap">
-          {/* Display Errors */}
-          <CardErrors color={color} />
-        </div>
-        <div className="flex flex-col justify-around flex-wrap">
-          {/* Display Current Steps */}
-          {/* <CardSteps
-            key={stepParameter.index}
-            title={stepParameter.name || stepParameter.label}
-            value={stepParameter.value * stepParameter.factor}
-            unit={stepParameter.unit}
-            info={stepParameter.description}
-            steps={stepsParameters}
-            className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"
-          /> */}
-        </div>
+            {/* Display Current Steps */}
+            <CardSteps
+              value={stepParameter.value * stepParameter.factor}
+              info={stepParameter.description}
+              steps={stepsParameters}
+            />
+          </div>
       </div>
+
     </div>
   );
 };

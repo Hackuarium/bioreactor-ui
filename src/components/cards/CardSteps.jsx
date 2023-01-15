@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, memo } from 'react';
 import clsx from 'clsx';
 
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
 import { useEffect } from 'react';
+import { StepParameterContext, StepsProtocolParameterContext } from '../../pages/LocalDeviceDetails/Contexts';
 
 const COLOR_CHANGED_TIMEOUT = 1000;
+
+/**
+ * @template Frame
+ * Data for the steps:
+ * Configuration: 1 bit (X)
+ * Flags: 6 bits (Y) (7 bits from setting: 11 bits)
+ * Actions: 4 bits (Z)
+ * Frame: XZZZZYYYYYYYYYYY (Total 16 bits)
+ */
 
 const config = [0, 1].map((v) => ({
   label: v === 0 ? `Action` : 'Change Parameter',
@@ -28,49 +38,61 @@ const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for wei
  *
  * @param {string} title
  * @param {string} value
- * @param {string} unit
  * @param {string} info
- * @param {string} className
  */
 
-const CardSteps = ({ title, value, unit, info, steps, className }) => {
+const CardSteps = ({ value, info, steps }) => {
+  const stepParameter = useContext(StepParameterContext);
+  const stepsProtocolParameter = useContext(StepsProtocolParameterContext);
+  console.log('stepParameter', stepParameter);
+  console.log('stepsProtocolParameter', stepsProtocolParameter);
 
-  console.log("steps", steps);
-  
   const [_steps, setSteps] = useState([]);
   
-  // change _steps when steps is changed
-  useEffect(() => {
-    let timeout;
-    try {
-      // don't execute it on the first render
-      // if (_flag) {
-        timeout = setTimeout(() => {
-          let result = [];
-          result = steps.map((step, index) => {
-            step.value < 0 
-              ?
-              result = [...result, (step.value >>> 0).toString(2).slice(16,32).split('')]
-              :
-              result = [...result, Number(step.value | 0)
-                .toString(2)
-                .padStart(16, '0')
-                .split('')];
-            return result[index];
-          });
-          setSteps(_steps => [...result]);
-          }, COLOR_CHANGED_TIMEOUT);
-        // });
-      // }
-    } catch (e) {
-      // console.log(e);
-    }
-    // setFlag(true);
-    return () => timeout && clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [steps]);
+  // // change _steps when steps is changed
+  // useEffect(() => {
+  //   let timeout;
+  //   try {
+  //     // don't execute it on the first render
+  //     // if (_flag) {
+  //       timeout = setTimeout(() => {
+  //         let result = [];
+  //         result = steps.map((step, index) => {
+  //           step.value < 0 
+  //             ?
+  //             result = [...result, (step.value >>> 0).toString(2).slice(16,32).split('')]
+  //             :
+  //             result = [...result, Number(step.value | 0)
+  //               .toString(2)
+  //               .padStart(16, '0')
+  //               .split('')];
+  //           return result[index];
+  //         });
+  //         setSteps(_steps => [...result]);
+  //         }, COLOR_CHANGED_TIMEOUT);
+  //       // });
+  //     // }
+  //   } catch (e) {
+  //     // console.log(e);
+  //   }
+  //   // setFlag(true);
+  //   return () => timeout && clearTimeout(timeout);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [steps]);
 
-  console.log('_steps', _steps);
+  let result;
+  result = steps.map((step) => {
+    if (step.value < 0) {
+      return (step.value >>> 0).toString(2).slice(16,32).split('');
+    } else {
+      return Number(step.value | 0)
+      .toString(2)
+      .padStart(16, '0')
+      .split('');
+    }
+  });
+
+  console.log('result', result);
 
   const [_configStep, _setConfigStep] = useState(0);
   const [_actionStep, _setActionStep] = useState(0);
@@ -83,7 +105,7 @@ const CardSteps = ({ title, value, unit, info, steps, className }) => {
 
   let flagStep2 = new Array(16).fill(0);
 
-  _steps.map((step, index) => {
+  result.map((step, index) => {
     // Check Step parameters
     let confTemp = Number(step.slice(0, 1).join(''));
     // console.log('confTemp', confTemp);
@@ -94,7 +116,7 @@ const CardSteps = ({ title, value, unit, info, steps, className }) => {
     // Set Action/Parameter Array
     // confStep = [...confStep, config[`${step[0]}`].label];
     confStep = [...confStep, config[`${confTemp}`].label];
-    console.log('confStep', confStep);
+    // console.log('confStep', confStep);
 
     if (confStep[index] === 'Action') {
       // Check Action
@@ -105,55 +127,52 @@ const CardSteps = ({ title, value, unit, info, steps, className }) => {
         case '0000':
           // let actionStep0 = actions[Number(`0b${actionStep}`)].label;
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          console.log(actionTemp);
+          // console.log(actionTemp);
           break;
         case '0001':
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          console.log(actionTemp);        
+          // console.log(actionTemp);        
           break;
         case '0010':
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          console.log(actionTemp);
+          // console.log(actionTemp);
           break;
         case '0011':
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          console.log(actionTemp);
+          // console.log(actionTemp);
           break;
         case '0100':
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          console.log(actionTemp);
+          // console.log(actionTemp);
           break;
         case '0101':
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          console.log(actionTemp);
+          // console.log(actionTemp);
           break;
         case '1000':
           actionTemp = actions[6].label;
-          console.log(actionTemp);
+          // console.log(actionTemp);
           break;
         default:
           actionTemp = 'Not an action';
-          console.log(actionTemp);
+          // console.log(actionTemp);
           break;
       }
       actStep = [...actStep, actionTemp];
-      console.log('actStepArray', actStep);
+      // console.log('actStepArray', actStep);
 
       
       // console.log(actions.findIndex((action) => action.label === 'Set all the flags'));
 
       let activeFlag = [];
-      if (actStep[index] === actions[6].label) {
+      if (actStep[index] === actions[6].label) { // Set all the flags
         // Check Parameter to set
         let tempFlag = step.slice(5, 16).reverse();
         console.log("flag without slice", tempFlag);
         tempFlag.map((flag, indexFlag) => {
           if (indexFlag < 6) {
             if (flag === '1') activeFlag = [...activeFlag, flags[indexFlag].label];
-
-            // activeFlag = [...activeFlag, flags[index && Boolean(flag)].label];
           }
-          // activeFlag = [...activeFlag, flags[index && Number(flag)].label];
           return activeFlag;
         });
         console.log("activeFlag", activeFlag);
@@ -211,12 +230,12 @@ const CardSteps = ({ title, value, unit, info, steps, className }) => {
   });
 
   return (
-    <div className={clsx('flex', className)}>
+    <div className={clsx('flex', "w-full sm:w-1/2 md:w-full lg:w-full")}>
       <div className="m-2 p-2 flex flex-col justify-between items-center sm:items-start rounded-md bg-blue-gray-100 shadow-md">
         <div className="w-full py-1 flex flex-row justify-between items-start relative">
           <h3 className='text-sm font-medium text-neutral-700'>
-            {title}</h3>
-          {info && (
+            {stepParameter.name || stepParameter.label}</h3>
+          {stepParameter.description && (
             <div className=" group">
               <InfoIcon
                 height="12"
@@ -227,7 +246,7 @@ const CardSteps = ({ title, value, unit, info, steps, className }) => {
                 className="absolute bottom-full right-0 hidden group-hover:flex z-10 p-1 bg-neutral-50 shadow-md rounded"
                 max-content={100}
               >
-                <span className=" text-xs text-neutral-400 ">{info}</span>
+                <span className=" text-xs text-neutral-400 ">{stepParameter.description}</span>
               </div>
             </div>
           )}
@@ -250,4 +269,4 @@ const CardSteps = ({ title, value, unit, info, steps, className }) => {
   );
 };
 
-export default CardSteps;
+export default memo(CardSteps);

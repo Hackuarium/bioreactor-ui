@@ -24,7 +24,7 @@ import {
   getLastSavedData,
 } from '../../services/devicesService';
 
-import { StatusParameterContext, ErrorParameterContext } from './Contexts';
+import { StatusParameterContext, ErrorParameterContext, StepParameterContext, StepsProtocolParameterContext } from './Contexts';
 
 const SCAN_INTERVAL = 1000;
 
@@ -47,6 +47,7 @@ const LocalDevices = ({ match, history }) => {
   const [statusParameter, setStatusParameter] = useState([]);
   const [errorParameter, setErrorParameter] = useState([]);
   const [stepParameter, setStepParameter] = useState([]);
+  const [stepsProtocolParameter, setStepsProtocolParameter] = useState([]);
 
   const { addWarningNotification } = useNotification();
 
@@ -67,6 +68,7 @@ const LocalDevices = ({ match, history }) => {
 
   // get data from device
   const getCurrentData = useCallback(async () => {
+    const steps = [...Array(16).keys()].map((v) => v+1);
     if (currentDevice?.id) {
       if (currentDevice?.connected) {
         try {
@@ -84,18 +86,19 @@ const LocalDevices = ({ match, history }) => {
           setStatusParameter(results.parametersArray?.find(param => param.name === 'Status'));
           setErrorParameter(results.parametersArray?.find(param => param.name === 'Error'));
           setStepParameter(results.parametersArray?.find(param => param.name === 'Current step'));
+          setStepsProtocolParameter(steps.map(v => (results.parametersArray?.find(param => param.name === `Step ${v}`))));
         } catch (e) {
           //  console.log(e.message);
         }
       } else {
         // get local saved data
         getLastSavedData(currentDevice._id).then((row) => {
-          console.log(row);
           if (row.length > 0) {
             setCurrentData(row[0]);
             setStatusParameter(row[0].parametersArray?.find(param => param.name === 'Status'));
             setErrorParameter(row[0].parametersArray?.find(param => param.name === 'Error'));
             setStepParameter(row[0].parametersArray?.find(param => param.name === 'Current step'));
+            setStepsProtocolParameter(steps.map(v => (row[0].parametersArray?.find(param => param.name === `Step ${v}`))));
           }
         });
       }
@@ -187,7 +190,11 @@ const LocalDevices = ({ match, history }) => {
           return (
             <StatusParameterContext.Provider value={statusParameter}>
               <ErrorParameterContext.Provider value={errorParameter}>
-                <BioreactorTab data={currentData} statusParameter={statusParameter} />
+                <StepParameterContext.Provider value={stepParameter}>
+                  <StepsProtocolParameterContext.Provider value={stepsProtocolParameter}>
+                    <BioreactorTab data={currentData} />
+                  </StepsProtocolParameterContext.Provider>
+                </StepParameterContext.Provider>
               </ErrorParameterContext.Provider>
             </StatusParameterContext.Provider>
           );
@@ -211,7 +218,7 @@ const LocalDevices = ({ match, history }) => {
         selected={selectedTab}
         options={tabs}
       />
-      <div className="p-3 mt-4 sm:m-0 flex flex-col items-center rounded-md sm:rounded-t-none bg-white shadow ">
+      <div className="p-3 mt-4 sm:m-0 flex flex-col items-center rounded-md sm:rounded-t-none bg-white shadow">
         {renderTabContent(selectedTab)}
       </div>
 

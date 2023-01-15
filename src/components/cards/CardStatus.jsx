@@ -60,9 +60,9 @@ const CardStatus = () => {
       .reverse();
 
   return (
-    <div className={clsx('flex', "w-full sm:w-1/2 md:w-1/2 lg:w-full flex")}>
+    <div className={clsx('flex', "w-full sm:w-1/2 md:w-full lg:w-full")}>
       <div className="w-full m-2 p-2 flex-1 flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
-        <div className="w-full py-1 flex flex-row justify-between items-start relative">
+        <div className="w-full py-1 flex flex-row justify-between">
           <h3 className={'text-sm font-medium text-neutral-700'}>
             {statusParameter.name}: {statusParameter.value}
           </h3>
@@ -73,15 +73,16 @@ const CardStatus = () => {
                 width="12"
                 className="my-1 fill-current text-neutral-400 group-hover:text-primary-600"
               />
-              <div className="absolute bottom-full right-0 hidden group-hover:flex z-10 p-1 bg-neutral-50 shadow-md rounded"
+              <div
+                className="absolute bottom-full right-0 hidden group-hover:flex z-10 p-1 bg-neutral-50 shadow-md rounded"
                 max-content={100}
               >
-              <span className="text-xs text-neutral-400 ">{statusParameter.description}</span>
+                <span className="text-xs text-neutral-400">{statusParameter.description}</span>
               </div>
             </div>
           )}
         </div>
-        <ul className="list-inside list-disc fw-full mt-2 flex flex-col flex-wrap justify-between sm:justify-end" >
+        <ul className="list-inside list-disc fw-full mt-2 flex flex-col flex-wrap justify-between" >
           {/* {stepTable} */}
           <TableSteps result={result} flags={statusParameter.flags} />
         </ul>
