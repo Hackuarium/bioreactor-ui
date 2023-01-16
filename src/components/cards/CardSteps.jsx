@@ -2,10 +2,7 @@ import React, { useState, useContext, memo } from 'react';
 import clsx from 'clsx';
 
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
-import { useEffect } from 'react';
 import { StepParameterContext, StepsProtocolParameterContext } from '../../pages/LocalDeviceDetails/Contexts';
-
-const COLOR_CHANGED_TIMEOUT = 1000;
 
 /**
  * @template Frame
@@ -41,47 +38,19 @@ const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for wei
  * @param {string} info
  */
 
-const CardSteps = ({ value, info, steps }) => {
+const CardSteps = () => {
+  console.log('CardSteps');
   const stepParameter = useContext(StepParameterContext);
   const stepsProtocolParameter = useContext(StepsProtocolParameterContext);
-  console.log('stepParameter', stepParameter);
-  console.log('stepsProtocolParameter', stepsProtocolParameter);
+  // console.log('stepParameter', stepParameter);
+  // console.log('stepsProtocolParameter', stepsProtocolParameter);
 
-  const [_steps, setSteps] = useState([]);
-  
-  // // change _steps when steps is changed
-  // useEffect(() => {
-  //   let timeout;
-  //   try {
-  //     // don't execute it on the first render
-  //     // if (_flag) {
-  //       timeout = setTimeout(() => {
-  //         let result = [];
-  //         result = steps.map((step, index) => {
-  //           step.value < 0 
-  //             ?
-  //             result = [...result, (step.value >>> 0).toString(2).slice(16,32).split('')]
-  //             :
-  //             result = [...result, Number(step.value | 0)
-  //               .toString(2)
-  //               .padStart(16, '0')
-  //               .split('')];
-  //           return result[index];
-  //         });
-  //         setSteps(_steps => [...result]);
-  //         }, COLOR_CHANGED_TIMEOUT);
-  //       // });
-  //     // }
-  //   } catch (e) {
-  //     // console.log(e);
-  //   }
-  //   // setFlag(true);
-  //   return () => timeout && clearTimeout(timeout);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [steps]);
+  // const [sConfigStep, setSConfigStep] = useState([]);
+  // const [_actionStep, _setActionStep] = useState(0);
+  // const [_flagStep, _setFlagStep] = useState(0);
 
   let result;
-  result = steps.map((step) => {
+  result = stepsProtocolParameter.map((step) => {
     if (step.value < 0) {
       return (step.value >>> 0).toString(2).slice(16,32).split('');
     } else {
@@ -92,125 +61,91 @@ const CardSteps = ({ value, info, steps }) => {
     }
   });
 
-  console.log('result', result);
-
-  const [_configStep, _setConfigStep] = useState(0);
-  const [_actionStep, _setActionStep] = useState(0);
-  const [_flagStep, _setFlagStep] = useState(0);
-
   // Store 16 Steps(16 bits) into: config (1 bit), action (4 bits) and flags (11 bits)
   let confStep = [];
   let actStep = [];
-  let flagStep = [];
+  let flagStep = new Array(16).fill(0);
 
-  let flagStep2 = new Array(16).fill(0);
 
   result.map((step, index) => {
     // Check Step parameters
     let confTemp = Number(step.slice(0, 1).join(''));
-    // console.log('confTemp', confTemp);
     let actTemp = step.slice(1, 5).join('');
-    let flagTemp = step.slice(5, 16).join('');
-    // console.log("flagTemp", flagTemp);
+    let flagTemp = step.slice(5, 16).reverse();
 
     // Set Action/Parameter Array
-    // confStep = [...confStep, config[`${step[0]}`].label];
     confStep = [...confStep, config[`${confTemp}`].label];
-    // console.log('confStep', confStep);
 
     if (confStep[index] === 'Action') {
       // Check Action
-      console.log('actionStepNumber', Number(`0b${actTemp}`));
-
       let actionTemp = '';
       switch (actTemp) {
-        case '0000':
+        case '0000':  // Do nothing
           // let actionStep0 = actions[Number(`0b${actionStep}`)].label;
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          // console.log(actionTemp);
           break;
-        case '0001':
+        case '0001':  // Wait in minutes
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          // console.log(actionTemp);        
           break;
-        case '0010':
+        case '0010':  // Wait in hours
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          // console.log(actionTemp);
           break;
-        case '0011':
+        case '0011':  // Wait for weight reduction to yy% of maximum weight
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          // console.log(actionTemp);
           break;
-        case '0100':
+        case '0100':  // Wait for weight increase to yy% of maximum weight
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          // console.log(actionTemp);
           break;
-        case '0101':
+        case '0101':  // Wait for temperature change (continue if delta < yy [°C/100])
           actionTemp = actions[Number(`0b${actTemp}`)].label;
-          // console.log(actionTemp);
           break;
-        case '1000':
+        case '1000':  // Set all the flags
           actionTemp = actions[6].label;
-          // console.log(actionTemp);
           break;
-        default:
+        default:  // Not an action
           actionTemp = 'Not an action';
-          // console.log(actionTemp);
           break;
       }
       actStep = [...actStep, actionTemp];
-      // console.log('actStepArray', actStep);
 
-      
-      // console.log(actions.findIndex((action) => action.label === 'Set all the flags'));
-
-      let activeFlag = [];
+      let tActiveFlag = [];
       if (actStep[index] === actions[6].label) { // Set all the flags
         // Check Parameter to set
-        let tempFlag = step.slice(5, 16).reverse();
-        console.log("flag without slice", tempFlag);
-        tempFlag.map((flag, indexFlag) => {
+        // let tempFlag = step.slice(5, 16).reverse();
+        flagTemp.map((flag, indexFlag) => {
           if (indexFlag < 6) {
-            if (flag === '1') activeFlag = [...activeFlag, flags[indexFlag].label];
+            if (flag === '1') tActiveFlag = [...tActiveFlag, flags[indexFlag].label];
           }
-          return activeFlag;
+          return tActiveFlag;
         });
-        console.log("activeFlag", activeFlag);
-        flagStep = [...flagStep, activeFlag];
-        console.log("flagStep", flagStep);
-        
+        if (tActiveFlag.length === 0) tActiveFlag = 'Disable all the flags';
       } else {
-        activeFlag = [...activeFlag, Number(`0b${step.slice(5, 16).join('')}`)];
-        console.log("tempFlagPAram", activeFlag);
+        tActiveFlag = [...tActiveFlag, Number(`0b${step.slice(5, 16).join('')}`)];
       }
-      flagStep2[index] = [activeFlag];
-      console.log("flagStep2", flagStep2);
+      flagStep[index] = [tActiveFlag];
 
     } else if (confStep[index] === 'Change Parameter'){
       let tempFlag = [];
       switch (actTemp) {
-        case '0000':
+        case '0000':  // Set the TEMPERATURE
           actStep[index] = 'Temperature';
           tempFlag = [...tempFlag, Number(`0b${step.slice(5, 16).join('')}`)];
-          // tempFlag = Number(`0b${step.slice(5, 16).join('')}`);
           break;
         default:
           actStep[index] = 'Not a parameter';
           tempFlag = [...tempFlag, 'Not a parameter'];
           break;
       }
-      console.log("tempFlagPAram for Change Parameter", tempFlag);
-      flagStep2[index] = [tempFlag];
-      console.log("flagStep2 for CP", flagStep2);
+      flagStep[index] = [tempFlag];
     }
+    // console.log("flagStep", flagStep);
+    return flagStep;
   });
-
-  console.log("flagStep2", flagStep2[0]);
 
   const handleTable = confStep.map((step, index) => {
     let classTemp = '';
-    Number(flagStep2[index][0]) === 0 ? classTemp = 'text-gray-600' : classTemp = 'text-warning-600';
-    if (value === index) classTemp = 'text-success-600';
+    Number(flagStep[index][0]) === 0 ? classTemp = 'text-gray-600' : classTemp = 'text-warning-600';
+    if ((stepParameter.value * stepParameter.factor) === index) classTemp = 'text-success-600';
     return (
       <tr className={classTemp}>
         <td>
@@ -223,7 +158,7 @@ const CardSteps = ({ value, info, steps }) => {
           {actStep[index]}
         </td>
         <td>
-        {flagStep2[index].join(`, `)}
+        {flagStep[index].join(`, `)}
         </td>
       </tr>
     );

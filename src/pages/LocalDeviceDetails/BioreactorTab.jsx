@@ -74,11 +74,7 @@ const BioreactorTab = ({ data }) => {
         </div>
         <div className="flex flex-row justify-around flex-wrap">
             {/* Display Current Steps */}
-            <CardSteps
-              value={stepParameter.value * stepParameter.factor}
-              info={stepParameter.description}
-              steps={stepsParameters}
-            />
+            <CardSteps />
           </div>
       </div>
 
