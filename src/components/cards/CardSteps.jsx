@@ -162,7 +162,7 @@ const TableSteps = ({ confStep, flagStep, actStep, value }) => {
 }
 
 const CardSteps = () => {
-  console.log('CardSteps');
+  // console.log('CardSteps');
   const stepParameter = useContext(StepParameterContext);
   const stepsProtocolParameter = useContext(StepsProtocolParameterContext);
   // console.log('stepParameter', stepParameter);

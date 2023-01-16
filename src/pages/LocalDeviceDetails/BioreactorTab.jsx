@@ -1,6 +1,6 @@
-import React, { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 
-import { CardValue, CardStatus, CardErrors, CardSteps } from '../../components';
+import { CardStatus, CardErrors, CardSteps } from '../../components';
 import { msToTime } from '../../services/util';
 
 const COLOR_CHANGED_TIMEOUT = 700;
@@ -9,23 +9,10 @@ const BioreactorTab = ({ data }) => {
   const [_value, setValue] = useState('');
   const [color, setColor] = useState(0);
 
-  console.log('BioreactorTab');
-  console.log('W value', data.parametersArray?.find(param => param.label === 'W').value);
-  console.log('X value', data.parametersArray?.find(param => param.label === 'X').value);
-  console.log('Y value', data.parametersArray?.find(param => param.label === 'Y').value);
-  console.log('Z value', data.parametersArray?.find(param => param.label === 'Z').value);
-  console.log('AZ value', data.parametersArray?.find(param => param.label === 'AZ').value);
+  // console.log('BioreactorTab');
 
-  const [errorParameter, setErrorParameter] = useState(data.parametersArray?.find(param => param.name === 'Error'));
-
-  let stepParameter = data?.parametersArray?.find(param => param.name === 'Current step');
-
-  let steps = [...Array(16).keys()].map((v) => v+1);
-
-  let stepsParameters = steps.map(v => (data?.parametersArray?.find(param => param.name === `Step ${v}`)));
+  const errorParameter = data.parametersArray?.find(param => param.name === 'Error');
   
-  // setErrorParameter(errorParameter.value);
-
   // change color when Error is not zero
   useEffect(() => {
     let timeout;
@@ -77,7 +64,6 @@ const BioreactorTab = ({ data }) => {
             <CardSteps />
           </div>
       </div>
-
     </div>
   );
 };

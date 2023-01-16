@@ -33,8 +33,6 @@ let tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor'].map(
   label: v,
 }));
 
-// export const StatusParameterContext = createContext();
-
 const LocalDevices = ({ match, history }) => {
   const [currentDevice, setCurrentDevice] = useState();
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
