@@ -1,4 +1,4 @@
-import React, { useState, useContext, memo, useMemo } from 'react';
+import React, { useContext, memo, useMemo } from 'react';
 import clsx from 'clsx';
 
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
