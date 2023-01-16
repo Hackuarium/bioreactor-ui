@@ -6,6 +6,7 @@ import HistoryTab from './HistoryTab';
 import ConfigTab from './ConfigTab';
 import AdvancedTab from './AdvancedTab';
 import BioreactorTab from "./BioreactorTab";
+import BioreactorPlot from './BioreactorPlot';
 import DeviceCardInfo from './DeviceCardInfo';
 import LocalDeviceModal from '../LocalDevices/LocalDeviceModal';
 import useNotification from '../../hooks/useNotification';
@@ -28,7 +29,7 @@ import { StatusParameterContext, ErrorParameterContext, StepParameterContext, St
 
 const SCAN_INTERVAL = 1000;
 
-let tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor'].map((v) => ({
+let tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor', 'Plots'].map((v) => ({
   value: v,
   label: v,
 }));
@@ -196,7 +197,13 @@ const LocalDevices = ({ match, history }) => {
               </ErrorParameterContext.Provider>
             </StatusParameterContext.Provider>
           );
-          // return <BioreactorTab statusParameter={statusParameter} errorParameter={errorParameter} stepParameter={stepParameter} />;
+      case 'Plots':
+        return (
+          <BioreactorPlot
+              device={currentDevice}
+              refreshInterval={refreshInterval}
+            />
+        );
       default:
         return <div />;
     }

@@ -2,6 +2,7 @@ import { useState, useEffect, memo } from 'react';
 
 import { CardStatus, CardErrors, CardSteps } from '../../components';
 import { msToTime } from '../../services/util';
+import Plot from 'react-plotly.js';
 
 const COLOR_CHANGED_TIMEOUT = 700;
 
@@ -38,6 +39,7 @@ const BioreactorTab = ({ data }) => {
 
   return (
     <div className="flex flex-col">
+      {/* Display Awake time */}
       <div className="ml-auto">
         {data?.epoch && (
           <p className="mx-2 my-2 text-base font-medium text-black self-end">
@@ -48,6 +50,7 @@ const BioreactorTab = ({ data }) => {
           </p>
         )}
       </div>
+      {/* Display Status, Errors and Steps */}
       <div className="flex flex-row flex-wrap">
         <div className="flex flex-col flex-auto">
           <div className="flex flex-row justify-around flex-wrap">
@@ -63,6 +66,22 @@ const BioreactorTab = ({ data }) => {
             {/* Display Current Steps */}
             <CardSteps />
           </div>
+      </div>
+      {/* Display Plot */}
+      <div className="flex justify-center ">
+        <Plot
+          data={[
+            {
+              x: [1, 2, 3],
+              y: [2, 6, 3],
+              type: 'scatter',
+              mode: 'lines+markers',
+              marker: {color: 'red'},
+            },
+            {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
+          ]}
+          layout={ { title: 'A Fancy Plot'} }
+        />
       </div>
     </div>
   );
