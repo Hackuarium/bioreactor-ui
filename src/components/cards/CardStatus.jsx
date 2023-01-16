@@ -9,7 +9,7 @@ import { StatusParameterContext } from '../../pages/LocalDeviceDetails/Contexts'
  * @param {string} statusParameter
  */
 
-const TableSteps = ({ result, flags }) => {
+const TableStatus = ({ result, flags }) => {
   const checkOption = result.map((item, index) => {
     if (item === '0') {
       return (
@@ -83,8 +83,8 @@ const CardStatus = () => {
           )}
         </div>
         <ul className="list-inside list-disc fw-full mt-2 flex flex-col flex-wrap justify-between" >
-          {/* {stepTable} */}
-          <TableSteps result={result} flags={statusParameter.flags} />
+          {/* {statusTable} */}
+          <TableStatus result={result} flags={statusParameter.flags} />
         </ul>
       </div>
     </div>

@@ -11,7 +11,7 @@ import { ErrorParameterContext } from '../../pages/LocalDeviceDetails/Contexts';
  * @param {number} color
  */
 
-const TableSteps = ({ title, result, flags, color }) => {
+const TableErrors = ({ title, result, flags, color }) => {
   const checkOption = result.map((item, index) => {
     if (item === '0') {
       return null;
@@ -82,7 +82,7 @@ const CardErrors = ({ color=0 }) => {
           </div>
           <ul className="list-inside list-disc fw-full mt-2 flex flex-col flex-wrap justify-between sm:justify-end">
             {/* {errorTable} */}
-            <TableSteps result={result} flags={errorParameter.flags} color={color} />
+            <TableErrors result={result} flags={errorParameter.flags} color={color} />
           </ul>
        </div>
     </div>

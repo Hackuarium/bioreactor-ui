@@ -1,4 +1,4 @@
-import React, { useState, useContext, memo } from 'react';
+import React, { useState, useContext, memo, useMemo } from 'react';
 import clsx from 'clsx';
 
 import { ReactComponent as InfoIcon } from '../../assets/icons/information.svg';
@@ -38,19 +38,8 @@ const actions = ['Do nothing', 'Wait in minutes', 'Wait in hours', 'Wait for wei
  * @param {string} info
  */
 
-const CardSteps = () => {
-  console.log('CardSteps');
-  const stepParameter = useContext(StepParameterContext);
-  const stepsProtocolParameter = useContext(StepsProtocolParameterContext);
-  // console.log('stepParameter', stepParameter);
-  // console.log('stepsProtocolParameter', stepsProtocolParameter);
-
-  // const [sConfigStep, setSConfigStep] = useState([]);
-  // const [_actionStep, _setActionStep] = useState(0);
-  // const [_flagStep, _setFlagStep] = useState(0);
-
-  let result;
-  result = stepsProtocolParameter.map((step) => {
+const obtainTableValues = ({ stepsProtocolParameter }) => {
+  let result = stepsProtocolParameter.map((step) => {
     if (step.value < 0) {
       return (step.value >>> 0).toString(2).slice(16,32).split('');
     } else {
@@ -60,14 +49,16 @@ const CardSteps = () => {
       .split('');
     }
   });
+  return result;
+}
 
+const calculateTable = ({ tableValues }) => {
   // Store 16 Steps(16 bits) into: config (1 bit), action (4 bits) and flags (11 bits)
   let confStep = [];
   let actStep = [];
   let flagStep = new Array(16).fill(0);
 
-
-  result.map((step, index) => {
+  tableValues.map((step, index) => {
     // Check Step parameters
     let confTemp = Number(step.slice(0, 1).join(''));
     let actTemp = step.slice(1, 5).join('');
@@ -142,10 +133,14 @@ const CardSteps = () => {
     return flagStep;
   });
 
-  const handleTable = confStep.map((step, index) => {
+  return [ confStep, actStep, flagStep ];
+}
+
+const TableSteps = ({ confStep, flagStep, actStep, value }) => {
+  const tableSteps = confStep.map((step, index) => {
     let classTemp = '';
     Number(flagStep[index][0]) === 0 ? classTemp = 'text-gray-600' : classTemp = 'text-warning-600';
-    if ((stepParameter.value * stepParameter.factor) === index) classTemp = 'text-success-600';
+    if ((value) === index) classTemp = 'text-success-600';
     return (
       <tr className={classTemp}>
         <td>
@@ -163,6 +158,22 @@ const CardSteps = () => {
       </tr>
     );
   });
+  return tableSteps;
+}
+
+const CardSteps = () => {
+  console.log('CardSteps');
+  const stepParameter = useContext(StepParameterContext);
+  const stepsProtocolParameter = useContext(StepsProtocolParameterContext);
+  // console.log('stepParameter', stepParameter);
+  // console.log('stepsProtocolParameter', stepsProtocolParameter);
+  const tableValuesFunc = useMemo(() => obtainTableValues({ stepsProtocolParameter }), [stepsProtocolParameter]);
+
+  // Obtain Table Values
+  const tableValues =  tableValuesFunc;
+
+  // Calculate Table
+  const [confStep, actStep, flagStep] = useMemo(() => calculateTable({ tableValues }), [tableValues]);
 
   return (
     <div className={clsx('flex', "w-full sm:w-1/2 md:w-full lg:w-full")}>
@@ -196,7 +207,8 @@ const CardSteps = () => {
             </tr>
           </thead>
           <tbody>
-            {handleTable}
+            {/* {stepsTable} */}
+            <TableSteps confStep={confStep} flagStep={flagStep} actStep={actStep} value={stepParameter.value * stepParameter.factor} />
           </tbody>
         </table>
       </div>
