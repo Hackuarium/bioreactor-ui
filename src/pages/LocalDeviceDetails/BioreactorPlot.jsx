@@ -1,6 +1,6 @@
-import { useState, useEffect, memo, useCallback } from 'react';
+import { useState, useEffect, memo } from 'react';
 
-import { getSavedData, clearSavedData } from '../../services/devicesService';
+import { getSavedData } from '../../services/devicesService';
 
 import { msToTime } from '../../services/util';
 import Plot from 'react-plotly.js';
@@ -48,14 +48,8 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
   };
 
   const paramEpoch = (data) => {
-    return data.map((d) => msToTime(d.epoch));
+    return data.map((d) => msToTime(d.epoch).replaceAll(' ', ''));
   };
-
-  console.log('data', data);
-
-  console.log('param', data.map((d) => d.parametersArray[0].value));
-
-  console.log('epoch', data.map((d) => msToTime(d.epoch)));
 
   return (
     <div className="flex flex-col">
@@ -79,7 +73,8 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
               },
               xaxis: {
                 title: {
-                  text: 'x Axis',
+                  // standoff: 80,
+                  text: 'Time',
                 },
                 // side: 'top',
               },
@@ -87,7 +82,8 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                 title: {
                   text: 'Temp [°C]',
                 }
-              }
+              },
+              width: 1080, height: 810,
             }
           }
         />

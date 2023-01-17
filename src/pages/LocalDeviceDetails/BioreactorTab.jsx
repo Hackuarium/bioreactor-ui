@@ -2,7 +2,6 @@ import { useState, useEffect, memo } from 'react';
 
 import { CardStatus, CardErrors, CardSteps } from '../../components';
 import { msToTime } from '../../services/util';
-import Plot from 'react-plotly.js';
 
 const COLOR_CHANGED_TIMEOUT = 700;
 
@@ -26,7 +25,7 @@ const BioreactorTab = ({ data }) => {
           timeout = setTimeout(() => {
             setColor(0);
           }, COLOR_CHANGED_TIMEOUT);
-          console.log(color);
+          // console.log(color);
         });
       }
     } catch (e) {

@@ -142,7 +142,7 @@ const TableSteps = ({ confStep, flagStep, actStep, value }) => {
     Number(flagStep[index][0]) === 0 ? classTemp = 'text-gray-600' : classTemp = 'text-warning-600';
     if ((value) === index) classTemp = 'text-success-600';
     return (
-      <tr className={classTemp}>
+      <tr className={classTemp} key={index}>
         <td>
           {index+1} 
         </td>
