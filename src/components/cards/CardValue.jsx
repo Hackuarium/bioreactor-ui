@@ -78,7 +78,7 @@ const CardValue = ({ title, value, unit, info, className, errorParameter=0 }) =>
               // errorParameter < 0 && 'text-danger-600',
             )}
           >
-            {_value}
+            {_value || 0}
           </p>
           <p className="ml-1 text-sm font-medium text-gray-500">{unit}</p>
         </div>

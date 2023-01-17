@@ -53,77 +53,7 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row">
-        {/* Display Plots */}
-        <div className="flex justify-center">
-          <Plot
-            data={[
-              {
-                // x: [1, 2, 3],
-                // y: [2, 6, 3],
-                x: paramEpoch(data).reverse(),
-                y: paramArray(data).reverse(),
-                type: 'scatter',
-                mode: 'lines+markers',
-                marker: {color: 'red'},
-              },
-            ]}
-            layout={{ 
-                title: {
-                  text:'Plot Temperature A',
-                },
-                xaxis: {
-                  title: {
-                    // standoff: 80,
-                    text: 'Time',
-                  },
-                  // side: 'top',
-                },
-                yaxis: {
-                  title: {
-                    text: 'Temp [°C]',
-                  }
-                },
-                // width: 500, height: 320,
-              }
-            }
-          />
-        </div>
-        <div className="flex justify-center">
-          <Plot
-            data={[
-              {
-                // x: [1, 2, 3],
-                // y: [2, 6, 3],
-                x: paramEpoch(data).reverse(),
-                y: paramArray(data, 1).reverse(),
-                type: 'scatter',
-                mode: 'lines+markers',
-                marker: {color: 'red'},
-              },
-            ]}
-            layout={{ 
-                title: {
-                  text:'Plot Temperature B',
-                },
-                xaxis: {
-                  title: {
-                    // standoff: 80,
-                    text: 'Time',
-                  },
-                  // side: 'top',
-                },
-                yaxis: {
-                  title: {
-                    text: 'Temp [°C]',
-                  }
-                },
-                // width: 500, height: 320,
-              }
-            }
-          />
-        </div>
-      </div>
+    {/* Display Plots */}
       <div className="flex flex-row">
         <div className="flex justify-center">
           <Plot
@@ -175,6 +105,76 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
             layout={{ 
                 title: {
                   text:'Plot Temperature PCB',
+                },
+                xaxis: {
+                  title: {
+                    // standoff: 80,
+                    text: 'Time',
+                  },
+                  // side: 'top',
+                },
+                yaxis: {
+                  title: {
+                    text: 'Temp [°C]',
+                  }
+                },
+                // width: 500, height: 320,
+              }
+            }
+          />
+        </div>
+      </div>
+      <div className="flex flex-row">
+        <div className="flex justify-center">
+          <Plot
+            data={[
+              {
+                // x: [1, 2, 3],
+                // y: [2, 6, 3],
+                x: paramEpoch(data).reverse(),
+                y: paramArray(data).reverse(),
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: {color: 'red'},
+              },
+            ]}
+            layout={{ 
+                title: {
+                  text:'Plot Temperature A',
+                },
+                xaxis: {
+                  title: {
+                    // standoff: 80,
+                    text: 'Time',
+                  },
+                  // side: 'top',
+                },
+                yaxis: {
+                  title: {
+                    text: 'Temp [°C]',
+                  }
+                },
+                // width: 500, height: 320,
+              }
+            }
+          />
+        </div>
+        <div className="flex justify-center">
+          <Plot
+            data={[
+              {
+                // x: [1, 2, 3],
+                // y: [2, 6, 3],
+                x: paramEpoch(data).reverse(),
+                y: paramArray(data, 1).reverse(),
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: {color: 'red'},
+              },
+            ]}
+            layout={{ 
+                title: {
+                  text:'Plot Temperature B',
                 },
                 xaxis: {
                   title: {
