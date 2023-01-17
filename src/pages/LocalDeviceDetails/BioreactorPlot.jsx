@@ -78,6 +78,7 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                     text: 'Time',
                   },
                   // side: 'top',
+                  tickangle: -45,
                 },
                 yaxis: {
                   title: {
@@ -110,8 +111,10 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                   title: {
                     // standoff: 80,
                     text: 'Time',
+                    constraintoward: 'left',
                   },
                   // side: 'top',
+                  tickangle: -45,
                 },
                 yaxis: {
                   title: {
@@ -148,6 +151,7 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                     text: 'Time',
                   },
                   // side: 'top',
+                  tickangle: -45,
                 },
                 yaxis: {
                   title: {
@@ -182,6 +186,7 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                     text: 'Time',
                   },
                   // side: 'top',
+                  tickangle: -45,
                 },
                 yaxis: {
                   title: {
