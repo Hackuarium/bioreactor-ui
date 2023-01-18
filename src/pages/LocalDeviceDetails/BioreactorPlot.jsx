@@ -48,6 +48,7 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
   };
 
   const paramEpoch = (data) => {
+    console.log(data.map((d) => msToTime(d.epoch).replaceAll(' ', '')));
     return data.map((d) => msToTime(d.epoch).replaceAll(' ', ''));
   };
 
@@ -77,6 +78,8 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                     // standoff: 80,
                     text: 'Time',
                   },
+                  // dtick: 86400000.0,
+                  nticks: 10,
                   // side: 'top',
                   tickangle: -45,
                 },
@@ -114,6 +117,7 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                     constraintoward: 'left',
                   },
                   // side: 'top',
+                  nticks: 10,
                   tickangle: -45,
                 },
                 yaxis: {
@@ -151,6 +155,7 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                     text: 'Time',
                   },
                   // side: 'top',
+                  nticks: 10,
                   tickangle: -45,
                 },
                 yaxis: {
@@ -186,6 +191,7 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                     text: 'Time',
                   },
                   // side: 'top',
+                  nticks: 10,
                   tickangle: -45,
                 },
                 yaxis: {
