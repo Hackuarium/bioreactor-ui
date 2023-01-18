@@ -62,9 +62,9 @@ const CardStatus = () => {
   return (
     <div className={clsx('flex', "w-full sm:w-1/2 md:w-full lg:w-full")}>
       <div className="w-full m-2 p-2 flex-1 flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
-        <div className="w-full py-1 flex flex-row justify-between">
+        <div className="w-full py-1 flex flex-row justify-between items-start relative">
           <h3 className={'text-sm font-medium text-neutral-700'}>
-            {statusParameter.name}: {statusParameter.value}
+            {statusParameter.name || statusParameter.label}: {statusParameter.value}
           </h3>
           {statusParameter.description && (
             <div className=" group">
@@ -77,7 +77,7 @@ const CardStatus = () => {
                 className="absolute bottom-full right-0 hidden group-hover:flex z-10 p-1 bg-neutral-50 shadow-md rounded"
                 max-content={100}
               >
-                <span className="text-xs text-neutral-400">{statusParameter.description}</span>
+                <span className=" text-xs text-neutral-400 ">{statusParameter.description}</span>
               </div>
             </div>
           )}

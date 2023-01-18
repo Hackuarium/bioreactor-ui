@@ -58,7 +58,7 @@ const CardErrors = ({ color=0 }) => {
   return (
     <div className={clsx('flex', "w-full sm:w-1/2 md:w-full lg:w-full")}>
       <div className="w-full m-2 p-2 flex-1 flex-col justify-between items-left sm:items-start rounded-md bg-blue-gray-100 shadow-md">
-        <div className="w-full py-1 flex flex-row justify-between">
+        <div className="w-full py-1 flex flex-row justify-between items-start relative">
             <h3 className={clsx('text-sm font-medium text-neutral-700',
               color > 0 && 'text-success-700',
               color < 0 && 'text-danger-700',
