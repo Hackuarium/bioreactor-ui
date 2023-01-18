@@ -7,6 +7,7 @@ import ConfigTab from './ConfigTab';
 import AdvancedTab from './AdvancedTab';
 import BioreactorTab from "./BioreactorTab";
 import BioreactorPlot from './BioreactorPlot';
+import BioreactorSettings from './BioreactorSettings';
 import DeviceCardInfo from './DeviceCardInfo';
 import LocalDeviceModal from '../LocalDevices/LocalDeviceModal';
 import useNotification from '../../hooks/useNotification';
@@ -29,7 +30,7 @@ import { StatusParameterContext, ErrorParameterContext, StepParameterContext, St
 
 const SCAN_INTERVAL = 1000;
 
-let tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor', 'Plots'].map((v) => ({
+let tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor', 'Bioreactor Plots', 'Bioreactor Settings'].map((v) => ({
   value: v,
   label: v,
 }));
@@ -59,7 +60,7 @@ const LocalDevices = ({ match, history }) => {
       // console.log('currentDevice', check);
       if (!(check === '36' || check === 'Na')) {
         let newTab = [...tabs];
-        newTab = newTab.filter((tab) => tab.value !== 'Bioreactor');
+        newTab = newTab.filter((tab) => tab.value !== 'Bioreactor' || tab.value !== 'Bioreactor Plots' || tab.value !== 'Bioreactor Settings');
         tabs = newTab;
       }
     });
@@ -197,12 +198,16 @@ const LocalDevices = ({ match, history }) => {
               </ErrorParameterContext.Provider>
             </StatusParameterContext.Provider>
           );
-      case 'Plots':
+      case 'Bioreactor Plots':
         return (
           <BioreactorPlot
               device={currentDevice}
               refreshInterval={refreshInterval}
             />
+        );
+      case 'Bioreactor Settings':
+        return (
+          <BioreactorSettings data={currentData} />
         );
       default:
         return <div />;

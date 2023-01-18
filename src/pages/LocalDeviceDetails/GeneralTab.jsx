@@ -2,6 +2,7 @@ import { CardValue } from '../../components';
 import { msToTime } from '../../services/util';
 
 const GeneralTab = ({ data }) => {
+  console.log('Array: ', data?.parametersArray);
   return (
     <div className="flex flex-col">
       {data?.epoch && (
