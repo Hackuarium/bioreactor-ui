@@ -36,6 +36,35 @@ const BioreactorSettings = ({ data }) => {
     </label>
   ));
 
+const stepsForm2 = stepsValue.map((step) => (
+  <div className="flex flex-row">
+    <label className='text-gray-400'>Enter Step {step}:
+    </label>
+    <select {...register("Config", { required: true })}>
+      <option value="0">Action</option>
+      <option value="1">Change Parameter</option>
+    </select>
+    <select {...register("Flags", { required: true })}>
+      <option value="000001">Temperature control</option>
+      <option value="000010">Agitation control</option>
+      <option value="000100">Food control 1</option>
+      <option value="001000">Food control 2</option>
+      <option value="010000">Food control 3</option>
+      <option value="100000">Food control 4</option>
+    </select>
+    <select {...register("Actions", { required: true })}>
+      <option value="0">Do nothing</option>
+      <option value="1">Wait in minutes</option>
+      <option value="2">Wait in hours</option>
+      <option value="3">Wait for weight reduction to yy% of maximum weight</option>
+      <option value="4">Wait for weight increase to yy% of maximum weight</option>
+      <option value="5">Wait for temperature change</option>
+      <option value="6">Set all flags</option>
+    </select>
+    <input type="number" placeholder="Step 1" {...register("Step 1", {required: true, min: 0, maxLength: 80})} />
+  </div>
+));
+
   return (
     <div className="flex flex-col">
       {/* Display Awake time */}
@@ -50,20 +79,32 @@ const BioreactorSettings = ({ data }) => {
         )}
       </div>
       <DividerCustom title="Edit parameters" />
-      <div className="flex flex-col flex-wrap">
+      <div className="flex flex-row justify-between">
         {/* <form onSubmit={handleSubmit}>
           {stepsForm}
           <input type="submit" />
         </form> */}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <input type="number" placeholder="Step 1" {...register("Step 1", {required: true, min: 0, maxLength: 80})} />
-          <input type="number" placeholder="Step 2" {...register("Step 2", {required: true, min: 0, maxLength: 100})} />
+          {stepsForm2}
+          {/* <input type="number" placeholder="Step 2" {...register("Step 2", {required: true, min: 0, maxLength: 100})} />
           <input type="text" placeholder="Step 3" {...register("Step 3", {required: true, pattern: /^\S+@\S+$/i})} />
           <input type="text" placeholder="Step 4" {...register("Step 4", {required: true, minLength: 1, maxLength: 12})} />
+          <input type="number" placeholder="Step 5" {...register("Step 1", {required: true, min: 0, maxLength: 80})} />
+          <input type="number" placeholder="Step 6" {...register("Step 2", {required: true, min: 0, maxLength: 100})} />
+          <input type="text" placeholder="Step 7" {...register("Step 3", {required: true, pattern: /^\S+@\S+$/i})} />
+          <input type="text" placeholder="Step 8" {...register("Step 4", {required: true, minLength: 1, maxLength: 12})} />
+          <input type="number" placeholder="Step 9" {...register("Step 1", {required: true, min: 0, maxLength: 80})} />
+          <input type="number" placeholder="Step 10" {...register("Step 2", {required: true, min: 0, maxLength: 100})} />
+          <input type="text" placeholder="Step 11" {...register("Step 3", {required: true, pattern: /^\S+@\S+$/i})} />
+          <input type="text" placeholder="Step 12" {...register("Step 4", {required: true, minLength: 1, maxLength: 12})} />
+          <input type="number" placeholder="Step 13" {...register("Step 1", {required: true, min: 0, maxLength: 80})} />
+          <input type="number" placeholder="Step 14" {...register("Step 2", {required: true, min: 0, maxLength: 100})} />
+          <input type="text" placeholder="Step 15" {...register("Step 3", {required: true, pattern: /^\S+@\S+$/i})} />
+          <input type="text" placeholder="Step 16" {...register("Step 4", {required: true, minLength: 1, maxLength: 12})} />
           <select {...register("Title", { required: true })}>
             <option value="Step">Step</option>
             <option value="Parameter">Parameter</option>
-          </select>
+          </select> */}
 
           <input {...register("Set", { required: true })} type="radio" value="Yes" />
           <input {...register("Set", { required: true })} type="radio" value="No" />
