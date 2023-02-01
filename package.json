@@ -15,7 +15,7 @@
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
-    "@emotion/react": "^11.4.1",
+    "@emotion/react": "^11.10.5",
     "@headlessui/react": "^1.4.1",
     "@lukeed/uuid": "^2.0.0",
     "@popperjs/core": "^2.10.1",
