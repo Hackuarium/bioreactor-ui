@@ -5,7 +5,7 @@ import GeneralTab from './GeneralTab';
 import HistoryTab from './HistoryTab';
 import ConfigTab from './ConfigTab';
 import AdvancedTab from './AdvancedTab';
-import BioreactorTab from "./BioreactorTab";
+import BioreactorTab from './BioreactorTab';
 import BioreactorPlot from './BioreactorPlot';
 import BioreactorSettings from './BioreactorSettings';
 import DeviceCardInfo from './DeviceCardInfo';
@@ -26,11 +26,24 @@ import {
   getLastSavedData,
 } from '../../services/devicesService';
 
-import { StatusParameterContext, ErrorParameterContext, StepParameterContext, StepsProtocolParameterContext } from './Contexts';
+import {
+  StatusParameterContext,
+  ErrorParameterContext,
+  StepParameterContext,
+  StepsProtocolParameterContext,
+} from './Contexts';
 
 const SCAN_INTERVAL = 1000;
 
-let tabs = ['General', 'History', 'Advanced', 'Configuration','Bioreactor', 'Bioreactor Plots', 'Bioreactor Settings'].map((v) => ({
+let tabs = [
+  'General',
+  'History',
+  'Advanced',
+  'Configuration',
+  'Bioreactor',
+  'Bioreactor Plots',
+  'Bioreactor Settings',
+].map((v) => ({
   value: v,
   label: v,
 }));
@@ -56,11 +69,16 @@ const LocalDevices = ({ match, history }) => {
     const deviceId = `${match.params.id}`;
     getDevice(deviceId).then((_device) => {
       setCurrentDevice(_device);
-      let check = Number(_device?.id).toString(16).slice(0,2);
+      let check = Number(_device?.id).toString(16).slice(0, 2);
       // console.log('currentDevice', check);
       if (!(check === '36' || check === 'Na')) {
         let newTab = [...tabs];
-        newTab = newTab.filter((tab) => tab.value !== 'Bioreactor' || tab.value !== 'Bioreactor Plots' || tab.value !== 'Bioreactor Settings');
+        newTab = newTab.filter(
+          (tab) =>
+            tab.value !== 'Bioreactor' ||
+            tab.value !== 'Bioreactor Plots' ||
+            tab.value !== 'Bioreactor Settings',
+        );
         tabs = newTab;
       }
     });
@@ -68,7 +86,7 @@ const LocalDevices = ({ match, history }) => {
 
   // get data from device
   const getCurrentData = useCallback(async () => {
-    const steps = [...Array(16).keys()].map((v) => v+1);
+    const steps = [...Array(16).keys()].map((v) => v + 1);
     if (currentDevice?.id) {
       if (currentDevice?.connected) {
         try {
@@ -81,12 +99,26 @@ const LocalDevices = ({ match, history }) => {
             parameterInfo: true,
             parametersArray: true,
           });
-          setCurrentData(results);  // Update current data on-line
+          setCurrentData(results); // Update current data on-line
           saveDataRow(currentDevice._id, results);
-          setStatusParameter(results.parametersArray?.find(param => param.name === 'Status'));
-          setErrorParameter(results.parametersArray?.find(param => param.name === 'Error'));
-          setStepParameter(results.parametersArray?.find(param => param.name === 'Current step'));
-          setStepsProtocolParameter(steps.map(v => (results.parametersArray?.find(param => param.name === `Step ${v}`))));
+          setStatusParameter(
+            results.parametersArray?.find((param) => param.name === 'Status'),
+          );
+          setErrorParameter(
+            results.parametersArray?.find((param) => param.name === 'Error'),
+          );
+          setStepParameter(
+            results.parametersArray?.find(
+              (param) => param.name === 'Current step',
+            ),
+          );
+          setStepsProtocolParameter(
+            steps.map((v) =>
+              results.parametersArray?.find(
+                (param) => param.name === `Step ${v}`,
+              ),
+            ),
+          );
         } catch (e) {
           //  console.log(e.message);
         }
@@ -95,10 +127,24 @@ const LocalDevices = ({ match, history }) => {
         getLastSavedData(currentDevice._id).then((row) => {
           if (row.length > 0) {
             setCurrentData(row[0]);
-            setStatusParameter(row[0].parametersArray?.find(param => param.name === 'Status'));
-            setErrorParameter(row[0].parametersArray?.find(param => param.name === 'Error'));
-            setStepParameter(row[0].parametersArray?.find(param => param.name === 'Current step'));
-            setStepsProtocolParameter(steps.map(v => (row[0].parametersArray?.find(param => param.name === `Step ${v}`))));
+            setStatusParameter(
+              row[0].parametersArray?.find((param) => param.name === 'Status'),
+            );
+            setErrorParameter(
+              row[0].parametersArray?.find((param) => param.name === 'Error'),
+            );
+            setStepParameter(
+              row[0].parametersArray?.find(
+                (param) => param.name === 'Current step',
+              ),
+            );
+            setStepsProtocolParameter(
+              steps.map((v) =>
+                row[0].parametersArray?.find(
+                  (param) => param.name === `Step ${v}`,
+                ),
+              ),
+            );
           }
         });
       }
@@ -159,7 +205,7 @@ const LocalDevices = ({ match, history }) => {
       setIsModalOpen(false);
     });
   };
-  
+
   const renderTabContent = (tab) => {
     // console.log('Check', Number(currentDevice?.id).toString(16).slice(0,2));
     switch (tab.value) {
@@ -185,30 +231,30 @@ const LocalDevices = ({ match, history }) => {
           />
         );
       case 'Bioreactor':
-          // console.log(currentData);
-          // console.log(currentDevice);
-          return (
-            <StatusParameterContext.Provider value={statusParameter}>
-              <ErrorParameterContext.Provider value={errorParameter}>
-                <StepParameterContext.Provider value={stepParameter}>
-                  <StepsProtocolParameterContext.Provider value={stepsProtocolParameter}>
-                    <BioreactorTab data={currentData} />
-                  </StepsProtocolParameterContext.Provider>
-                </StepParameterContext.Provider>
-              </ErrorParameterContext.Provider>
-            </StatusParameterContext.Provider>
-          );
+        // console.log(currentData);
+        // console.log(currentDevice);
+        return (
+          <StatusParameterContext.Provider value={statusParameter}>
+            <ErrorParameterContext.Provider value={errorParameter}>
+              <StepParameterContext.Provider value={stepParameter}>
+                <StepsProtocolParameterContext.Provider
+                  value={stepsProtocolParameter}
+                >
+                  <BioreactorTab data={currentData} />
+                </StepsProtocolParameterContext.Provider>
+              </StepParameterContext.Provider>
+            </ErrorParameterContext.Provider>
+          </StatusParameterContext.Provider>
+        );
       case 'Bioreactor Plots':
         return (
           <BioreactorPlot
-              device={currentDevice}
-              refreshInterval={refreshInterval}
-            />
+            device={currentDevice}
+            refreshInterval={refreshInterval}
+          />
         );
       case 'Bioreactor Settings':
-        return (
-          <BioreactorSettings data={currentData} />
-        );
+        return <BioreactorSettings data={currentData} />;
       default:
         return <div />;
     }
