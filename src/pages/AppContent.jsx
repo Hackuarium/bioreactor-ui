@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
-import { Route, Switch } from 'react-router-dom';
-
+import { Route, Routes } from 'react-router-dom';
 import { routes, renderRoutes } from '../navigation/routeHelper';
 
 import {
@@ -10,6 +9,7 @@ import {
 } from '../components/tailwind-ui';
 
 const AppContent = () => {
+  const Tab = routes[0].component;
   return (
     <div className="w-full h-full max-w-full" data-testid="App-content">
       <NotificationProvider>
@@ -21,11 +21,11 @@ const AppContent = () => {
             </div>
           }
         >
-          <Switch>
+          <Routes>
             {renderRoutes(routes)}
             {/**use the first route as default one */}
-            <Route path={'/'} exact component={routes[0].component} />
-          </Switch>
+            <Route path={'/'} element={<Tab />} />
+          </Routes>
         </Suspense>
       </NotificationProvider>
     </div>

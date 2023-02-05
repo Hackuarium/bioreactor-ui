@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/tailwind-ui';
 
+import { useNavigate } from 'react-router-dom';
+
 import LocalDeviceModal from './LocalDeviceModal';
 import LocalDevicesList from './LocalDevicesList';
 import useNotification from '../../hooks/useNotification';
@@ -29,6 +31,8 @@ const LocalDevices = ({ history, match }) => {
   const { addInfoNotification } = useNotification();
 
   useEffect(() => refreshDevices(), []);
+
+  const navigate = useNavigate();
 
   // update devices status continuously
   useEffect(() => {
@@ -76,7 +80,8 @@ const LocalDevices = ({ history, match }) => {
   };
 
   const onSelectDevice = (device, e) => {
-    history.push(match.url + '/' + device._id);
+    // history.push(match.url + '/' + device._id);
+    navigate(match.url + '/' + device._id);
   };
 
   const onEditDevice = async (device, e) => {

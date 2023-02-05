@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom-v5-compat';
 
 import {
   SvgOutlineMenu,
@@ -17,7 +18,8 @@ const getNavbarOptions = (routes, onClick) =>
       const renderOption =
         route.component || route.render
           ? (children, option) => (
-              <NavLink to={option.value} exact onClick={onClick}>
+              // <NavLink to={option.value} exact onClick={onClick}>
+              <NavLink end to={option.value} onClick={onClick}>
                 {children}
               </NavLink>
             )
