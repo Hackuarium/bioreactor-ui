@@ -1,4 +1,4 @@
-import mqtt from 'mqtt';
+import mqtt from 'mqtt-packet';
 import { isFunction } from 'lodash';
 import { parseCurrentSettings } from 'legoino-util';
 
