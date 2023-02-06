@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { parseCurrentSettings } from 'legoino-util';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import GeneralTab from './GeneralTab';
 import HistoryTab from './HistoryTab';
@@ -48,7 +49,7 @@ let tabs = [
   label: v,
 }));
 
-const LocalDevices = ({ match, history }) => {
+const LocalDevices = (props) => {
   const [currentDevice, setCurrentDevice] = useState();
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,9 +65,12 @@ const LocalDevices = ({ match, history }) => {
 
   const { addWarningNotification } = useNotification();
 
+  const match = useParams();
+  const history = useNavigate();
+
   // get device from DB just in the first render
   useEffect(() => {
-    const deviceId = `${match.params.id}`;
+    const deviceId = `${match.id}`;
     getDevice(deviceId).then((_device) => {
       setCurrentDevice(_device);
       let check = Number(_device?.id).toString(16).slice(0, 2);
@@ -82,7 +86,7 @@ const LocalDevices = ({ match, history }) => {
         tabs = newTab;
       }
     });
-  }, [match.params.id]);
+  }, [match.id]);
 
   // get data from device
   const getCurrentData = useCallback(async () => {
@@ -264,7 +268,7 @@ const LocalDevices = ({ match, history }) => {
     <div className="mx-4 pb-4">
       <DeviceCardInfo
         device={currentDevice}
-        goBack={() => history.goBack()}
+        goBack={() => history(-1)}
         onOpenModel={setIsModalOpen}
         onRequest={onRequest}
       />
