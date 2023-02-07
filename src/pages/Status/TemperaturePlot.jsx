@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import { Data, Data2 } from '../utils/Data';
 import LineChart from './LineChart';
 
