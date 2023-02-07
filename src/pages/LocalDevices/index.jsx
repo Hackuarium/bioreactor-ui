@@ -34,7 +34,7 @@ const LocalDevices = (props) => {
 
   // React Router v6
   const history = useNavigate();
-  const match = useParams();
+  // const match = useParams();
 
   // update devices status continuously
   useEffect(() => {

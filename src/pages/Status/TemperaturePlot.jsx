@@ -37,7 +37,7 @@ export const data = {
 };
 
 const TemperaturePlot = () => {
-  const [chartData, setChartData] = useState({
+  const chartData = {
     labels: Data.map((data) => data.x),
     datasets: [
       {
@@ -55,7 +55,7 @@ const TemperaturePlot = () => {
         borderWidth: 2,
       },
     ],
-  });
+  };
 
   return (
     <div className="w-max h-max m-2 p-4 flex justify-center items-center rounded-md bg-white shadow">

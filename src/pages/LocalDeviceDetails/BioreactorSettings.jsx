@@ -104,7 +104,6 @@ const StepsForm = ({ stepsValue, register, OnRefreshIntervalChanged }) =>
   ));
 
 const BioreactorSettings = ({ data }) => {
-  const [steps, setSteps] = useState({});
   // const stepsValue = [...Array(16).keys()].map((v) => v + 1);
   const stepsValue = useMemo(() => [...Array(16).keys()].map((v) => v + 1), []);
 
