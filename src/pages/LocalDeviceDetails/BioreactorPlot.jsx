@@ -5,7 +5,6 @@ import { getSavedData } from '../../services/devicesService';
 import { msToTime } from '../../services/util';
 import Plot from 'react-plotly.js';
 
-
 const BioreactorPlot = ({ device, refreshInterval }) => {
   const [headers, setHeaders] = useState([]);
   const [data, setData] = useState([]);
@@ -43,18 +42,19 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
     }
   };
 
-  const paramArray = (data, param=0) => {
+  const paramArray = (data, param = 0) => {
     return data.map((d) => d.parametersArray[param].value);
   };
 
   const paramEpoch = (data) => {
-    console.log(data.map((d) => msToTime(d.epoch).replaceAll(' ', '')));
-    return data.map((d) => msToTime(d.epoch).replaceAll(' ', ''));
+    // console.log(data.map((d) => msToTime(d.epoch).replaceAll(' ', '')));
+    // return data.map((d) => msToTime(d.epoch).replaceAll(' ', ''));
+    return data.map((d) => new Date(d.epoch).toLocaleTimeString());
   };
 
   return (
     <div className="flex flex-col">
-    {/* Display Plots */}
+      {/* Display Plots */}
       <div className="flex flex-row">
         <div className="flex justify-center">
           <Plot
@@ -66,31 +66,30 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                 y: paramArray(data, 6).reverse(),
                 type: 'scatter',
                 mode: 'lines+markers',
-                marker: {color: 'red'},
+                marker: { color: 'red' },
               },
             ]}
-            layout={{ 
+            layout={{
+              title: {
+                text: 'Plot Weight',
+              },
+              xaxis: {
                 title: {
-                  text:'Plot Weight',
+                  // standoff: 80,
+                  text: 'Time',
                 },
-                xaxis: {
-                  title: {
-                    // standoff: 80,
-                    text: 'Time',
-                  },
-                  // dtick: 86400000.0,
-                  nticks: 10,
-                  // side: 'top',
-                  tickangle: -45,
+                // dtick: 86400000.0,
+                nticks: 10,
+                // side: 'top',
+                tickangle: -45,
+              },
+              yaxis: {
+                title: {
+                  text: 'Weight [gr]',
                 },
-                yaxis: {
-                  title: {
-                    text: 'Weight [gr]',
-                  }
-                },
-                // width: 500, height: 320,
-              }
-            }
+              },
+              // width: 500, height: 320,
+            }}
           />
         </div>
         <div className="flex justify-center">
@@ -103,31 +102,30 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                 y: paramArray(data, 2).reverse(),
                 type: 'scatter',
                 mode: 'lines+markers',
-                marker: {color: 'red'},
+                marker: { color: 'red' },
               },
             ]}
-            layout={{ 
+            layout={{
+              title: {
+                text: 'Plot Temperature PCB',
+              },
+              xaxis: {
                 title: {
-                  text:'Plot Temperature PCB',
+                  // standoff: 80,
+                  text: 'Time',
+                  constraintoward: 'left',
                 },
-                xaxis: {
-                  title: {
-                    // standoff: 80,
-                    text: 'Time',
-                    constraintoward: 'left',
-                  },
-                  // side: 'top',
-                  nticks: 10,
-                  tickangle: -45,
+                // side: 'top',
+                nticks: 10,
+                tickangle: -45,
+              },
+              yaxis: {
+                title: {
+                  text: 'Temp [°C]',
                 },
-                yaxis: {
-                  title: {
-                    text: 'Temp [°C]',
-                  }
-                },
-                // width: 500, height: 320,
-              }
-            }
+              },
+              // width: 500, height: 320,
+            }}
           />
         </div>
       </div>
@@ -142,30 +140,29 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                 y: paramArray(data).reverse(),
                 type: 'scatter',
                 mode: 'lines+markers',
-                marker: {color: 'red'},
+                marker: { color: 'red' },
               },
             ]}
-            layout={{ 
+            layout={{
+              title: {
+                text: 'Plot Temperature A',
+              },
+              xaxis: {
                 title: {
-                  text:'Plot Temperature A',
+                  // standoff: 80,
+                  text: 'Time',
                 },
-                xaxis: {
-                  title: {
-                    // standoff: 80,
-                    text: 'Time',
-                  },
-                  // side: 'top',
-                  nticks: 10,
-                  tickangle: -45,
+                // side: 'top',
+                nticks: 10,
+                tickangle: -45,
+              },
+              yaxis: {
+                title: {
+                  text: 'Temp [°C]',
                 },
-                yaxis: {
-                  title: {
-                    text: 'Temp [°C]',
-                  }
-                },
-                // width: 500, height: 320,
-              }
-            }
+              },
+              // width: 500, height: 320,
+            }}
           />
         </div>
         <div className="flex justify-center">
@@ -178,30 +175,29 @@ const BioreactorPlot = ({ device, refreshInterval }) => {
                 y: paramArray(data, 1).reverse(),
                 type: 'scatter',
                 mode: 'lines+markers',
-                marker: {color: 'red'},
+                marker: { color: 'red' },
               },
             ]}
-            layout={{ 
+            layout={{
+              title: {
+                text: 'Plot Temperature B',
+              },
+              xaxis: {
                 title: {
-                  text:'Plot Temperature B',
+                  // standoff: 80,
+                  text: 'Time',
                 },
-                xaxis: {
-                  title: {
-                    // standoff: 80,
-                    text: 'Time',
-                  },
-                  // side: 'top',
-                  nticks: 10,
-                  tickangle: -45,
+                // side: 'top',
+                nticks: 10,
+                tickangle: -45,
+              },
+              yaxis: {
+                title: {
+                  text: 'Temp [°C]',
                 },
-                yaxis: {
-                  title: {
-                    text: 'Temp [°C]',
-                  }
-                },
-                // width: 500, height: 320,
-              }
-            }
+              },
+              // width: 500, height: 320,
+            }}
           />
         </div>
       </div>
