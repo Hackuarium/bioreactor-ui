@@ -56,7 +56,7 @@ const LocalDevices = (props) => {
   const [forceRender, setForceRender] = useState(false);
 
   const [currentData, setCurrentData] = useState({}); // data to display
-  const [refreshInterval, setRefreshInterval] = useState(2000);
+  const [refreshInterval, setRefreshInterval] = useState(30000);
 
   const [statusParameter, setStatusParameter] = useState([]);
   const [errorParameter, setErrorParameter] = useState([]);
