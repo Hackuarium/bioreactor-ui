@@ -3,6 +3,9 @@ import { useState, useEffect, memo } from 'react';
 import { CardStatus, CardErrors, CardSteps } from '../../components';
 import { msToTime } from '../../services/util';
 
+// import { ReactComponent as Bioreactor } from '../../components/bioreactor/Bioreactor';
+import { Bioreactor } from '../../components/bioreactor/Bioreactor';
+
 const COLOR_CHANGED_TIMEOUT = 700;
 
 const BioreactorTab = ({ data }) => {
@@ -11,8 +14,10 @@ const BioreactorTab = ({ data }) => {
 
   // console.log('BioreactorTab');
 
-  const errorParameter = data.parametersArray?.find(param => param.name === 'Error');
-  
+  const errorParameter = data.parametersArray?.find(
+    (param) => param.name === 'Error',
+  );
+
   // change color when Error is not zero
   useEffect(() => {
     let timeout;
@@ -52,6 +57,12 @@ const BioreactorTab = ({ data }) => {
       {/* Display Status, Errors and Steps */}
       <div className="flex flex-row flex-wrap">
         <div className="flex flex-col flex-auto">
+          <div
+            className="flex flex-row justify-around flex-wrap"
+            style={{ transform: 'scale(1)' }}
+          >
+            <Bioreactor />
+          </div>
           <div className="flex flex-row justify-around flex-wrap">
             {/* Display Status */}
             <CardStatus />
@@ -62,9 +73,9 @@ const BioreactorTab = ({ data }) => {
           </div>
         </div>
         <div className="flex flex-row justify-around flex-wrap">
-            {/* Display Current Steps */}
-            <CardSteps />
-          </div>
+          {/* Display Current Steps */}
+          <CardSteps />
+        </div>
       </div>
     </div>
   );

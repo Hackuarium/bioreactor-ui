@@ -32,10 +32,18 @@ const AdvancedTab = ({ device }) => {
         const data = await sendCommand(deviceId, command);
         setResults(data);
       } catch (e) {
-        addErrorNotification(
-          e.name,
-          !device?.connected ? `${device?.name} is disconnected` : e.message,
-        );
+        e.name === 'Error'
+          ? addErrorNotification(
+              e.name,
+              !device?.connected
+                ? `${device?.name} is disconnected`
+                : e.message,
+            )
+          : addErrorNotification('Error', e);
+        // addErrorNotification(
+        //   e.name,
+        //   !device?.connected ? `${device?.name} is disconnected` : e.message,
+        // );
       }
     }
   };
