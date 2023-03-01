@@ -151,7 +151,6 @@ const calculateTable = ({ tableValues }) => {
       }
       flagStep[index] = [tempFlag];
     }
-    // console.log("flagStep", flagStep);
     return flagStep;
   });
 
@@ -163,8 +162,8 @@ const TableSteps = ({ confStep, flagStep, actStep, value }) => {
     let classTemp = '';
     Number(flagStep[index][0]) === 0
       ? (classTemp = 'text-gray-600')
-      : (classTemp = 'text-warning-600');
-    if (value === index) classTemp = 'text-success-600';
+      : (classTemp = 'text-black');
+    if (value === index) classTemp = 'text-success-600 font-bold';
     return (
       <tr className={classTemp} key={index}>
         <td>{index + 1}</td>
@@ -178,11 +177,8 @@ const TableSteps = ({ confStep, flagStep, actStep, value }) => {
 };
 
 const CardSteps = () => {
-  // console.log('CardSteps');
   const stepParameter = useContext(StepParameterContext);
   const stepsProtocolParameter = useContext(StepsProtocolParameterContext);
-  // console.log('stepParameter', stepParameter);
-  // console.log('stepsProtocolParameter', stepsProtocolParameter);
   const tableValuesFunc = useMemo(
     () => obtainTableValues({ stepsProtocolParameter }),
     [stepsProtocolParameter],
