@@ -58,23 +58,23 @@ const BioreactorTab = ({ data }) => {
       <div className="flex flex-row flex-wrap">
         <div className="flex flex-col flex-auto">
           <div
-            className="flex flex-row justify-around flex-wrap"
+            className="flex flex-col justify-around flex-wrap m-2 p-2 rounded-md bg-blue-gray-100 shadow-md"
             style={{ transform: 'scale(1)' }}
           >
             <Bioreactor />
+            <div className="flex flex-row justify-around flex-auto">
+              {/* Display Errors */}
+              <CardErrors color={color} />
+            </div>
+          </div>
+          <div className="flex flex-row justify-around flex-wrap content-start">
+            {/* Display Current Steps */}
+            <CardSteps />
           </div>
           <div className="flex flex-row justify-around flex-wrap">
             {/* Display Status */}
             <CardStatus />
           </div>
-          <div className="flex flex-row justify-around flex-auto">
-            {/* Display Errors */}
-            <CardErrors color={color} />
-          </div>
-        </div>
-        <div className="flex flex-row justify-around flex-wrap">
-          {/* Display Current Steps */}
-          <CardSteps />
         </div>
       </div>
     </div>
