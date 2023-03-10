@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbioreactor_ui=self.webpackChunkbioreactor_ui||[]).push([[615],{5615:function(e,i,r){r.r(i);var t=r(184);i.default=function(){return(0,t.jsx)("div",{children:"Settings"})}}}]);
+//# sourceMappingURL=615.d3e9ed3f.chunk.js.map
