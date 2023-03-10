@@ -1,64 +1,47 @@
 import React from 'react';
-import { Data, Data2 } from '../utils/Data';
-import LineChart from './LineChart';
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
-    },
-  },
-};
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => Math.random() * 100),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => Math.random() * 100),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
+import { Data1, Data2 } from '../utils/Data';
+import { Axis, LineSeries, Plot, Heading, Legend } from 'react-plot';
 
 const TemperaturePlot = () => {
-  const chartData = {
-    labels: Data.map((data) => data.x),
-    datasets: [
-      {
-        label: 'Current Temperature',
-        data: Data.map((data) => data.y),
-        backgroundColor: 'blue',
-        borderColor: 'blue',
-        borderWidth: 2,
-      },
-      {
-        label: 'Target Temperature',
-        data: Data2.map((data) => data.y),
-        backgroundColor: 'red',
-        borderColor: 'red',
-        borderWidth: 2,
-      },
-    ],
-  };
-
   return (
     <div className="w-max h-max m-2 p-4 flex justify-center items-center rounded-md bg-white shadow">
-      <LineChart options={options} data={chartData} />
+      <Plot
+        width={900}
+        height={400}
+        margin={{ bottom: 50, left: 55, top: 20, right: 20 }}
+        seriesViewportStyle={{
+          stroke: 'black',
+          strokeWidth: 0.3,
+        }}
+      >
+        <Heading title="Temperature" />
+
+        <Axis id="x" position="bottom" label="Time" labelSpace={25} />
+        <Axis
+          id="y"
+          position="left"
+          label="°C"
+          labelSpace={40}
+          paddingEnd={0.1}
+        />
+
+        <LineSeries
+          data={Data1}
+          xAxis="x"
+          yAxis="y"
+          lineStyle={{ stroke: 'red', strokeWidth: 2 }}
+          label="Current temperature °C"
+        />
+
+        <LineSeries
+          data={Data2}
+          xAxis="x"
+          yAxis="y"
+          lineStyle={{ stroke: 'green', strokeWidth: 2 }}
+          label="Target temperature °C"
+        />
+        <Legend position="embedded" bottom="80" left="0"></Legend>
+      </Plot>
     </div>
   );
 };

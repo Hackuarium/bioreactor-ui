@@ -6,7 +6,7 @@ import { msToTime } from '../../services/util';
 // import { ReactComponent as Bioreactor } from '../../components/bioreactor/Bioreactor';
 import { Bioreactor } from '../../components/bioreactor/Bioreactor';
 
-const COLOR_CHANGED_TIMEOUT = 700;
+const COLOR_CHANGED_TIMEOUT = 5000;
 
 const BioreactorTab = ({ data }) => {
   const [_value, setValue] = useState('');
@@ -58,22 +58,27 @@ const BioreactorTab = ({ data }) => {
       <div className="flex flex-row flex-wrap">
         <div className="flex flex-col flex-auto">
           <div
-            className="flex flex-col justify-around flex-wrap m-2 p-2 rounded-md bg-blue-gray-100 shadow-md"
+            className="flex flex-row justify-around flex-wrap m-2 p-2 rounded-md bg-blue-gray-100 shadow-md"
             style={{ transform: 'scale(1)' }}
           >
-            <Bioreactor />
-            <div className="flex flex-row justify-around flex-auto">
-              {/* Display Errors */}
-              <CardErrors color={color} />
+            <div
+              className="flex flex-row justify-around flex-auto"
+              style={{ transform: 'scale(1)' }}
+            >
+              <Bioreactor />
             </div>
+            <div className="flex flex-row justify-around flex-wrap">
+              {/* Display Status */}
+              <CardStatus />
+            </div>
+          </div>
+          <div className="flex flex-row justify-around flex-auto">
+            {/* Display Errors */}
+            <CardErrors color={color} />
           </div>
           <div className="flex flex-row justify-around flex-wrap content-start">
             {/* Display Current Steps */}
             <CardSteps />
-          </div>
-          <div className="flex flex-row justify-around flex-wrap">
-            {/* Display Status */}
-            <CardStatus />
           </div>
         </div>
       </div>
