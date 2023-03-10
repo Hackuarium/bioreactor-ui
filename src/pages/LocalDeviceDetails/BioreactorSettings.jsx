@@ -51,8 +51,8 @@ const actions = [
 }));
 
 const StepsForm = ({ stepsValue, register, OnRefreshIntervalChanged }) =>
-  stepsValue.map((step) => (
-    <div className="flex flex-row">
+  stepsValue.map((step, index) => (
+    <div key={index} className="flex flex-row">
       <div className="my-2.5 flex flex-auto justify-between">
         <label className="text-gray-400">Set Step {step}:</label>
       </div>
@@ -114,7 +114,7 @@ const BioreactorSettings = ({ data }) => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => console.log(data);
-  console.log(errors);
+  Object.keys(errors).length !== 0 && console.log(errors);
 
   // const handleChange = (event) => {
   //   const step = event.target.name;
