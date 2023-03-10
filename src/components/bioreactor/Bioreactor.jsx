@@ -22,8 +22,6 @@ import MeasureRule from './layouts/MeasureRule';
 import SpatulaLeft from './SpatulaLeft';
 import SpatulaRight from './SpatulaRight';
 
-const envelope = [<Liquid />, <StepperMotorRod />];
-
 export const Bioreactor = () => {
   return (
     <svg

@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Button, Table, Td, Th, useTable } from '../../components/tailwind-ui';
 import { getSavedData, clearSavedData } from '../../services/devicesService';
-import { msToTime } from '../../services/util';
+// import { msToTime } from '../../services/util';
 
 const ROWS_BY_PAGE = 10;
 

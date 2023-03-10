@@ -2,7 +2,7 @@ import { useState, useEffect, memo } from 'react';
 
 import { getSavedData } from '../../services/devicesService';
 
-import { msToTime } from '../../services/util';
+// import { msToTime } from '../../services/util';
 import Plot from 'react-plotly.js';
 
 const BioreactorPlot = ({ device, refreshInterval }) => {
