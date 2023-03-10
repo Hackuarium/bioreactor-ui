@@ -1,5 +1,6 @@
-import { Route } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Route, useLocation } from 'react-router-dom';
+// import { Route } from 'react-router-dom-v5-compat';
+// import { useLocation } from 'react-router-dom-v5-compat';
 
 import ROUTS from './routes';
 
@@ -9,23 +10,14 @@ export const routes = ROUTS;
 export const renderRoutes = (routes) =>
   routes.flatMap((route) => {
     const routeList = [];
+    const RouteElement = route.component;
     if (route.component)
       routeList.push(
-        <Route
-          key={route.id}
-          path={route.value}
-          exact={route.exact}
-          component={route.component}
-        />,
+        <Route key={route.id} path={route.value} element={<RouteElement />} />,
       );
     else if (route.render)
       routeList.push(
-        <Route
-          key={route.id}
-          path={route.value}
-          exact={route.exact}
-          render={route.render}
-        />,
+        <Route key={route.id} path={route.value} render={route.render} />,
       );
     // if it has sub routes, add them
     if (route.options) routeList.push(renderRoutes(route.options));

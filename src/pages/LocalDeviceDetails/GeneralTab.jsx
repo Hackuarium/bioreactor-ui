@@ -17,7 +17,7 @@ const GeneralTab = ({ data }) => {
           <CardValue
             key={index}
             title={param.name || param.label}
-            value={param.value * param.factor}
+            value={param.value * (param.factor || 1)}
             unit={param.unit}
             info={param.description}
             className="w-full sm:w-1/2  md:w-1/4 lg:w-1/5 flex"

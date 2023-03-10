@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/tailwind-ui';
 
+import { useNavigate } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
+
 import LocalDeviceModal from './LocalDeviceModal';
 import LocalDevicesList from './LocalDevicesList';
 import useNotification from '../../hooks/useNotification';
@@ -22,13 +25,17 @@ import {
 
 const REFRESH_INTERVAL = 1000;
 
-const LocalDevices = ({ history, match }) => {
+const LocalDevices = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [devices, setDevices] = useState([]);
   const [deviceEdited, setDeviceEdited] = useState({});
   const { addInfoNotification } = useNotification();
 
   useEffect(() => refreshDevices(), []);
+
+  // React Router v6
+  const history = useNavigate();
+  // const match = useParams();
 
   // update devices status continuously
   useEffect(() => {
@@ -76,7 +83,8 @@ const LocalDevices = ({ history, match }) => {
   };
 
   const onSelectDevice = (device, e) => {
-    history.push(match.url + '/' + device._id);
+    // history.push(match.url + '/' + device._id);
+    history(`${device._id}`);
   };
 
   const onEditDevice = async (device, e) => {

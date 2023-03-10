@@ -32,10 +32,18 @@ const AdvancedTab = ({ device }) => {
         const data = await sendCommand(deviceId, command);
         setResults(data);
       } catch (e) {
-        addErrorNotification(
-          e.name,
-          !device?.connected ? `${device?.name} is disconnected` : e.message,
-        );
+        e.name === 'Error'
+          ? addErrorNotification(
+              e.name,
+              !device?.connected
+                ? `${device?.name} is disconnected`
+                : e.message,
+            )
+          : addErrorNotification('Error', e);
+        // addErrorNotification(
+        //   e.name,
+        //   !device?.connected ? `${device?.name} is disconnected` : e.message,
+        // );
       }
     }
   };
@@ -72,6 +80,19 @@ const AdvancedTab = ({ device }) => {
       );
     }
     setTimeout(() => document.activeElement.blur(), 100);
+  };
+
+  const onEpoch = async () => {
+    const epoch = Date.now() / 1000;
+    try {
+      const data = await sendCommand(deviceId, `ue${epoch}`);
+      setResults(data);
+    } catch (e) {
+      addErrorNotification(
+        e.name,
+        !device?.connected ? `${device?.name} is disconnected` : e.message,
+      );
+    }
   };
 
   const handleDropdownSelect = (option) =>
@@ -142,6 +163,14 @@ const AdvancedTab = ({ device }) => {
               onClick={onSettings}
             >
               Settings
+            </Button>
+            <Button
+              className="m-1"
+              variant="white"
+              size="xSmall"
+              onClick={onEpoch}
+            >
+              Set Time
             </Button>
           </div>
         </div>

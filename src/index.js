@@ -1,16 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+// import { CompatRouter } from 'react-router-dom-]v5-compat';
 import './assets/main.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <BrowserRouter basename={process.env.PUBLIC_URL}>
+    {/* <CompatRouter> */}
     <App />
+    {/* </CompatRouter> */}
   </BrowserRouter>,
-  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

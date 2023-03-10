@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Button, Table, Td, Th, useTable } from '../../components/tailwind-ui';
 import { getSavedData, clearSavedData } from '../../services/devicesService';
-import { msToTime } from '../../services/util';
+// import { msToTime } from '../../services/util';
 
 const ROWS_BY_PAGE = 10;
 
@@ -46,12 +46,15 @@ const HistoryTab = ({ device, refreshInterval }) => {
     clearSavedData(device?._id).then(() => setData([]));
   };
 
+  /* A function that returns a table row. */
   const Row = useCallback((val) => {
     const classnames = 'text-xs text-center p-2';
+    const timeEpoch = new Date(val.value.epoch).toLocaleTimeString();
     return (
       <tr>
         <Td compact={true} className={classnames + ' font-medium'}>
-          {msToTime(val.value.epoch)}
+          {/* {msToTime(val.value.epoch)} */}
+          {timeEpoch}
         </Td>
         {val.value.parametersArray?.map((p, index) => (
           <Td key={index} compact={true} className={classnames}>

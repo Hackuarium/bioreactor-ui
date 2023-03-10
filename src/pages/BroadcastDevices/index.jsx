@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../components/tailwind-ui';
 import {
@@ -23,6 +24,8 @@ const BroadcastDevices = ({ history, match }) => {
   const [devicesList, setDevicesList] = useState([]);
   const [onEditValues, setOnEditValues] = useState({});
   const { addErrorNotification } = useNotification();
+
+  const navigate = useNavigate();
 
   // get saved devices from DB
   useEffect(() => {
@@ -70,7 +73,8 @@ const BroadcastDevices = ({ history, match }) => {
   };
 
   const onSelectDevice = (device, e) => {
-    history.push(match.url + '/' + device._id);
+    // history.push(match.url + '/' + device._id);
+    navigate(match.url + '/' + device._id);
   };
 
   const onAddDevice = async (device) => {

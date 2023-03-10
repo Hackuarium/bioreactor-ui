@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   presets: [
     require('@zakodium/tailwind-config')({
       colors: {
@@ -14,7 +14,6 @@ module.exports = {
       },
     }),
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       colors: {},
@@ -23,7 +22,6 @@ module.exports = {
   variants: {
     extend: {
       fontWeight: ['group-hover', 'hover'],
-      backgroundColor: ['active'],
       fill: ['group-hover'],
       display: ['group-hover'],
     },
